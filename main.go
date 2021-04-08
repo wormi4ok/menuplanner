@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -15,6 +14,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
+	"github.com/go-playground/validator/v10"
 	"github.com/kelseyhightower/envconfig"
 )
 
@@ -27,19 +27,10 @@ func main() {
 	c := new(Config)
 	envconfig.MustProcess("MP", c)
 
-	r := chi.NewRouter()
-	r.Use(middleware.Logger)
-	r.Use(middleware.RealIP)
-	r.Use(middleware.Recoverer)
-	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{"*"},
-		AllowedMethods:   []string{"GET", "POST", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Accept", "Content-Type"},
-		AllowCredentials: false,
-		MaxAge:           300, // Maximum value not ignored by any of major browsers
-	}))
-
+	v := validator.New()
+	r := router()
 	r.Get("/", weekHandler())
+	r.Post("/recipe", addRecipeHandler(v))
 
 	srv := &http.Server{
 		Addr:         fmt.Sprintf("%s:%d", c.Host, c.Port),
@@ -59,50 +50,19 @@ func main() {
 	handleServerShutdown(srv)
 }
 
-func weekHandler() http.HandlerFunc {
-	r1 := Recipe{
-		ID:       1,
-		Name:     "Moroccan Carrot Soup",
-		Calories: 300,
-		Protein:  60,
-		Fat:      50,
-		Carbs:    50,
-	}
-
-	r2 := Recipe{
-		ID:       2,
-		Name:     "Ovsyanoblin",
-		Calories: 350,
-		Protein:  50,
-		Fat:      10,
-		Carbs:    30,
-	}
-
-	r3 := Recipe{
-		ID:          3,
-		Name:        "Pasta Carbonara",
-		Description: "",
-		ImageURL:    "",
-		Calories:    500,
-		Protein:     120,
-		Fat:         80,
-		Carbs:       260,
-	}
-
-	d1 := map[int]Recipe{0: r1, 1: r2}
-	d2 := map[int]Recipe{2: r3}
-	m := Menu{0: DailyMenu{Recipes: d1}, 1: DailyMenu{d2}}
-	week := Week{Menu: m}
-
-	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		err := json.NewEncoder(w).Encode(week)
-		if err != nil {
-			log.Printf("Handler error: %v", err)
-			w.WriteHeader(500)
-		}
-	}
+func router() *chi.Mux {
+	r := chi.NewRouter()
+	r.Use(middleware.Logger)
+	r.Use(middleware.RealIP)
+	r.Use(middleware.Recoverer)
+	r.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Content-Type"},
+		AllowCredentials: false,
+		MaxAge:           300, // Maximum value not ignored by any of major browsers
+	}))
+	return r
 }
 
 func handleServerShutdown(srv *http.Server) {

@@ -2,7 +2,7 @@ package main
 
 type Recipe struct {
 	ID          int    `json:"id"`
-	Name        string `json:"name"`
+	Name        string `json:"name" validate:"required"`
 	Description string `json:"description,omitempty"`
 	ImageURL    string `json:"imageUrl"`
 
