@@ -8,6 +8,7 @@
 <script>
 import Navbar from '@/components/Navbar.vue';
 import Week from '@/components/Week.vue';
+import axios from 'axios';
 
 export default {
   name: 'App',
@@ -21,67 +22,14 @@ export default {
     };
   },
   created() {
-    this.week = {
-      menu: {
-        0: {
-          recipes: {
-            0: {
-              id: 1,
-              name: 'Ovsyanoblin',
-              calories: 300,
-            },
-            1: {
-              id: 2,
-              name: 'Pasta Carbonara',
-              calories: 500,
-            },
-            2: {
-              id: 3,
-              name: 'Abendbrot',
-              calories: 700,
-            },
-          },
-        },
-        1: {
-          recipes: {
-            0: {
-              id: 1,
-              name: 'Ovsyanoblin2',
-              calories: 300,
-            },
-            1: {
-              id: 2,
-              name: 'Pasta Carbonara2',
-              calories: 500,
-            },
-            2: {
-              id: 3,
-              name: 'Abendbrot2',
-              calories: 700,
-            },
-          },
-        },
-        2: {
-          recipes: {
-            0: {
-              id: 1,
-              name: 'Ovsyanoblin2',
-              calories: 300,
-            },
-            1: {
-              id: 2,
-              name: 'Pasta Carbonara2',
-              calories: 500,
-            },
-            2: {
-              id: 3,
-              name: 'Abendbrot2',
-              calories: 700,
-            },
-          },
-        },
-      },
-    };
+    axios
+      .get('http://localhost:8081')
+      .then((response) => {
+        this.week = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
 };
 </script>
