@@ -30,7 +30,7 @@ func main() {
 	v := validator.New()
 	r := router()
 	r.Get("/", weekHandler())
-	r.Post("/recipe", addRecipeHandler(v))
+	r.Mount("/recipe", recipeResource{v}.Routes())
 
 	srv := &http.Server{
 		Addr:         fmt.Sprintf("%s:%d", c.Host, c.Port),

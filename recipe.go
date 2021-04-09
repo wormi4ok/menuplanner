@@ -1,8 +1,10 @@
 package main
 
+var allRecipes []Recipe
+
 type Recipe struct {
 	ID          int    `json:"id"`
-	Name        string `json:"name" validate:"required"`
+	Name        string `json:"name"`
 	Description string `json:"description,omitempty"`
 	ImageURL    string `json:"imageUrl"`
 
