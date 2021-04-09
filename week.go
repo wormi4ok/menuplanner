@@ -4,10 +4,12 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+
+	"github.com/wormi4ok/menuplanner/internal"
 )
 
 func weekHandler() http.HandlerFunc {
-	r1 := Recipe{
+	r1 := internal.Recipe{
 		ID:       1,
 		Name:     "Moroccan Carrot Soup",
 		Calories: 300,
@@ -16,7 +18,7 @@ func weekHandler() http.HandlerFunc {
 		Carbs:    50,
 	}
 
-	r2 := Recipe{
+	r2 := internal.Recipe{
 		ID:       2,
 		Name:     "Ovsyanoblin",
 		Calories: 350,
@@ -25,7 +27,7 @@ func weekHandler() http.HandlerFunc {
 		Carbs:    30,
 	}
 
-	r3 := Recipe{
+	r3 := internal.Recipe{
 		ID:       3,
 		Name:     "Pasta Carbonara",
 		Calories: 500,
@@ -34,10 +36,10 @@ func weekHandler() http.HandlerFunc {
 		Carbs:    260,
 	}
 
-	d1 := map[int]Recipe{0: r1, 1: r2}
-	d2 := map[int]Recipe{2: r3}
-	m := Menu{0: DailyMenu{Recipes: d1}, 1: DailyMenu{d2}}
-	week := Week{Menu: m}
+	d1 := map[int]internal.Recipe{0: r1, 1: r2}
+	d2 := map[int]internal.Recipe{2: r3}
+	m := internal.Menu{0: internal.DailyMenu{Recipes: d1}, 1: internal.DailyMenu{d2}}
+	week := internal.Week{Menu: m}
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")

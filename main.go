@@ -16,6 +16,7 @@ import (
 	"github.com/go-chi/cors"
 	"github.com/go-playground/validator/v10"
 	"github.com/kelseyhightower/envconfig"
+	"github.com/wormi4ok/menuplanner/storage/mock"
 )
 
 type Config struct {
@@ -30,7 +31,7 @@ func main() {
 	v := validator.New()
 	r := router()
 	r.Get("/", weekHandler())
-	r.Mount("/recipe", recipeResource{v}.Routes())
+	r.Mount("/recipe", recipeEndpoint{&mock.Recipes{}, v}.Routes())
 
 	srv := &http.Server{
 		Addr:         fmt.Sprintf("%s:%d", c.Host, c.Port),

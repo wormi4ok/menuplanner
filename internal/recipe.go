@@ -1,6 +1,13 @@
-package main
+package internal
 
-var allRecipes []Recipe
+import "context"
+
+type RecipeRepository interface {
+	Read(ctx context.Context, id int) *Recipe
+	ReadAll(ctx context.Context) []*Recipe
+	Create(ctx context.Context, r *Recipe) *Recipe
+	Delete(ctx context.Context, id int) bool
+}
 
 type Recipe struct {
 	ID          int    `json:"id"`
@@ -12,14 +19,4 @@ type Recipe struct {
 	Protein  int `json:"protein"`
 	Fat      int `json:"fat"`
 	Carbs    int `json:"carbs"`
-}
-
-type DailyMenu struct {
-	Recipes map[int]Recipe `json:"recipes"`
-}
-
-type Menu map[int]DailyMenu
-
-type Week struct {
-	Menu Menu `json:"menu"`
 }

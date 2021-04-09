@@ -11,42 +11,38 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"
+	"github.com/wormi4ok/menuplanner/internal"
 )
 
-type recipeResource struct {
+type recipeEndpoint struct {
+	storage  internal.RecipeRepository
 	validate *validator.Validate
 }
 
 // Routes creates a REST router for the todos resource
-func (rs recipeResource) Routes() chi.Router {
+func (e recipeEndpoint) Routes() chi.Router {
 	r := chi.NewRouter()
 
-	r.Get("/", rs.List)
-	r.Post("/", rs.Create)
+	r.Get("/", e.List)
+	r.Post("/", e.Create)
 
 	r.Route("/{id}", func(r chi.Router) {
-		r.Use(rs.RecipeCtx)
-		r.Get("/", rs.Get)
-		r.Delete("/", rs.Delete)
+		r.Use(e.RecipeCtx)
+		r.Get("/", e.Get)
+		r.Delete("/", e.Delete)
 	})
 
 	return r
 }
 
-func (rs recipeResource) RecipeCtx(next http.Handler) http.Handler {
+func (e recipeEndpoint) RecipeCtx(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		id, err := strconv.Atoi(chi.URLParam(r, "id"))
 		if err != nil {
 			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 			return
 		}
-		var recipe *Recipe
-		for _, r := range allRecipes {
-			if r.ID == id {
-				recipe = &r
-				break
-			}
-		}
+		recipe := e.storage.Read(r.Context(), id)
 		if recipe == nil {
 			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 			return
@@ -76,7 +72,7 @@ type ValidationErrorResponse struct {
 	Errors []ValidationError `json:"errors"`
 }
 
-func (rs recipeResource) Create(w http.ResponseWriter, r *http.Request) {
+func (e recipeEndpoint) Create(w http.ResponseWriter, r *http.Request) {
 	req := &AddRecipeRequest{}
 
 	body, err := io.ReadAll(r.Body)
@@ -92,7 +88,7 @@ func (rs recipeResource) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := rs.validate.StructCtx(r.Context(), req); err != nil {
+	if err := e.validate.StructCtx(r.Context(), req); err != nil {
 		if _, ok := err.(*validator.InvalidValidationError); ok {
 			_, _ = io.WriteString(w, err.Error())
 			w.WriteHeader(http.StatusInternalServerError)
@@ -115,8 +111,7 @@ func (rs recipeResource) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	allRecipes = append(allRecipes, Recipe{
-		ID:          len(allRecipes) + 1,
+	e.storage.Create(r.Context(), &internal.Recipe{
 		Name:        req.Name,
 		Description: req.Description,
 		ImageURL:    req.ImageURL,
@@ -129,38 +124,34 @@ func (rs recipeResource) Create(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 }
 
-func (rs recipeResource) List(w http.ResponseWriter, r *http.Request) {
+func (e recipeEndpoint) List(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 
-	err := json.NewEncoder(w).Encode(allRecipes)
+	err := json.NewEncoder(w).Encode(e.storage.ReadAll(r.Context()))
 	if err != nil {
 		log.Printf("Handler error: %v", err)
 		w.WriteHeader(500)
 	}
 }
 
-func (rs recipeResource) Delete(w http.ResponseWriter, r *http.Request) {
+func (e recipeEndpoint) Delete(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	recipe, ok := ctx.Value("recipe").(*Recipe)
+	recipe, ok := ctx.Value("recipe").(*internal.Recipe)
 	if !ok {
 		http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
 		return
 	}
 
-	for i, r := range allRecipes {
-		if r.ID == recipe.ID {
-			allRecipes[i] = allRecipes[len(allRecipes)-1]
-			allRecipes = allRecipes[:len(allRecipes)-1]
-			w.WriteHeader(http.StatusNoContent)
-			return
-		}
+	if e.storage.Delete(r.Context(), recipe.ID) {
+		w.WriteHeader(http.StatusNoContent)
+		return
 	}
 }
 
-func (rs recipeResource) Get(w http.ResponseWriter, r *http.Request) {
+func (e recipeEndpoint) Get(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	recipe, ok := ctx.Value("recipe").(*Recipe)
+	recipe, ok := ctx.Value("recipe").(*internal.Recipe)
 	if !ok {
 		http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
 		return
