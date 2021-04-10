@@ -1,5 +1,10 @@
 package internal
 
+type WeekRepository interface {
+	ReadCurrent() *Week
+	UpdateCurrent(*Week) *Week
+}
+
 type DailyMenu struct {
 	Recipes map[int]Recipe `json:"recipes"`
 }

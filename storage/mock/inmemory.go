@@ -39,3 +39,25 @@ func (rs *Recipes) Delete(_ context.Context, id int) bool {
 	}
 	return false
 }
+
+type Weeks struct {
+	Recipes internal.RecipeRepository
+	current *internal.Week
+}
+
+func (ws *Weeks) UpdateCurrent(week *internal.Week) *internal.Week {
+	ws.current = week
+	return ws.current
+}
+
+func (ws *Weeks) ReadCurrent() *internal.Week {
+	c := ws.current
+	for i, day := range c.Menu {
+		for k, recipe := range day.Recipes {
+			r := ws.Recipes.Read(context.TODO(), recipe.ID)
+			c.Menu[i].Recipes[k] = *r
+		}
+	}
+
+	return c
+}

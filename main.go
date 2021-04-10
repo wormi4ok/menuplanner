@@ -30,8 +30,12 @@ func main() {
 
 	v := validator.New()
 	r := router()
-	r.Get("/", weekHandler())
-	r.Mount("/recipe", recipeEndpoint{&mock.Recipes{}, v}.Routes())
+	mr := &mock.Recipes{}
+	w := weekEndpoint{storage: &mock.Weeks{Recipes: mr}}
+
+	r.Get("/", w.Get())
+	r.Mount("/week", w.Routes())
+	r.Mount("/recipe", recipeEndpoint{mr, v}.Routes())
 
 	srv := &http.Server{
 		Addr:         fmt.Sprintf("%s:%d", c.Host, c.Port),
