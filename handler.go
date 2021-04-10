@@ -23,13 +23,13 @@ type recipeEndpoint struct {
 func (e recipeEndpoint) Routes() chi.Router {
 	r := chi.NewRouter()
 
-	r.Get("/", e.List)
-	r.Post("/", e.Create)
+	r.Get("/", e.List())
+	r.Post("/", e.Create())
 
 	r.Route("/{id}", func(r chi.Router) {
 		r.Use(e.RecipeCtx)
-		r.Get("/", e.Get)
-		r.Delete("/", e.Delete)
+		r.Get("/", e.Get())
+		r.Delete("/", e.Delete())
 	})
 
 	return r
@@ -52,117 +52,125 @@ func (e recipeEndpoint) RecipeCtx(next http.Handler) http.Handler {
 	})
 }
 
-type AddRecipeRequest struct {
-	Name        string `json:"name" validate:"required"`
-	Description string `json:"description"`
-	ImageURL    string `json:"imageUrl" validate:"omitempty,url"`
+func (e recipeEndpoint) Create() http.HandlerFunc {
+	type request struct {
+		Name        string `json:"name" validate:"required"`
+		Description string `json:"description"`
+		ImageURL    string `json:"imageUrl" validate:"omitempty,url"`
 
-	Calories int `json:"calories" validate:"required"`
-	Protein  int `json:"protein" validate:"required"`
-	Fat      int `json:"fat" validate:"required"`
-	Carbs    int `json:"carbs" validate:"required"`
-}
-
-type ValidationError struct {
-	Field   string `json:"field"`
-	Message string `json:"message"`
-}
-
-type ValidationErrorResponse struct {
-	Errors []ValidationError `json:"errors"`
-}
-
-func (e recipeEndpoint) Create(w http.ResponseWriter, r *http.Request) {
-	req := &AddRecipeRequest{}
-
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		_, _ = io.WriteString(w, "Missing or malformed payload")
-		w.WriteHeader(http.StatusBadRequest)
-		return
+		Calories int `json:"calories" validate:"required"`
+		Protein  int `json:"protein" validate:"required"`
+		Fat      int `json:"fat" validate:"required"`
+		Carbs    int `json:"carbs" validate:"required"`
 	}
 
-	if err := json.Unmarshal(body, req); err != nil {
-		_, _ = io.WriteString(w, err.Error())
-		w.WriteHeader(http.StatusBadRequest)
-		return
+	type validationError struct {
+		Field   string `json:"field"`
+		Message string `json:"message"`
 	}
 
-	if err := e.validate.StructCtx(r.Context(), req); err != nil {
-		if _, ok := err.(*validator.InvalidValidationError); ok {
-			_, _ = io.WriteString(w, err.Error())
-			w.WriteHeader(http.StatusInternalServerError)
+	type validationErrorResponse struct {
+		Errors []validationError `json:"errors"`
+	}
+
+	return func(w http.ResponseWriter, r *http.Request) {
+		req := &request{}
+
+		body, err := io.ReadAll(r.Body)
+		if err != nil {
+			_, _ = io.WriteString(w, "Missing or malformed payload")
+			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		res := ValidationErrorResponse{}
-		for _, err := range err.(validator.ValidationErrors) {
 
-			res.Errors = append(res.Errors, ValidationError{
-				Field:   err.Field(),
-				Message: fmt.Sprintf("Validation error (%s)", err.Tag()),
-			})
-		}
-
-		w.WriteHeader(http.StatusBadRequest)
-		if err := json.NewEncoder(w).Encode(res); err != nil {
+		if err := json.Unmarshal(body, req); err != nil {
 			_, _ = io.WriteString(w, err.Error())
-			w.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusBadRequest)
+			return
 		}
-		return
-	}
 
-	e.storage.Create(r.Context(), &internal.Recipe{
-		Name:        req.Name,
-		Description: req.Description,
-		ImageURL:    req.ImageURL,
-		Calories:    req.Calories,
-		Protein:     req.Protein,
-		Fat:         req.Fat,
-		Carbs:       req.Carbs,
-	})
+		if err := e.validate.StructCtx(r.Context(), req); err != nil {
+			if _, ok := err.(*validator.InvalidValidationError); ok {
+				_, _ = io.WriteString(w, err.Error())
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+			res := validationErrorResponse{}
+			for _, err := range err.(validator.ValidationErrors) {
 
-	w.WriteHeader(http.StatusCreated)
-}
+				res.Errors = append(res.Errors, validationError{
+					Field:   err.Field(),
+					Message: fmt.Sprintf("Validation error (%s)", err.Tag()),
+				})
+			}
 
-func (e recipeEndpoint) List(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
+			w.WriteHeader(http.StatusBadRequest)
+			if err := json.NewEncoder(w).Encode(res); err != nil {
+				_, _ = io.WriteString(w, err.Error())
+				w.WriteHeader(http.StatusInternalServerError)
+			}
+			return
+		}
 
-	err := json.NewEncoder(w).Encode(e.storage.ReadAll(r.Context()))
-	if err != nil {
-		log.Printf("Handler error: %v", err)
-		w.WriteHeader(500)
-	}
-}
+		e.storage.Create(r.Context(), &internal.Recipe{
+			Name:        req.Name,
+			Description: req.Description,
+			ImageURL:    req.ImageURL,
+			Calories:    req.Calories,
+			Protein:     req.Protein,
+			Fat:         req.Fat,
+			Carbs:       req.Carbs,
+		})
 
-func (e recipeEndpoint) Delete(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
-	recipe, ok := ctx.Value("recipe").(*internal.Recipe)
-	if !ok {
-		http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
-		return
-	}
-
-	if e.storage.Delete(r.Context(), recipe.ID) {
-		w.WriteHeader(http.StatusNoContent)
-		return
+		w.WriteHeader(http.StatusCreated)
 	}
 }
 
-func (e recipeEndpoint) Get(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
-	recipe, ok := ctx.Value("recipe").(*internal.Recipe)
-	if !ok {
-		http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
-		return
+func (e recipeEndpoint) List() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+
+		err := json.NewEncoder(w).Encode(e.storage.ReadAll(r.Context()))
+		if err != nil {
+			log.Printf("Handler error: %v", err)
+			w.WriteHeader(500)
+		}
 	}
+}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
+func (e recipeEndpoint) Delete() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		recipe, ok := ctx.Value("recipe").(*internal.Recipe)
+		if !ok {
+			http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
+			return
+		}
 
-	err := json.NewEncoder(w).Encode(recipe)
-	if err != nil {
-		log.Printf("Handler error: %v", err)
-		w.WriteHeader(500)
+		if e.storage.Delete(r.Context(), recipe.ID) {
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+	}
+}
+
+func (e recipeEndpoint) Get() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		recipe, ok := ctx.Value("recipe").(*internal.Recipe)
+		if !ok {
+			http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+
+		err := json.NewEncoder(w).Encode(recipe)
+		if err != nil {
+			log.Printf("Handler error: %v", err)
+			w.WriteHeader(500)
+		}
 	}
 }
