@@ -1,0 +1,128 @@
+openapi: 3.0.3
+info:
+  title: MenuPlanner
+  description: MenuPlanner application API
+  version: 0.1.0
+servers:
+- url: 'http://localhost:8080'
+paths:
+  /recipe:
+    get:
+      description: Get a list of all recipes
+      responses:
+        200:
+          description: A list of recipes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/recipe"
+    post:
+      description: Add a new recipe
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/recipe"
+            example:
+              name: Pasta
+              calories: 500
+              protein: 40
+              fat: 50
+              carbs: 200
+      responses:
+        201:
+          description: Created
+        400:
+          $ref: "#/components/responses/InvalidPayload"
+  /recipe/{id}:
+    get:
+      description: Get recipe by id
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: Recipe data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/recipe"
+  /week:
+    get:
+      description: Get current week
+      responses:
+        200:
+          description: Current week configuration
+          content:
+            applicatin/json:
+              schema:
+                $ref: "#/components/schemas/week"
+    put:
+      description: Update current week
+      parameters:
+      - name: fillGaps
+        in: query
+        description: Fill empty slots in the menu with sutable recipes
+        schema:
+          type: boolean
+          default: false
+      responses:
+        200:
+          description: Updated week
+          content:
+            applicatin/json:
+              schema:
+                $ref: "#/components/schemas/week"
+components:
+  schemas:
+    recipe:
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        imageUrl:
+          type: string
+        calories:
+          type: integer
+        protein:
+          type: integer
+        fat:
+          type: integer
+        carbs:
+          type: integer
+    week:
+      type: object
+      properties:
+        menu:
+          type: array
+          items:
+            properties:
+              recipes:
+                type: array
+                items:
+                  $ref: "#/components/schemas/recipe"
+    validationError:
+      properties:
+        field:
+          type: string
+        message:
+          type: string
+  responses:
+    InvalidPayload:
+      description: Validation Errors
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errors:
+                type: array
+                items:
+                  $ref: "#/components/schemas/validationError"

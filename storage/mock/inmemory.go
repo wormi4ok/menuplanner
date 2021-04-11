@@ -55,7 +55,7 @@ func (ws *Weeks) ReadCurrent() *internal.Week {
 	for i, day := range c.Menu {
 		for k, recipe := range day.Recipes {
 			r := ws.Recipes.Read(context.TODO(), recipe.ID)
-			c.Menu[i].Recipes[k] = *r
+			c.Menu[i].Recipes[k] = r
 		}
 	}
 

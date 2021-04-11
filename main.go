@@ -40,6 +40,7 @@ func main() {
 	r.Get("/", w.Get())
 	r.Mount("/week", w.Routes())
 	r.Mount("/recipe", recipeEndpoint{mr, v}.Routes())
+	r.Handle("/docs", http.StripPrefix("/docs", http.FileServer(http.Dir("./docs"))))
 
 	srv := &http.Server{
 		Addr:         fmt.Sprintf("%s:%d", c.Host, c.Port),
