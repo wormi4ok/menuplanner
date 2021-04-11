@@ -2,12 +2,29 @@ package mock
 
 import (
 	"context"
+	"encoding/json"
+	"os"
 
 	"github.com/wormi4ok/menuplanner/internal"
 )
 
 type Recipes struct {
 	all []*internal.Recipe
+}
+
+func (rs *Recipes) LoadFromFile(path string) error {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return err
+	}
+	var rr []*internal.Recipe
+
+	if err = json.Unmarshal(data, &rr); err != nil {
+		return err
+	}
+	rs.all = rr
+
+	return nil
 }
 
 func (rs *Recipes) Create(_ context.Context, r *internal.Recipe) (*internal.Recipe, error) {
@@ -43,6 +60,21 @@ func (rs *Recipes) Delete(_ context.Context, id int) bool {
 type Weeks struct {
 	Recipes internal.RecipeRepository
 	current *internal.Week
+}
+
+func (ws *Weeks) LoadFromFile(path string) error {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return err
+	}
+	var w *internal.Week
+
+	if err = json.Unmarshal(data, &w); err != nil {
+		return err
+	}
+	ws.current = w
+
+	return nil
 }
 
 func (ws *Weeks) UpdateCurrent(week *internal.Week) *internal.Week {

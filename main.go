@@ -16,8 +16,10 @@ import (
 )
 
 type Config struct {
-	Host string `default:"localhost"`
-	Port int    `default:"8081"`
+	Host        string `default:"localhost"`
+	Port        int    `default:"8081"`
+	RecipesJSON string `split_words:"true"`
+	WeekJSON    string `split_words:"true"`
 }
 
 //go:embed docs/index.html
@@ -28,7 +30,19 @@ func main() {
 	envconfig.MustProcess("MP", c)
 
 	mr := &mock.Recipes{}
+	if c.RecipesJSON != "" {
+		if err := mr.LoadFromFile(c.RecipesJSON); err != nil {
+			log.Println("Failed to load recipes from file")
+			os.Exit(1)
+		}
+	}
 	wr := &mock.Weeks{Recipes: mr}
+	if c.WeekJSON != "" {
+		if err := wr.LoadFromFile(c.WeekJSON); err != nil {
+			log.Println("Failed to load recipes from file")
+			os.Exit(1)
+		}
+	}
 
 	srv := http.NewServer(c.Host, c.Port, mr, wr, docs)
 	log.Printf("Starting service on %s port %d...\n", c.Host, c.Port)
