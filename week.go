@@ -12,6 +12,7 @@ import (
 
 type weekEndpoint struct {
 	storage internal.WeekRepository
+	filler  *internal.GapFiller
 }
 
 // Routes creates a REST router for the todos resource
@@ -55,6 +56,11 @@ func (e *weekEndpoint) Update() http.HandlerFunc {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		e.storage.UpdateCurrent(&req.Week)
+
+		week := &req.Week
+		if r.URL.Query().Get("fillGaps") != "" {
+			e.filler.FillWeek(r.Context(), week)
+		}
+		e.storage.UpdateCurrent(week)
 	}
 }

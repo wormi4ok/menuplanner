@@ -3,10 +3,15 @@ package internal
 import "context"
 
 type RecipeRepository interface {
-	Read(ctx context.Context, id int) *Recipe
-	ReadAll(ctx context.Context) []*Recipe
+	RecipeReader
+
 	Create(ctx context.Context, r *Recipe) *Recipe
 	Delete(ctx context.Context, id int) bool
+}
+
+type RecipeReader interface {
+	Read(ctx context.Context, id int) *Recipe
+	ReadAll(ctx context.Context) []*Recipe
 }
 
 type Recipe struct {

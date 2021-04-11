@@ -16,6 +16,7 @@ import (
 	"github.com/go-chi/cors"
 	"github.com/go-playground/validator/v10"
 	"github.com/kelseyhightower/envconfig"
+	"github.com/wormi4ok/menuplanner/internal"
 	"github.com/wormi4ok/menuplanner/storage/mock"
 )
 
@@ -31,7 +32,10 @@ func main() {
 	v := validator.New()
 	r := router()
 	mr := &mock.Recipes{}
-	w := weekEndpoint{storage: &mock.Weeks{Recipes: mr}}
+	w := weekEndpoint{
+		storage: &mock.Weeks{Recipes: mr},
+		filler:  internal.NewGapFiller(mr),
+	}
 
 	r.Get("/", w.Get())
 	r.Mount("/week", w.Routes())
