@@ -1,4 +1,4 @@
-package main
+package http
 
 import (
 	"encoding/json"
@@ -62,5 +62,6 @@ func (e *weekEndpoint) Update() http.HandlerFunc {
 			e.filler.FillWeek(r.Context(), week)
 		}
 		e.storage.UpdateCurrent(week)
+		w.WriteHeader(http.StatusAccepted)
 	}
 }

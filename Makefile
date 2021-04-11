@@ -1,3 +1,9 @@
+run:
+	@go run main.go
+
+test:
+	@go test ./...
+
 api-docs:
 	@docker run --rm \
        -v ${PWD}:/local openapitools/openapi-generator-cli generate \

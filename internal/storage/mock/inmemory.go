@@ -10,10 +10,10 @@ type Recipes struct {
 	all []*internal.Recipe
 }
 
-func (rs *Recipes) Create(_ context.Context, r *internal.Recipe) *internal.Recipe {
+func (rs *Recipes) Create(_ context.Context, r *internal.Recipe) (*internal.Recipe, error) {
 	r.ID = len(rs.all) + 1
 	rs.all = append(rs.all, r)
-	return r
+	return r, nil
 }
 
 func (rs *Recipes) Read(_ context.Context, id int) *internal.Recipe {

@@ -2,22 +2,17 @@ package main
 
 import (
 	"context"
-	"fmt"
+	_ "embed"
 	"log"
-	"net/http"
 	"os"
 	"os/signal"
 	"strings"
 	"syscall"
 	"time"
 
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
-	"github.com/go-chi/cors"
-	"github.com/go-playground/validator/v10"
 	"github.com/kelseyhightower/envconfig"
-	"github.com/wormi4ok/menuplanner/internal"
-	"github.com/wormi4ok/menuplanner/storage/mock"
+	"github.com/wormi4ok/menuplanner/internal/http"
+	"github.com/wormi4ok/menuplanner/internal/storage/mock"
 )
 
 type Config struct {
@@ -25,54 +20,20 @@ type Config struct {
 	Port int    `default:"8081"`
 }
 
+//go:embed docs/index.html
+var docs []byte
+
 func main() {
 	c := new(Config)
 	envconfig.MustProcess("MP", c)
 
-	v := validator.New()
-	r := router()
 	mr := &mock.Recipes{}
-	w := weekEndpoint{
-		storage: &mock.Weeks{Recipes: mr},
-		filler:  internal.NewGapFiller(mr),
-	}
+	wr := &mock.Weeks{Recipes: mr}
 
-	r.Get("/", w.Get())
-	r.Mount("/week", w.Routes())
-	r.Mount("/recipe", recipeEndpoint{mr, v}.Routes())
-	r.Handle("/docs", http.StripPrefix("/docs", http.FileServer(http.Dir("./docs"))))
-
-	srv := &http.Server{
-		Addr:         fmt.Sprintf("%s:%d", c.Host, c.Port),
-		Handler:      r,
-		ReadTimeout:  time.Second * 15,
-		WriteTimeout: time.Second * 60,
-		IdleTimeout:  time.Second * 60,
-	}
+	srv := http.NewServer(c.Host, c.Port, mr, wr, docs)
 	log.Printf("Starting service on %s port %d...\n", c.Host, c.Port)
 
-	go func() {
-		if err := srv.ListenAndServe(); err != nil {
-			log.Printf("%v\n", err)
-		}
-	}()
-
 	handleServerShutdown(srv)
-}
-
-func router() *chi.Mux {
-	r := chi.NewRouter()
-	r.Use(middleware.Logger)
-	r.Use(middleware.RealIP)
-	r.Use(middleware.Recoverer)
-	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{"*"},
-		AllowedMethods:   []string{"GET", "POST", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Accept", "Content-Type"},
-		AllowCredentials: false,
-		MaxAge:           300, // Maximum value not ignored by any of major browsers
-	}))
-	return r
 }
 
 func handleServerShutdown(srv *http.Server) {
