@@ -1,0 +1,25 @@
+services:
+  web:
+    build:
+      context: web
+      target: dev
+    environment:
+      VUE_APP_API_ADDRESS: http://localhost:8081
+    volumes:
+      - ./web/src:/app/src
+    ports:
+      - 127.0.0.1:8080:8080
+    depends_on:
+      - api
+  api:
+    build: .
+    volumes:
+      - .:/go/src/github.com/wormi4ok/menuplanner
+    ports:
+      - 127.0.0.1:8081:8081
+    environment:
+      MP_HOST: 0.0.0.0
+      MP_RECIPES_JSON: internal/testdata/recipes.json
+      MP_WEEK_JSON: internal/testdata/week_with_gaps.json
+
+

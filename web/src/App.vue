@@ -23,7 +23,7 @@ export default {
   },
   created() {
     axios
-      .get('http://localhost:8081')
+      .get(process.env.VUE_APP_API_ADDRESS)
       .then((response) => {
         this.week = response.data;
       })
