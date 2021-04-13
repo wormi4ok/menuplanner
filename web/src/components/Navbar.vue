@@ -13,16 +13,29 @@
           </a>
         </div>
       </b-navbar-item>
-      <b-navbar-item href="#">
-        Add recipe
+      <b-navbar-item>
+        <b-button label="Add Recipe" @click="showAddRecipeForm = true"/>
+        <b-modal v-model="showAddRecipeForm">
+          <AddRecipeForm  @close="showAddRecipeForm = false"/>
+        </b-modal>
       </b-navbar-item>
     </template>
   </b-navbar>
 </template>
 
 <script>
+import AddRecipeForm from '@/components/AddRecipeForm.vue';
+
 export default {
   name: 'Navbar',
+  components: {
+    AddRecipeForm,
+  },
+  data() {
+    return {
+      showAddRecipeForm: false,
+    };
+  },
 };
 </script>
 
