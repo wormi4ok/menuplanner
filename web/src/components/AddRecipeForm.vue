@@ -6,7 +6,7 @@
       </header>
       <section class="modal-card-body">
         <b-field label="Name">
-          <b-input type="text" v-model="name"></b-input>
+FI          <b-input type="text" required v-model="name"></b-input>
         </b-field>
         <b-field label="Description">
           <b-input type="text" v-model="description"></b-input>
@@ -15,24 +15,18 @@
           <b-numberinput v-model="calories" step="50" min-step="1"></b-numberinput>
         </b-field>
         <b-field label="Protein">
-          <b-numberinput v-model="protein"></b-numberinput>
+          <b-numberinput v-model="protein" step="50" min-step="1"></b-numberinput>
         </b-field>
         <b-field label="Fat">
-          <b-numberinput v-model="fat" step="50"></b-numberinput>
+          <b-numberinput v-model="fat" step="50" min-step="1"></b-numberinput>
         </b-field>
         <b-field label="Carbs">
-          <b-numberinput v-model="carbs" step="50"></b-numberinput>
+          <b-numberinput v-model="carbs" step="50" min-step="1"></b-numberinput>
         </b-field>
       </section>
       <footer class="modal-card-foot">
-        <b-button
-          label="Close"
-          @click="$emit('close')"/>
-        <b-button
-          class="is-primary"
-          label="Create"
-          native-type="submit"
-        />
+        <b-button label="Close" @click="$emit('close')"/>
+        <b-button label="Create" class="is-primary" native-type="submit"/>
       </footer>
     </form>
   </div>
@@ -56,9 +50,22 @@ export default {
   },
   methods: {
     AddRecipe() {
-      recipeApi.create(this.data).then(() => {
-        this.$emit('close');
-      });
+      const recipe = {
+        name: this.name,
+        description: this.description,
+        imageUrl: this.imageUrl,
+        calories: this.calories,
+        protein: this.protein,
+        fat: this.fat,
+        carbs: this.carbs,
+      };
+      recipeApi.create(recipe)
+        .then(() => {
+          this.$emit('close');
+        })
+        .catch((error) => {
+          this.$emit('error', error.data);
+        });
     },
   },
 };
