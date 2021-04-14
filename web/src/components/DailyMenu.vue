@@ -1,15 +1,15 @@
 <template>
   <div class="menu">
     <div class="block">
-      <Recipe v-if="recipes[0]" v-bind="recipes[0]"/>
+      <RecipeCard v-if="recipes[0]" v-bind="recipes[0]"/>
       <EmptySlot v-else></EmptySlot>
     </div>
     <div class="block">
-      <Recipe v-if="recipes[1]" v-bind="recipes[1]"/>
+      <RecipeCard v-if="recipes[1]" v-bind="recipes[1]"/>
       <EmptySlot v-else></EmptySlot>
     </div>
     <div class="block">
-      <Recipe v-if="recipes[2]" v-bind="recipes[2]"/>
+      <RecipeCard v-if="recipes[2]" v-bind="recipes[2]"/>
       <EmptySlot v-else></EmptySlot>
     </div>
     <div class="block">
@@ -19,13 +19,13 @@
 </template>
 
 <script>
-import Recipe from '@/components/Recipe.vue';
+import RecipeCard from '@/components/RecipeCard.vue';
 import EmptySlot from '@/components/EmptySlot.vue';
 
 export default {
   name: 'Weekday',
   components: {
-    Recipe,
+    RecipeCard,
     EmptySlot,
   },
   props: {
