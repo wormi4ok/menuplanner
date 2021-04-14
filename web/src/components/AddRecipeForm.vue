@@ -6,7 +6,7 @@
       </header>
       <section class="modal-card-body">
         <b-field label="Name">
-FI          <b-input type="text" required v-model="name"></b-input>
+          <b-input type="text" required v-model="name"></b-input>
         </b-field>
         <b-field label="Description">
           <b-input type="text" v-model="description"></b-input>
