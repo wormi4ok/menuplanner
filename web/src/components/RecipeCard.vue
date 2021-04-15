@@ -5,7 +5,12 @@
         {{ name }}
       </p>
       <p class="card-header-icon" aria-label="delete">
-        <b-icon icon="times" type="is-danger"></b-icon>
+        <b-button
+          icon-right="times"
+          type="is-ghost is-danger"
+          inverted
+          @click="deleteRecipe"
+        />
       </p>
     </header>
     <!--    <div class="card-image">-->
@@ -42,6 +47,11 @@ export default {
   computed: {
     total() {
       return this.protein + this.fat + this.carbs;
+    },
+  },
+  methods: {
+    deleteRecipe() {
+      this.$emit('delete-recipe');
     },
   },
 };
