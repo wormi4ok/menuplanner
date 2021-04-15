@@ -1,7 +1,7 @@
 <template>
   <b-navbar>
     <template #brand>
-      <b-navbar-item>
+      <b-navbar-item tag="router-link" :to="{ path: '/' }">
         <img src="https://flaningo.ru/wp-content/uploads/2019/03/cropped-99-1.jpg" alt="MenuPlanner logo">
       </b-navbar-item>
     </template>
@@ -12,6 +12,9 @@
             <strong>Fill gaps</strong>
           </a>
         </div>
+      </b-navbar-item>
+      <b-navbar-item>
+        <b-button label="Recipes" tag="router-link" :to="{ path: '/recipes' }" />
       </b-navbar-item>
       <b-navbar-item>
         <b-button label="Add Recipe" @click="showAddRecipeForm = true"/>

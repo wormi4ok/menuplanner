@@ -6,6 +6,7 @@ import 'buefy/dist/buefy.css';
 import Buefy from 'buefy';
 import App from './App.vue';
 import store from './store';
+import router from './router';
 
 Vue.component('fa', FontAwesomeIcon);
 library.add(fas);
@@ -19,5 +20,6 @@ Vue.config.productionTip = false;
 
 new Vue({
   store,
+  router,
   render: (h) => h(App),
 }).$mount('#app');
