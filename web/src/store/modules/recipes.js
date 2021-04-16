@@ -1,5 +1,5 @@
 /* eslint no-shadow: ["error", { "allow": ["state"] }] */
-import recipeApi from '@/api';
+import api from '@/api';
 
 const state = () => ({
   recipes: [],
@@ -11,7 +11,7 @@ const getters = {
 
 const actions = {
   async fetchRecipes({ commit }) {
-    const response = await recipeApi.list();
+    const response = await api.recipe.list();
     commit('setRecipes', response.data);
   },
 };

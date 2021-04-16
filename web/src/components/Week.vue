@@ -3,7 +3,7 @@
     <div :key="day" v-for="(today, day) in menu" class="column">
       <DailyMenu
         :recipes="today.recipes"
-        @sync-week="syncWeek"
+        @empty-slot="removeSlot(day,$event)"
       />
     </div>
   </div>
@@ -21,8 +21,8 @@ export default {
     menu: Object,
   },
   methods: {
-    syncWeek() {
-      this.$emit('sync');
+    removeSlot(day, slot) {
+      this.$store.dispatch('emptySlot', { day, slot });
     },
   },
 };

@@ -33,8 +33,7 @@ export default {
   },
   methods: {
     deleteRecipe(slot) {
-      this.recipes[slot] = null;
-      this.$emit('sync-week');
+      this.$emit('empty-slot', slot);
     },
   },
 };

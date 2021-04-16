@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import recipeApi from '../api';
+import api from '../api';
 
 export default {
   name: 'AddRecipeForm',
@@ -59,7 +59,7 @@ export default {
         fat: this.fat,
         carbs: this.carbs,
       };
-      recipeApi.create(recipe)
+      api.recipe.create(recipe)
         .then(() => {
           this.$emit('close');
         })

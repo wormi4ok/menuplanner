@@ -9,7 +9,7 @@ const client = axios.create({
   },
 });
 
-export default {
+const recipe = {
   list() {
     return client.get('/recipe');
   },
@@ -21,4 +21,19 @@ export default {
   create(data) {
     return client.post('/recipe', data);
   },
+};
+
+const week = {
+  getCurrent() {
+    return client.get('/week');
+  },
+
+  update(data) {
+    return client.put('/week', data);
+  },
+};
+
+export default {
+  recipe,
+  week,
 };
