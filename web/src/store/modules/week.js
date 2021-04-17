@@ -76,6 +76,16 @@ const actions = {
       console.log(error);
     }
   },
+  async fillSlot({ commit, state }, config) {
+    const currentWeek = state.week;
+    currentWeek.menu[config.day].recipes[config.slot] = config.recipe;
+    try {
+      await api.week.update(currentWeek);
+      commit('setCurrentWeek', currentWeek);
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 
 const mutations = {

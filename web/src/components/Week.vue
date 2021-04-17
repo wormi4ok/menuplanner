@@ -4,6 +4,7 @@
       <DailyMenu
         :recipes="today.recipes"
         @empty-slot="removeSlot(day,$event)"
+        @fill-slot="fillSlot(day,$event)"
       />
     </div>
   </div>
@@ -23,6 +24,9 @@ export default {
   methods: {
     removeSlot(day, slot) {
       this.$store.dispatch('emptySlot', { day, slot });
+    },
+    fillSlot(day, { slot, recipe }) {
+      this.$store.dispatch('fillSlot', { day, slot, recipe });
     },
   },
 };

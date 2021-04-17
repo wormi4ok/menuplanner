@@ -1,23 +1,11 @@
 <template>
   <div class="card">
     <header class="card-header">
-      <p class="card-header-title">
-        {{ name }}
-      </p>
+      <p class="card-header-title">{{ name }}</p>
       <p class="card-header-icon" aria-label="delete">
-        <b-button
-          icon-right="times"
-          type="is-ghost is-danger"
-          inverted
-          @click="deleteRecipe"
-        />
+        <b-button icon-right="times" type="is-ghost is-danger" inverted @click="deleteRecipe"/>
       </p>
     </header>
-    <!--    <div class="card-image">-->
-    <!--      <figure class="image">-->
-    <!--        <img src="../assets/carbonara.jpg" alt="Placeholder image">-->
-    <!--      </figure>-->
-    <!--    </div>-->
     <div class="card-content">
       <section>
         <b-progress :max="total" show-value>
