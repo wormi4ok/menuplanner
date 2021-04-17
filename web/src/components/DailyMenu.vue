@@ -1,17 +1,14 @@
 <template>
   <div class="menu">
-    <div class="block">
-      <RecipeCard v-if="recipes[0]" v-bind="recipes[0]" @delete-recipe="deleteRecipe(0)"/>
-      <EmptySlot v-else @pick-recipe="pickRecipe(0, $event)"></EmptySlot>
-    </div>
-    <div class="block">
-      <RecipeCard v-if="recipes[1]" v-bind="recipes[1]" @delete-recipe="deleteRecipe(1)"/>
-      <EmptySlot v-else @pick-recipe="pickRecipe(1, $event)"></EmptySlot>
-    </div>
-    <div class="block">
-      <RecipeCard v-if="recipes[2]" v-bind="recipes[2]" @delete-recipe="deleteRecipe(2)"/>
-      <EmptySlot v-else @pick-recipe="pickRecipe(2, $event)"></EmptySlot>
-    </div>
+    <MenuSlot :recipe="recipes[0]"
+              @delete-recipe="deleteRecipe(0)"
+              @pick-recipe="pickRecipe(0, $event)"/>
+    <MenuSlot :recipe="recipes[1]"
+              @delete-recipe="deleteRecipe(1)"
+              @pick-recipe="pickRecipe(1, $event)"/>
+    <MenuSlot :recipe="recipes[2]"
+              @delete-recipe="deleteRecipe(2)"
+              @pick-recipe="pickRecipe(2, $event)"/>
     <div class="block">
       Summary
     </div>
@@ -19,14 +16,12 @@
 </template>
 
 <script>
-import RecipeCard from '@/components/RecipeCard.vue';
-import EmptySlot from '@/components/EmptySlot.vue';
+import MenuSlot from '@/components/MenuSlot.vue';
 
 export default {
   name: 'Weekday',
   components: {
-    RecipeCard,
-    EmptySlot,
+    MenuSlot,
   },
   props: {
     recipes: Object,

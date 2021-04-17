@@ -1,5 +1,5 @@
 <template>
-  <Week :menu="weekMenu"/>
+  <Week :menu="data"/>
 </template>
 
 <script>
@@ -11,12 +11,18 @@ export default {
   components: {
     Week,
   },
-  computed: mapGetters(['weekMenu']),
+  computed: mapGetters({
+    data: 'weekMenu',
+  }),
   created() {
     this.fetchCurrentWeek();
+    this.fetchRecipes();
   },
   methods: {
-    ...mapActions(['fetchCurrentWeek']),
+    ...mapActions([
+      'fetchCurrentWeek',
+      'fetchRecipes',
+    ]),
   },
 };
 </script>

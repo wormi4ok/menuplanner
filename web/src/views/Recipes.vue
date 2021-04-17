@@ -1,7 +1,7 @@
 <template>
   <div class="about">
     <h1>Recipes</h1>
-    <div v-for="recipe in listRecipes" :key="recipe.id">
+    <div v-for="recipe in data" :key="recipe.id">
       <RecipeCard v-bind="recipe"/>
     </div>
   </div>
@@ -16,9 +16,13 @@ export default {
   components: {
     RecipeCard,
   },
-  computed: mapGetters(['listRecipes']),
+  computed: mapGetters({
+    data: 'listRecipes',
+  }),
   created() {
-    this.fetchRecipes();
+    if (this.data.length === 0) {
+      this.fetchRecipes();
+    }
   },
   methods: {
     ...mapActions(['fetchRecipes']),
