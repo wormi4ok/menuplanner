@@ -61,7 +61,12 @@ func (e *weekEndpoint) Update() http.HandlerFunc {
 		if r.URL.Query().Get("fillGaps") != "" {
 			e.filler.FillWeek(r.Context(), week)
 		}
-		e.storage.UpdateCurrent(week)
+		res := e.storage.UpdateCurrent(week)
+
 		w.WriteHeader(http.StatusAccepted)
+		if err := json.NewEncoder(w).Encode(res); err != nil {
+			_, _ = io.WriteString(w, err.Error())
+			w.WriteHeader(http.StatusInternalServerError)
+		}
 	}
 }
