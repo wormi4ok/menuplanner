@@ -11,7 +11,9 @@ import (
 	"time"
 
 	"github.com/kelseyhightower/envconfig"
+	"github.com/wormi4ok/menuplanner/internal"
 	"github.com/wormi4ok/menuplanner/internal/http"
+	"github.com/wormi4ok/menuplanner/internal/storage"
 	"github.com/wormi4ok/menuplanner/internal/storage/mock"
 )
 
@@ -20,6 +22,7 @@ type Config struct {
 	Port        int    `default:"8081"`
 	RecipesJSON string `split_words:"true"`
 	WeekJSON    string `split_words:"true"`
+	MysqlDSN    string `split_words:"true"`
 }
 
 //go:embed docs/index.html
@@ -29,6 +32,36 @@ func main() {
 	c := new(Config)
 	envconfig.MustProcess("MP", c)
 
+	var (
+		weekStorage   internal.WeekRepository
+		recipeStorage internal.RecipeRepository
+	)
+
+	if c.MysqlDSN != "" {
+		db := loadDB(c)
+		weekStorage, recipeStorage = db, db
+	} else {
+		recipeStorage, weekStorage = loadMocks(c)
+	}
+
+	srv := http.NewServer(c.Host, c.Port, recipeStorage, weekStorage, docs)
+	log.Printf("Starting service on %s port %d...\n", c.Host, c.Port)
+
+	handleServerShutdown(srv)
+}
+
+func loadDB(c *Config) *storage.DB {
+	log.Printf("Connecting to the database...")
+	db, err := storage.InitDB(c.MysqlDSN)
+	if err != nil {
+		log.Printf("Failed to connect: %s", err)
+		os.Exit(1)
+	}
+	return db
+}
+
+func loadMocks(c *Config) (*mock.Recipes, *mock.Weeks) {
+	log.Println("Using mock storage...")
 	mr := &mock.Recipes{}
 	if c.RecipesJSON != "" {
 		if err := mr.LoadFromFile(c.RecipesJSON); err != nil {
@@ -43,11 +76,7 @@ func main() {
 			os.Exit(1)
 		}
 	}
-
-	srv := http.NewServer(c.Host, c.Port, mr, wr, docs)
-	log.Printf("Starting service on %s port %d...\n", c.Host, c.Port)
-
-	handleServerShutdown(srv)
+	return mr, wr
 }
 
 func handleServerShutdown(srv *http.Server) {

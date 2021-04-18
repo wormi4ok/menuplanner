@@ -79,8 +79,8 @@ func (e recipeEndpoint) Create() http.HandlerFunc {
 			return
 		}
 
-		id, err := internal.SaveRecipe(r.Context(), internal.Recipe(req), e.storage);
-		if  err != nil {
+		id, err := internal.SaveRecipe(r.Context(), internal.Recipe(req), e.storage)
+		if err != nil {
 			if _, ok := err.(*validator.InvalidValidationError); ok {
 				_, _ = io.WriteString(w, err.Error())
 				w.WriteHeader(http.StatusInternalServerError)
