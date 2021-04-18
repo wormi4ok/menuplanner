@@ -6,20 +6,18 @@
       </b-navbar-item>
     </template>
     <template #start>
-      <b-navbar-item href="#">
-        <div class="buttons">
-          <a class="button is-primary">
-            <strong>Fill gaps</strong>
-          </a>
-        </div>
+      <b-navbar-item>
+        <a class="button is-primary" @click="onFillGaps">
+          <strong>Fill gaps</strong>
+        </a>
       </b-navbar-item>
       <b-navbar-item>
-        <b-button label="Recipes" tag="router-link" :to="{ path: '/recipes' }" />
+        <b-button label="Recipes" tag="router-link" :to="{ path: '/recipes' }"/>
       </b-navbar-item>
       <b-navbar-item>
         <b-button label="Add Recipe" @click="showAddRecipeForm = true"/>
         <b-modal v-model="showAddRecipeForm">
-          <AddRecipeForm  @close="showAddRecipeForm = false"/>
+          <AddRecipeForm @close="showAddRecipeForm = false"/>
         </b-modal>
       </b-navbar-item>
     </template>
@@ -28,6 +26,7 @@
 
 <script>
 import AddRecipeForm from '@/components/AddRecipeForm.vue';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'Navbar',
@@ -38,6 +37,12 @@ export default {
     return {
       showAddRecipeForm: false,
     };
+  },
+  methods: {
+    ...mapActions(['fillGaps']),
+    onFillGaps() {
+      this.fillGaps();
+    },
   },
 };
 </script>

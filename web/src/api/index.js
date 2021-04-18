@@ -33,8 +33,14 @@ const week = {
     return client.get('/week');
   },
 
-  update(data) {
-    return client.put('/week', data);
+  update(data, fillGaps = false) {
+    let params = {};
+    if (fillGaps) {
+      params = { fillGaps: true };
+    }
+    return client.put('/week', data, {
+      params,
+    });
   },
 };
 

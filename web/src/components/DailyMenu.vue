@@ -1,12 +1,12 @@
 <template>
   <div class="menu">
-    <MenuSlot :recipe="recipes[0]"
+    <MenuSlot :recipe="breakfast"
               @delete-recipe="deleteRecipe(0)"
               @pick-recipe="pickRecipe(0, $event)"/>
-    <MenuSlot :recipe="recipes[1]"
+    <MenuSlot :recipe="lunch"
               @delete-recipe="deleteRecipe(1)"
               @pick-recipe="pickRecipe(1, $event)"/>
-    <MenuSlot :recipe="recipes[2]"
+    <MenuSlot :recipe="dinner"
               @delete-recipe="deleteRecipe(2)"
               @pick-recipe="pickRecipe(2, $event)"/>
     <div class="block">
@@ -19,12 +19,19 @@
 import MenuSlot from '@/components/MenuSlot.vue';
 
 export default {
-  name: 'Weekday',
+  name: 'DailyMenu',
   components: {
     MenuSlot,
   },
   props: {
     recipes: Object,
+  },
+  data() {
+    return {
+      breakfast: this.recipes[0],
+      lunch: this.recipes[1],
+      dinner: this.recipes[2],
+    };
   },
   methods: {
     deleteRecipe(slot) {

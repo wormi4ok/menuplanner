@@ -1,4 +1,5 @@
 /* eslint no-shadow: ["error", { "allow": ["state"] }] */
+import { stateMerge } from 'vue-object-merge';
 import api from '../../api';
 
 const state = () => ({
@@ -6,51 +7,51 @@ const state = () => ({
     menu: {
       0: {
         recipes: {
-          0: {},
-          1: {},
-          2: {},
+          0: null,
+          1: null,
+          2: null,
         },
       },
       1: {
         recipes: {
-          0: {},
-          1: {},
-          2: {},
+          0: null,
+          1: null,
+          2: null,
         },
       },
       2: {
         recipes: {
-          0: {},
-          1: {},
-          2: {},
+          0: null,
+          1: null,
+          2: null,
         },
       },
       3: {
         recipes: {
-          0: {},
-          1: {},
-          2: {},
+          0: null,
+          1: null,
+          2: null,
         },
       },
       4: {
         recipes: {
-          0: {},
-          1: {},
-          2: {},
+          0: null,
+          1: null,
+          2: null,
         },
       },
       5: {
         recipes: {
-          0: {},
-          1: {},
-          2: {},
+          0: null,
+          1: null,
+          2: null,
         },
       },
       6: {
         recipes: {
-          0: {},
-          1: {},
-          2: {},
+          0: null,
+          1: null,
+          2: null,
         },
       },
     },
@@ -87,11 +88,18 @@ const actions = {
       commit('setError', error.response.data);
     });
   },
+  fillGaps({ commit, state }) {
+    api.week.update(state.week, true).then((response) => {
+      commit('setCurrentWeek', response.data);
+    }).catch((error) => {
+      commit('setError', error.response.data);
+    });
+  },
 };
 
 const mutations = {
   setCurrentWeek: (state, week) => {
-    state.week = week;
+    stateMerge(state, week, 'week');
   },
 };
 
