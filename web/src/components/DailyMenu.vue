@@ -1,14 +1,10 @@
 <template>
   <div class="menu">
-    <MenuSlot :recipe="breakfast"
-              @delete-recipe="deleteRecipe(0)"
-              @pick-recipe="pickRecipe(0, $event)"/>
-    <MenuSlot :recipe="lunch"
-              @delete-recipe="deleteRecipe(1)"
-              @pick-recipe="pickRecipe(1, $event)"/>
-    <MenuSlot :recipe="dinner"
-              @delete-recipe="deleteRecipe(2)"
-              @pick-recipe="pickRecipe(2, $event)"/>
+    <MenuSlot v-for="(recipe, slot) in recipes"
+              :key="slot"
+              :recipe="recipe"
+              @delete-recipe="deleteRecipe(slot)"
+              @pick-recipe="pickRecipe(slot, $event)"/>
     <div class="block">
       Summary
     </div>
@@ -25,13 +21,6 @@ export default {
   },
   props: {
     recipes: Object,
-  },
-  data() {
-    return {
-      breakfast: this.recipes[0],
-      lunch: this.recipes[1],
-      dinner: this.recipes[2],
-    };
   },
   methods: {
     deleteRecipe(slot) {
