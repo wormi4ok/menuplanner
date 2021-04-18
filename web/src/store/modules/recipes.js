@@ -11,14 +11,27 @@ const getters = {
 
 const actions = {
   async fetchRecipes({ commit }) {
-    const response = await api.recipe.list();
-    commit('setRecipes', response.data);
+    api.recipe.list().then((response) => {
+      commit('setRecipes', response.data);
+    }).catch((error) => {
+      commit('setError', error.response.data);
+    });
+  },
+  async createRecipe({ commit }, recipe) {
+    api.recipe.create(recipe).then((response) => {
+      commit('pushNewRecipe', response.data);
+    }).catch((error) => {
+      commit('setError', error.response.data);
+    });
   },
 };
 
 const mutations = {
   setRecipes: (state, recipes) => {
     state.recipes = recipes;
+  },
+  pushNewRecipe: (state, recipe) => {
+    state.recipes.push(recipe);
   },
 };
 

@@ -7,12 +7,16 @@
 
 <script>
 import Navbar from '@/components/Navbar.vue';
+import ErrorHandler from '@/mixins/ErrorHandler';
 
 export default {
   name: 'App',
   components: {
     Navbar,
   },
+  mixins: [
+    ErrorHandler,
+  ],
 };
 </script>
 

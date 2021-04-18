@@ -62,29 +62,30 @@ const getters = {
 };
 
 const actions = {
-  async fetchCurrentWeek({ commit }) {
-    const response = await api.week.getCurrent();
-    commit('setCurrentWeek', response.data);
+  fetchCurrentWeek({ commit }) {
+    api.week.getCurrent().then((response) => {
+      commit('setCurrentWeek', response.data);
+    }).catch((error) => {
+      commit('setError', error.response.data);
+    });
   },
-  async emptySlot({ commit, state }, config) {
+  emptySlot({ commit, state }, config) {
     const currentWeek = state.week;
     currentWeek.menu[config.day].recipes[config.slot] = undefined;
-    try {
-      await api.week.update(currentWeek);
+    api.week.update(currentWeek).then(() => {
       commit('setCurrentWeek', currentWeek);
-    } catch (error) {
-      console.log(error);
-    }
+    }).catch((error) => {
+      commit('setError', error.response.data);
+    });
   },
-  async fillSlot({ commit, state }, config) {
+  fillSlot({ commit, state }, config) {
     const currentWeek = state.week;
     currentWeek.menu[config.day].recipes[config.slot] = config.recipe;
-    try {
-      await api.week.update(currentWeek);
+    api.week.update(currentWeek).then(() => {
       commit('setCurrentWeek', currentWeek);
-    } catch (error) {
-      console.log(error);
-    }
+    }).catch((error) => {
+      commit('setError', error.response.data);
+    });
   },
 };
 

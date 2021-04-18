@@ -1,6 +1,6 @@
 <template>
   <div class="modal-card">
-    <form @submit.prevent="AddRecipe">
+    <form @submit.prevent="addRecipe">
       <header class="modal-card-head">
         <p class="modal-card-title">Add recipe</p>
       </header>
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import api from '../api';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'AddRecipeForm',
@@ -49,7 +49,10 @@ export default {
     };
   },
   methods: {
-    AddRecipe() {
+    ...mapActions([
+      'createRecipe',
+    ]),
+    addRecipe() {
       const recipe = {
         name: this.name,
         description: this.description,
@@ -59,13 +62,8 @@ export default {
         fat: this.fat,
         carbs: this.carbs,
       };
-      api.recipe.create(recipe)
-        .then(() => {
-          this.$emit('close');
-        })
-        .catch((error) => {
-          this.$emit('error', error.data);
-        });
+      this.createRecipe(recipe);
+      this.$emit('close');
     },
   },
 };

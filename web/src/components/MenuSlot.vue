@@ -1,6 +1,6 @@
 <template>
   <div class="block">
-    <RecipeCard v-if="!isEmpty" v-bind="recipe" @delete-recipe="$emit('delete-recipe')"/>
+    <RecipeCard v-if="watchRecipe" v-bind="watchRecipe" @delete-recipe="deleteRecipe"/>
     <EmptySlot v-else @pick-recipe="pickRecipe($event)"></EmptySlot>
   </div>
 </template>
@@ -18,14 +18,18 @@ export default {
   props: {
     recipe: Object,
   },
-  computed: {
-    isEmpty() {
-      return !this.recipe;
-    },
+  data() {
+    return {
+      watchRecipe: this.recipe,
+    };
   },
   methods: {
+    deleteRecipe() {
+      this.watchRecipe = null;
+      this.$emit('delete-recipe');
+    },
     pickRecipe(recipe) {
-      this.recipe = recipe;
+      this.watchRecipe = recipe;
       this.$emit('pick-recipe', recipe);
     },
   },

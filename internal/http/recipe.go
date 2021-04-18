@@ -79,7 +79,8 @@ func (e recipeEndpoint) Create() http.HandlerFunc {
 			return
 		}
 
-		if _, err := internal.SaveRecipe(r.Context(), internal.Recipe(req), e.storage); err != nil {
+		id, err := internal.SaveRecipe(r.Context(), internal.Recipe(req), e.storage);
+		if  err != nil {
 			if _, ok := err.(*validator.InvalidValidationError); ok {
 				_, _ = io.WriteString(w, err.Error())
 				w.WriteHeader(http.StatusInternalServerError)
@@ -101,8 +102,13 @@ func (e recipeEndpoint) Create() http.HandlerFunc {
 			}
 			return
 		}
+		req.ID = id
 
 		w.WriteHeader(http.StatusCreated)
+		if err := json.NewEncoder(w).Encode(req); err != nil {
+			_, _ = io.WriteString(w, err.Error())
+			w.WriteHeader(http.StatusInternalServerError)
+		}
 	}
 }
 
