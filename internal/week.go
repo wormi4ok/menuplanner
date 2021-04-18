@@ -35,8 +35,8 @@ func (gf *GapFiller) FillWeek(ctx context.Context, week *Week) *Week {
 		dayCalories := 0
 
 		for j := 0; j < 3; j++ {
-			_, exists := week.Menu[i].Recipes[j]
-			if !exists {
+			recipe, exists := week.Menu[i].Recipes[j]
+			if !exists || recipe == nil {
 				week.Menu[i].Recipes[j] = &Recipe{}
 			}
 
