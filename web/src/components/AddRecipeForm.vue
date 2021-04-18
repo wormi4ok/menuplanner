@@ -37,17 +37,15 @@ import { mapActions } from 'vuex';
 
 export default {
   name: 'AddRecipeForm',
-  data() {
-    return {
-      name: '',
-      description: '',
-      imageUrl: '',
-      calories: 0,
-      protein: 0,
-      fat: 0,
-      carbs: 0,
-    };
-  },
+  data: () => ({
+    name: '',
+    description: '',
+    imageUrl: '',
+    calories: 0,
+    protein: 0,
+    fat: 0,
+    carbs: 0,
+  }),
   methods: {
     ...mapActions([
       'createRecipe',

@@ -33,11 +33,9 @@ export default {
   components: {
     AddRecipeForm,
   },
-  data() {
-    return {
-      showAddRecipeForm: false,
-    };
-  },
+  data: () => ({
+    showAddRecipeForm: false,
+  }),
   methods: {
     ...mapActions(['fillGaps']),
     onFillGaps() {

@@ -4,7 +4,7 @@
 
 <script>
 import Week from '@/components/Week.vue';
-import { mapActions, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Home',
@@ -14,15 +14,5 @@ export default {
   computed: mapGetters({
     data: 'weekMenu',
   }),
-  created() {
-    this.fetchCurrentWeek();
-    this.fetchRecipes();
-  },
-  methods: {
-    ...mapActions([
-      'fetchCurrentWeek',
-      'fetchRecipes',
-    ]),
-  },
 };
 </script>

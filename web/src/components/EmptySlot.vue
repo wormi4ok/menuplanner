@@ -22,11 +22,9 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'EmptySlot',
-  data() {
-    return {
-      name: '',
-    };
-  },
+  data: () => ({
+    name: '',
+  }),
   computed: {
     filteredDataObj() {
       return this.data.filter((option) => (
