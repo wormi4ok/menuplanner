@@ -1,6 +1,6 @@
 <template>
   <div class="block">
-    <RecipeCard v-if="recipe" v-bind="recipe" @delete-recipe="deleteRecipe"/>
+    <RecipeCard v-if="!isEmpty" v-bind="recipe" @delete-recipe="deleteRecipe"/>
     <EmptySlot v-else @pick-recipe="pickRecipe($event)"></EmptySlot>
   </div>
 </template>
@@ -17,6 +17,11 @@ export default {
   },
   props: {
     recipe: Object,
+  },
+  computed: {
+    isEmpty() {
+      return !this.recipe || this.recipe.id === 0;
+    },
   },
   methods: {
     deleteRecipe() {
