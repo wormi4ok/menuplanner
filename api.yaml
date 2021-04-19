@@ -6,6 +6,12 @@ info:
 servers:
   - url: 'http://localhost:8081'
 paths:
+  /health:
+    get:
+      description: Healthcheck endpoint
+      responses:
+        200:
+          description: Service is healthy
   /recipe:
     get:
       description: Get a list of all recipes
@@ -35,6 +41,10 @@ paths:
       responses:
         201:
           description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/recipe"
         400:
           $ref: "#/components/responses/InvalidPayload"
   /recipe/{id}:
@@ -79,6 +89,25 @@ paths:
             applicatin/json:
               schema:
                 $ref: "#/components/schemas/week"
+  /week/day/{day}/slot/{slot}:
+    delete:
+      description: Make a slot for a given day available
+      parameters:
+        - name: day
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: slot
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: Sucefully deleted
+        404:
+          description: Not found
 components:
   schemas:
     recipe:

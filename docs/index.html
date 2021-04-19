@@ -929,6 +929,9 @@ ul.nav-tabs {
             <li class="nav-fixed nav-header active" data-group="_"><a href="#api-_">API Summary</a></li>
 
                   <li class="nav-header" data-group="Default"><a href="#api-Default">API Methods - Default</a></li>
+                    <li data-group="Default" data-name="healthGet" class="">
+                      <a href="#api-Default-healthGet">healthGet</a>
+                    </li>
                     <li data-group="Default" data-name="recipeGet" class="">
                       <a href="#api-Default-recipeGet">recipeGet</a>
                     </li>
@@ -937,6 +940,9 @@ ul.nav-tabs {
                     </li>
                     <li data-group="Default" data-name="recipePost" class="">
                       <a href="#api-Default-recipePost">recipePost</a>
+                    </li>
+                    <li data-group="Default" data-name="weekDayDaySlotSlotDelete" class="">
+                      <a href="#api-Default-weekDayDaySlotSlotDelete">weekDayDaySlotSlotDelete</a>
                     </li>
                     <li data-group="Default" data-name="weekGet" class="">
                       <a href="#api-Default-weekGet">weekGet</a>
@@ -967,6 +973,249 @@ ul.nav-tabs {
         <div id="sections">
                 <section id="api-Default">
                   <h1>Default</h1>
+                    <div id="api-Default-healthGet">
+                      <article id="api-Default-healthGet-0" data-group="User" data-name="healthGet" data-version="0">
+                        <div class="pull-left">
+                          <h1>healthGet</h1>
+                          <p></p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Healthcheck endpoint</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/health</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Default-healthGet-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-healthGet-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-healthGet-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-healthGet-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-healthGet-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-healthGet-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-healthGet-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-healthGet-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-healthGet-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-healthGet-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-healthGet-0-python">Python</a></li>
+                          <li class=""><a href="#examples-Default-healthGet-0-rust">Rust</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Default-healthGet-0-curl">
+                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+ "http://localhost:8081/health"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Default-healthGet-0-java">
+                            <pre class="prettyprint"><code class="language-java">import org.openapitools.client.*;
+import org.openapitools.client.auth.*;
+import org.openapitools.client.model.*;
+import org.openapitools.client.api.DefaultApi;
+
+import java.io.File;
+import java.util.*;
+
+public class DefaultApiExample {
+    public static void main(String[] args) {
+        
+        // Create an instance of the API class
+        DefaultApi apiInstance = new DefaultApi();
+        
+        try {
+            apiInstance.healthGet();
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#healthGet");
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Default-healthGet-0-android">
+                            <pre class="prettyprint"><code class="language-java">import org.openapitools.client.api.DefaultApi;
+
+public class DefaultApiExample {
+    public static void main(String[] args) {
+        DefaultApi apiInstance = new DefaultApi();
+        
+        try {
+            apiInstance.healthGet();
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#healthGet");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Default-healthGet-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Default-healthGet-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">
+
+// Create an instance of the API class
+DefaultApi *apiInstance = [[DefaultApi alloc] init];
+
+[apiInstance healthGetWithCompletionHandler: 
+              ^(NSError* error) {
+    if (error) {
+        NSLog(@"Error: %@", error);
+    }
+}];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-healthGet-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var MenuPlanner = require('menu_planner');
+
+// Create an instance of the API class
+var api = new MenuPlanner.DefaultApi()
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully.');
+  }
+};
+api.healthGet(callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Default-healthGet-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Default-healthGet-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using Org.OpenAPITools.Api;
+using Org.OpenAPITools.Client;
+using Org.OpenAPITools.Model;
+
+namespace Example
+{
+    public class healthGetExample
+    {
+        public void main()
+        {
+            
+            // Create an instance of the API class
+            var apiInstance = new DefaultApi();
+
+            try {
+                apiInstance.healthGet();
+            } catch (Exception e) {
+                Debug.Print("Exception when calling DefaultApi.healthGet: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-healthGet-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+// Create an instance of the API class
+$api_instance = new OpenAPITools\Client\Api\DefaultApi();
+
+try {
+    $api_instance->healthGet();
+} catch (Exception $e) {
+    echo 'Exception when calling DefaultApi->healthGet: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-healthGet-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::OPenAPIClient::Configuration;
+use WWW::OPenAPIClient::DefaultApi;
+
+# Create an instance of the API class
+my $api_instance = WWW::OPenAPIClient::DefaultApi->new();
+
+eval { 
+    $api_instance->healthGet();
+};
+if ($@) {
+    warn "Exception when calling DefaultApi->healthGet: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-healthGet-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import openapi_client
+from openapi_client.rest import ApiException
+from pprint import pprint
+
+# Create an instance of the API class
+api_instance = openapi_client.DefaultApi()
+
+try: 
+    api_instance.health_get()
+except ApiException as e:
+    print("Exception when calling DefaultApi->healthGet: %s\n" % e)</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-healthGet-0-rust">
+                              <pre class="prettyprint"><code class="language-rust">extern crate DefaultApi;
+
+pub fn main() {
+
+    let mut context = DefaultApi::Context::default();
+    let result = client.healthGet(&context).wait();
+
+    println!("{:?}", result);
+}
+</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Scopes</h2>
+                          <table>
+                            
+                          </table>
+
+                          <h2>Parameters</h2>
+
+
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3 id="examples-Default-healthGet-title-200"></h3>
+                            <p id="examples-Default-healthGet-description-200" class="marked"></p>
+                            <script>
+                              var responseDefault200_description = `Service is healthy`;
+                              var responseDefault200_description_break = responseDefault200_description.indexOf('\n');
+                              if (responseDefault200_description_break == -1) {
+                                $("#examples-Default-healthGet-title-200").text("Status: 200 - " + responseDefault200_description);
+                              } else {
+                                $("#examples-Default-healthGet-title-200").text("Status: 200 - " + responseDefault200_description.substring(0, responseDefault200_description_break));
+                                $("#examples-Default-healthGet-description-200").html(responseDefault200_description.substring(responseDefault200_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Default-healthGet-200" class="nav nav-tabs nav-tabs-examples" >
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Default-healthGet-200-wrapper" style='margin-bottom: 10px;'>
+                            </div>
+                        </article>
+                      </div>
+                      <hr>
                     <div id="api-Default-recipeGet">
                       <article id="api-Default-recipeGet-0" data-group="User" data-name="recipeGet" data-version="0">
                         <div class="pull-left">
@@ -1002,7 +1251,7 @@ ul.nav-tabs {
                           <div class="tab-pane active" id="examples-Default-recipeGet-0-curl">
                             <pre class="prettyprint"><code class="language-bsh">curl -X GET\
  -H "Accept: application/json"\
- "http://localhost:8080/recipe"</code></pre>
+ "http://localhost:8081/recipe"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-recipeGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import org.openapitools.client.*;
@@ -1302,7 +1551,7 @@ pub fn main() {
                           <div class="tab-pane active" id="examples-Default-recipeIdGet-0-curl">
                             <pre class="prettyprint"><code class="language-bsh">curl -X GET\
  -H "Accept: application/json"\
- "http://localhost:8080/recipe/{id}"</code></pre>
+ "http://localhost:8081/recipe/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-recipeIdGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import org.openapitools.client.*;
@@ -1637,7 +1886,7 @@ pub fn main() {
                             <pre class="prettyprint"><code class="language-bsh">curl -X POST\
  -H "Accept: application/json"\
  -H "Content-Type: application/json"\
- "http://localhost:8080/recipe"</code></pre>
+ "http://localhost:8081/recipe"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-recipePost-0-java">
                             <pre class="prettyprint"><code class="language-java">import org.openapitools.client.*;
@@ -1656,7 +1905,8 @@ public class DefaultApiExample {
         Recipe recipe = {"name":"Pasta","calories":500,"protein":40,"fat":50,"carbs":200}; // Recipe | 
         
         try {
-            apiInstance.recipePost(recipe);
+            recipe result = apiInstance.recipePost(recipe);
+            System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling DefaultApi#recipePost");
             e.printStackTrace();
@@ -1675,7 +1925,8 @@ public class DefaultApiExample {
         Recipe recipe = {"name":"Pasta","calories":500,"protein":40,"fat":50,"carbs":200}; // Recipe | 
         
         try {
-            apiInstance.recipePost(recipe);
+            recipe result = apiInstance.recipePost(recipe);
+            System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling DefaultApi#recipePost");
             e.printStackTrace();
@@ -1695,7 +1946,10 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
 Recipe *recipe = {"name":"Pasta","calories":500,"protein":40,"fat":50,"carbs":200}; // 
 
 [apiInstance recipePostWith:recipe
-              completionHandler: ^(NSError* error) {
+              completionHandler: ^(recipe output, NSError* error) {
+    if (output) {
+        NSLog(@"%@", output);
+    }
     if (error) {
         NSLog(@"Error: %@", error);
     }
@@ -1714,7 +1968,7 @@ var callback = function(error, data, response) {
   if (error) {
     console.error(error);
   } else {
-    console.log('API called successfully.');
+    console.log('API called successfully. Returned data: ' + data);
   }
 };
 api.recipePost(recipe, callback);
@@ -1743,7 +1997,8 @@ namespace Example
             var recipe = new Recipe(); // Recipe | 
 
             try {
-                apiInstance.recipePost(recipe);
+                recipe result = apiInstance.recipePost(recipe);
+                Debug.WriteLine(result);
             } catch (Exception e) {
                 Debug.Print("Exception when calling DefaultApi.recipePost: " + e.Message );
             }
@@ -1762,7 +2017,8 @@ $api_instance = new OpenAPITools\Client\Api\DefaultApi();
 $recipe = {"name":"Pasta","calories":500,"protein":40,"fat":50,"carbs":200}; // Recipe | 
 
 try {
-    $api_instance->recipePost($recipe);
+    $result = $api_instance->recipePost($recipe);
+    print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling DefaultApi->recipePost: ', $e->getMessage(), PHP_EOL;
 }
@@ -1779,7 +2035,8 @@ my $api_instance = WWW::OPenAPIClient::DefaultApi->new();
 my $recipe = WWW::OPenAPIClient::Object::Recipe->new(); # Recipe | 
 
 eval { 
-    $api_instance->recipePost(recipe => $recipe);
+    my $result = $api_instance->recipePost(recipe => $recipe);
+    print Dumper($result);
 };
 if ($@) {
     warn "Exception when calling DefaultApi->recipePost: $@\n";
@@ -1798,7 +2055,8 @@ api_instance = openapi_client.DefaultApi()
 recipe = {"name":"Pasta","calories":500,"protein":40,"fat":50,"carbs":200} # Recipe | 
 
 try: 
-    api_instance.recipe_post(recipe)
+    api_response = api_instance.recipe_post(recipe)
+    pprint(api_response)
 except ApiException as e:
     print("Exception when calling DefaultApi->recipePost: %s\n" % e)</code></pre>
                             </div>
@@ -1899,12 +2157,56 @@ $(document).ready(function() {
 
 
                             <ul id="responses-detail-Default-recipePost-201" class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-Default-recipePost-201-schema">Schema</a>
+                                </li>
+
+
 
 
                             </ul>
 
 
                             <div class="tab-content" id="responses-Default-recipePost-201-wrapper" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-Default-recipePost-201-schema">
+                                  <div id="responses-Default-recipePost-schema-201" class="exampleStyle">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Created",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/recipe"
+      }
+    }
+  }
+};
+                                        var schema = findNode('schema',schemaWrapper).schema;
+                                        if (!schema) {
+                                          schema = schemaWrapper.schema;
+                                        }
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else if (schema.items != null && schema.items.$ref != null) {
+                                            schema.items = defsParser.$refs.get(schema.items.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-Default-recipePost-201-schema-data').val(JSON.stringify(schema));
+                                        var result = $('#responses-Default-recipePost-schema-201');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-Default-recipePost-201-schema-data' type='hidden' value=''></input>
+                                </div>
                             </div>
                             <h3 id="examples-Default-recipePost-title-400"></h3>
                             <p id="examples-Default-recipePost-description-400" class="marked"></p>
@@ -1975,6 +2277,338 @@ $(document).ready(function() {
                         </article>
                       </div>
                       <hr>
+                    <div id="api-Default-weekDayDaySlotSlotDelete">
+                      <article id="api-Default-weekDayDaySlotSlotDelete-0" data-group="User" data-name="weekDayDaySlotSlotDelete" data-version="0">
+                        <div class="pull-left">
+                          <h1>weekDayDaySlotSlotDelete</h1>
+                          <p></p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Make a slot for a given day available</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="delete"><code><span class="pln">/week/day/{day}/slot/{slot}</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Default-weekDayDaySlotSlotDelete-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-weekDayDaySlotSlotDelete-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-weekDayDaySlotSlotDelete-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-weekDayDaySlotSlotDelete-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-weekDayDaySlotSlotDelete-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-weekDayDaySlotSlotDelete-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-weekDayDaySlotSlotDelete-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-weekDayDaySlotSlotDelete-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-weekDayDaySlotSlotDelete-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-weekDayDaySlotSlotDelete-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-weekDayDaySlotSlotDelete-0-python">Python</a></li>
+                          <li class=""><a href="#examples-Default-weekDayDaySlotSlotDelete-0-rust">Rust</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Default-weekDayDaySlotSlotDelete-0-curl">
+                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
+ "http://localhost:8081/week/day/{day}/slot/{slot}"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Default-weekDayDaySlotSlotDelete-0-java">
+                            <pre class="prettyprint"><code class="language-java">import org.openapitools.client.*;
+import org.openapitools.client.auth.*;
+import org.openapitools.client.model.*;
+import org.openapitools.client.api.DefaultApi;
+
+import java.io.File;
+import java.util.*;
+
+public class DefaultApiExample {
+    public static void main(String[] args) {
+        
+        // Create an instance of the API class
+        DefaultApi apiInstance = new DefaultApi();
+        Integer day = 56; // Integer | 
+        Integer slot = 56; // Integer | 
+        
+        try {
+            apiInstance.weekDayDaySlotSlotDelete(day, slot);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#weekDayDaySlotSlotDelete");
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Default-weekDayDaySlotSlotDelete-0-android">
+                            <pre class="prettyprint"><code class="language-java">import org.openapitools.client.api.DefaultApi;
+
+public class DefaultApiExample {
+    public static void main(String[] args) {
+        DefaultApi apiInstance = new DefaultApi();
+        Integer day = 56; // Integer | 
+        Integer slot = 56; // Integer | 
+        
+        try {
+            apiInstance.weekDayDaySlotSlotDelete(day, slot);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#weekDayDaySlotSlotDelete");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Default-weekDayDaySlotSlotDelete-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Default-weekDayDaySlotSlotDelete-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">
+
+// Create an instance of the API class
+DefaultApi *apiInstance = [[DefaultApi alloc] init];
+Integer *day = 56; //  (default to null)
+Integer *slot = 56; //  (default to null)
+
+[apiInstance weekDayDaySlotSlotDeleteWith:day
+    slot:slot
+              completionHandler: ^(NSError* error) {
+    if (error) {
+        NSLog(@"Error: %@", error);
+    }
+}];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-weekDayDaySlotSlotDelete-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var MenuPlanner = require('menu_planner');
+
+// Create an instance of the API class
+var api = new MenuPlanner.DefaultApi()
+var day = 56; // {Integer} 
+var slot = 56; // {Integer} 
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully.');
+  }
+};
+api.weekDayDaySlotSlotDelete(day, slot, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Default-weekDayDaySlotSlotDelete-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Default-weekDayDaySlotSlotDelete-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using Org.OpenAPITools.Api;
+using Org.OpenAPITools.Client;
+using Org.OpenAPITools.Model;
+
+namespace Example
+{
+    public class weekDayDaySlotSlotDeleteExample
+    {
+        public void main()
+        {
+            
+            // Create an instance of the API class
+            var apiInstance = new DefaultApi();
+            var day = 56;  // Integer |  (default to null)
+            var slot = 56;  // Integer |  (default to null)
+
+            try {
+                apiInstance.weekDayDaySlotSlotDelete(day, slot);
+            } catch (Exception e) {
+                Debug.Print("Exception when calling DefaultApi.weekDayDaySlotSlotDelete: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-weekDayDaySlotSlotDelete-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+// Create an instance of the API class
+$api_instance = new OpenAPITools\Client\Api\DefaultApi();
+$day = 56; // Integer | 
+$slot = 56; // Integer | 
+
+try {
+    $api_instance->weekDayDaySlotSlotDelete($day, $slot);
+} catch (Exception $e) {
+    echo 'Exception when calling DefaultApi->weekDayDaySlotSlotDelete: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-weekDayDaySlotSlotDelete-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::OPenAPIClient::Configuration;
+use WWW::OPenAPIClient::DefaultApi;
+
+# Create an instance of the API class
+my $api_instance = WWW::OPenAPIClient::DefaultApi->new();
+my $day = 56; # Integer | 
+my $slot = 56; # Integer | 
+
+eval { 
+    $api_instance->weekDayDaySlotSlotDelete(day => $day, slot => $slot);
+};
+if ($@) {
+    warn "Exception when calling DefaultApi->weekDayDaySlotSlotDelete: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-weekDayDaySlotSlotDelete-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import openapi_client
+from openapi_client.rest import ApiException
+from pprint import pprint
+
+# Create an instance of the API class
+api_instance = openapi_client.DefaultApi()
+day = 56 # Integer |  (default to null)
+slot = 56 # Integer |  (default to null)
+
+try: 
+    api_instance.week_day_day_slot_slot_delete(day, slot)
+except ApiException as e:
+    print("Exception when calling DefaultApi->weekDayDaySlotSlotDelete: %s\n" % e)</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-weekDayDaySlotSlotDelete-0-rust">
+                              <pre class="prettyprint"><code class="language-rust">extern crate DefaultApi;
+
+pub fn main() {
+    let day = 56; // Integer
+    let slot = 56; // Integer
+
+    let mut context = DefaultApi::Context::default();
+    let result = client.weekDayDaySlotSlotDelete(day, slot, &context).wait();
+
+    println!("{:?}", result);
+}
+</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Scopes</h2>
+                          <table>
+                            
+                          </table>
+
+                          <h2>Parameters</h2>
+
+                            <div class="methodsubtabletitle">Path parameters</div>
+                            <table id="methodsubtable">
+                                <tr>
+                                  <th width="150px">Name</th>
+                                  <th>Description</th>
+                                </tr>
+                                  <tr><td style="width:150px;">day*</td>
+<td>
+
+
+    <div id="d2e199_weekDayDaySlotSlotDelete_day">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    Integer
+                </span>
+
+            </div>
+                <div class="inner required">
+                    Required
+                </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                                  <tr><td style="width:150px;">slot*</td>
+<td>
+
+
+    <div id="d2e199_weekDayDaySlotSlotDelete_slot">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    Integer
+                </span>
+
+            </div>
+                <div class="inner required">
+                    Required
+                </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                            </table>
+
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3 id="examples-Default-weekDayDaySlotSlotDelete-title-204"></h3>
+                            <p id="examples-Default-weekDayDaySlotSlotDelete-description-204" class="marked"></p>
+                            <script>
+                              var responseDefault204_description = `Sucefully deleted`;
+                              var responseDefault204_description_break = responseDefault204_description.indexOf('\n');
+                              if (responseDefault204_description_break == -1) {
+                                $("#examples-Default-weekDayDaySlotSlotDelete-title-204").text("Status: 204 - " + responseDefault204_description);
+                              } else {
+                                $("#examples-Default-weekDayDaySlotSlotDelete-title-204").text("Status: 204 - " + responseDefault204_description.substring(0, responseDefault204_description_break));
+                                $("#examples-Default-weekDayDaySlotSlotDelete-description-204").html(responseDefault204_description.substring(responseDefault204_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Default-weekDayDaySlotSlotDelete-204" class="nav nav-tabs nav-tabs-examples" >
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Default-weekDayDaySlotSlotDelete-204-wrapper" style='margin-bottom: 10px;'>
+                            </div>
+                            <h3 id="examples-Default-weekDayDaySlotSlotDelete-title-404"></h3>
+                            <p id="examples-Default-weekDayDaySlotSlotDelete-description-404" class="marked"></p>
+                            <script>
+                              var responseDefault404_description = `Not found`;
+                              var responseDefault404_description_break = responseDefault404_description.indexOf('\n');
+                              if (responseDefault404_description_break == -1) {
+                                $("#examples-Default-weekDayDaySlotSlotDelete-title-404").text("Status: 404 - " + responseDefault404_description);
+                              } else {
+                                $("#examples-Default-weekDayDaySlotSlotDelete-title-404").text("Status: 404 - " + responseDefault404_description.substring(0, responseDefault404_description_break));
+                                $("#examples-Default-weekDayDaySlotSlotDelete-description-404").html(responseDefault404_description.substring(responseDefault404_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Default-weekDayDaySlotSlotDelete-404" class="nav nav-tabs nav-tabs-examples" >
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Default-weekDayDaySlotSlotDelete-404-wrapper" style='margin-bottom: 10px;'>
+                            </div>
+                        </article>
+                      </div>
+                      <hr>
                     <div id="api-Default-weekGet">
                       <article id="api-Default-weekGet-0" data-group="User" data-name="weekGet" data-version="0">
                         <div class="pull-left">
@@ -2010,7 +2644,7 @@ $(document).ready(function() {
                           <div class="tab-pane active" id="examples-Default-weekGet-0-curl">
                             <pre class="prettyprint"><code class="language-bsh">curl -X GET\
  -H "Accept: applicatin/json"\
- "http://localhost:8080/week"</code></pre>
+ "http://localhost:8081/week"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-weekGet-0-java">
                             <pre class="prettyprint"><code class="language-java">import org.openapitools.client.*;
@@ -2307,7 +2941,7 @@ pub fn main() {
                           <div class="tab-pane active" id="examples-Default-weekPut-0-curl">
                             <pre class="prettyprint"><code class="language-bsh">curl -X PUT\
  -H "Accept: applicatin/json"\
- "http://localhost:8080/week?fillGaps="</code></pre>
+ "http://localhost:8081/week?fillGaps="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-weekPut-0-java">
                             <pre class="prettyprint"><code class="language-java">import org.openapitools.client.*;
