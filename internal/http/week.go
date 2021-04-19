@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/wormi4ok/menuplanner/internal"
@@ -21,6 +22,7 @@ func (e weekEndpoint) Routes() chi.Router {
 
 	r.Put("/", e.Update())
 	r.Get("/", e.Get())
+	r.Delete("/day/{day}/slot/{slot}", e.Delete())
 
 	return r
 }
@@ -29,7 +31,7 @@ func (e *weekEndpoint) Get() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		err := json.NewEncoder(w).Encode(e.storage.ReadCurrent())
+		err := json.NewEncoder(w).Encode(e.storage.ReadCurrent(r.Context()))
 		if err != nil {
 			log.Printf("Handler error: %v", err)
 			w.WriteHeader(500)
@@ -61,12 +63,33 @@ func (e *weekEndpoint) Update() http.HandlerFunc {
 		if r.URL.Query().Get("fillGaps") != "" {
 			e.filler.FillWeek(r.Context(), week)
 		}
-		res := e.storage.UpdateCurrent(week)
+		res := e.storage.UpdateCurrent(r.Context(), week)
 
 		w.WriteHeader(http.StatusAccepted)
 		if err := json.NewEncoder(w).Encode(res); err != nil {
 			_, _ = io.WriteString(w, err.Error())
 			w.WriteHeader(http.StatusInternalServerError)
 		}
+	}
+}
+
+func (e *weekEndpoint) Delete() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		day, err := strconv.Atoi(chi.URLParam(r, "day"))
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+			return
+		}
+		slot, err := strconv.Atoi(chi.URLParam(r, "slot"))
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+			return
+		}
+		err = e.storage.DeleteSlot(r.Context(), 1, day, slot)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusNotFound)
+			return
+		}
+		w.WriteHeader(http.StatusNoContent)
 	}
 }

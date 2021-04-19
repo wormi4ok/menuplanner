@@ -3,6 +3,7 @@ package mock
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"os"
 
 	"github.com/wormi4ok/menuplanner/internal"
@@ -77,12 +78,12 @@ func (ws *Weeks) LoadFromFile(path string) error {
 	return nil
 }
 
-func (ws *Weeks) UpdateCurrent(week *internal.Week) *internal.Week {
+func (ws *Weeks) UpdateCurrent(_ context.Context, week *internal.Week) *internal.Week {
 	ws.current = week
 	return ws.current
 }
 
-func (ws *Weeks) ReadCurrent() *internal.Week {
+func (ws *Weeks) ReadCurrent(_ context.Context) *internal.Week {
 	c := ws.current
 	for i, day := range c.Menu {
 		for k, recipe := range day.Recipes {
@@ -95,4 +96,17 @@ func (ws *Weeks) ReadCurrent() *internal.Week {
 	}
 
 	return c
+}
+
+func (ws *Weeks) DeleteSlot(_ context.Context, _, day, slot int) error {
+	menu := ws.current.Menu
+	if menu != nil {
+		if _, exists := menu[day]; exists {
+			if _, exists = menu[day].Recipes[slot]; exists {
+				ws.current.Menu[day].Recipes[slot] = nil
+				return nil
+			}
+		}
+	}
+	return errors.New("not found")
 }

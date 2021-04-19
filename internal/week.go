@@ -2,19 +2,20 @@ package internal
 
 import "context"
 
-type WeekRepository interface {
-	ReadCurrent() *Week
-	UpdateCurrent(*Week) *Week
-}
+type (
+	WeekRepository interface {
+		ReadCurrent(context.Context) *Week
+		UpdateCurrent(context.Context, *Week) *Week
+		DeleteSlot(ctx context.Context, week, day, slot int) error
+	}
+)
 
 type DailyMenu struct {
 	Recipes map[int]*Recipe `json:"recipes"`
 }
 
-type Menu map[int]DailyMenu
-
 type Week struct {
-	Menu Menu `json:"menu"`
+	Menu map[int]DailyMenu `json:"menu"`
 }
 
 type GapFiller struct {

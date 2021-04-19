@@ -34,6 +34,10 @@ func NewServer(
 	r.Mount("/week", we.Routes())
 	r.Mount("/recipe", recipeEndpoint{recipes}.Routes())
 	r.Handle("/docs*", docsEndpoint{docs})
+	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		_, _ = fmt.Fprintln(w, "What's on the menu?")
+	})
 
 	srv := &http.Server{
 		Addr:         fmt.Sprintf("%s:%d", host, port),
