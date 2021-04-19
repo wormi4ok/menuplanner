@@ -14,4 +14,6 @@ RUN go get github.com/githubnemo/CompileDaemon
 
 EXPOSE 8081
 
+HEALTHCHECK --timeout=3s CMD curl -f http://localhost:8081/health || exit 1
+
 ENTRYPOINT CompileDaemon -build="go install" -command="/go/bin/menuplanner"

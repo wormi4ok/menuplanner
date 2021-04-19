@@ -1,4 +1,23 @@
 services:
+  db:
+    image: mysql:5.7
+    ports:
+      - 3306
+    environment:
+      MYSQL_ROOT_PASSWORD: unsecurepassword
+      MYSQL_DATABASE: menuplanner
+      MYSQL_USER: menuplanner
+      MYSQL_PASSWORD: menuplanner
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    ports:
+      - 8183:80
   web:
     build:
       context: web
@@ -15,9 +34,11 @@ services:
       - .:/go/src/github.com/wormi4ok/menuplanner
     ports:
       - 127.0.0.1:8081:8081
+    depends_on:
+      - db
+    restart: always
     environment:
       MP_HOST: 0.0.0.0
-      MP_RECIPES_JSON: internal/testdata/recipes.json
-      MP_WEEK_JSON: internal/testdata/week_with_gaps.json
-
-
+      MP_MYSQL_DSN: menuplanner:menuplanner@tcp(db:3306)/menuplanner?charset=utf8mb4&parseTime=True&loc=Local
+#      MP_RECIPES_JSON: recipes.json
+#      MP_WEEK_JSON: internal/testdata/week_with_gaps.json
