@@ -42,6 +42,10 @@ const week = {
       params,
     });
   },
+
+  delete(day, slot) {
+    return client.delete(`/week/day/${day}/slot/${slot}`);
+  },
 };
 
 export default {

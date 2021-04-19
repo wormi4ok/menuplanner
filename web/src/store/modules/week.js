@@ -73,7 +73,7 @@ const actions = {
   emptySlot({ commit, state }, config) {
     const currentWeek = state.week;
     currentWeek.menu[config.day].recipes[config.slot] = undefined;
-    api.week.update(currentWeek).then(() => {
+    api.week.delete(config.day, config.slot).then(() => {
       commit('setCurrentWeek', currentWeek);
     }).catch((error) => {
       commit('setError', error.response.data);
