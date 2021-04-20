@@ -49,7 +49,7 @@ func (gf *GapFiller) FillWeek(ctx context.Context, week *Week) *Week {
 						continue
 					}
 
-					if recipe.Calories+dayCalories > MaxCalories {
+					if recipe.EnergyAmount()+dayCalories > MaxCalories {
 						continue
 					}
 
@@ -61,7 +61,7 @@ func (gf *GapFiller) FillWeek(ctx context.Context, week *Week) *Week {
 				week.Menu[i].Recipes[j] = gf.r.Read(ctx, id)
 			}
 			todayRecipeIDs[id] = week.Menu[i].Recipes[j]
-			dayCalories = dayCalories + week.Menu[i].Recipes[j].Calories
+			dayCalories = dayCalories + week.Menu[i].Recipes[j].EnergyAmount()
 		}
 	}
 

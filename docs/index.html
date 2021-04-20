@@ -858,9 +858,15 @@ ul.nav-tabs {
   }
 };
     defs["recipe"] = {
+  "required" : [ "calories", "carbs", "cards", "course", "fat", "name" ],
   "properties" : {
     "name" : {
       "type" : "string"
+    },
+    "course" : {
+      "type" : "string",
+      "description" : "For what kind of meal this recipe is suitable",
+      "enum" : [ "breakfast", "main", "pudding" ]
     },
     "description" : {
       "type" : "string"
@@ -879,6 +885,14 @@ ul.nav-tabs {
     },
     "carbs" : {
       "type" : "integer"
+    },
+    "quantity" : {
+      "type" : "integer",
+      "description" : "The amount of food used for energy amount calculations"
+    },
+    "portion" : {
+      "type" : "integer",
+      "description" : "Size of portion in grams"
     }
   }
 };

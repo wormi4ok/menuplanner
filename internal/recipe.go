@@ -21,13 +21,16 @@ type RecipeWriter interface {
 	Delete(ctx context.Context, id int) bool
 }
 
-type Validator interface {
-	StructCtx(ctx context.Context, s interface{}) (err error)
-}
+const (
+	CourseBreakfast = "breakfast"
+	CourseMain      = "main"
+	CoursePudding   = "pudding"
+)
 
 type Recipe struct {
 	ID          int    `json:"id"`
-	Name        string `json:"name" validate:"required"`
+	Name        string `json:"name" validate:"required" gorm:"not null"`
+	Course      string `json:"course" validate:"oneof:breakfast main pudding" gorm:"size:255 not null"`
 	Description string `json:"description,omitempty"`
 	ImageURL    string `json:"imageUrl" validate:"omitempty,url"`
 
@@ -35,6 +38,21 @@ type Recipe struct {
 	Protein  int `json:"protein" validate:"required"`
 	Fat      int `json:"fat" validate:"required"`
 	Carbs    int `json:"carbs" validate:"required"`
+
+	Quantity int `json:"quantity,omitempty"`
+	Portion  int `json:"portion,omitempty" validate:"required_with=Quantity"`
+}
+
+func (r *Recipe) EnergyAmount() int {
+	if r.Quantity > 0 {
+		return r.Calories / r.Quantity * r.Portion
+	}
+
+	return r.Calories
+}
+
+type Validator interface {
+	StructCtx(ctx context.Context, s interface{}) (err error)
 }
 
 func SaveRecipe(ctx context.Context, recipe Recipe, storage RecipeWriter) (id int, err error) {

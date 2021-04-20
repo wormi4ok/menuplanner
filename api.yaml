@@ -114,6 +114,13 @@ components:
       properties:
         name:
           type: string
+        course:
+          type: string
+          description: For what kind of meal this recipe is suitable
+          enum:
+            - breakfast
+            - main
+            - pudding
         description:
           type: string
         imageUrl:
@@ -126,6 +133,19 @@ components:
           type: integer
         carbs:
           type: integer
+        quantity:
+          description: The amount of food used for energy amount calculations
+          type: integer
+        portion:
+          description: Size of portion in grams
+          type: integer
+      required:
+        - name
+        - course
+        - calories
+        - fat
+        - cards
+        - carbs
     week:
       type: object
       properties:
