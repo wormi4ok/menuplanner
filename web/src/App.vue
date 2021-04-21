@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <Navbar/>
-    <router-view/>
+    <div class="container is-widescreen">
+      <router-view/>
+    </div>
     <b-loading :is-full-page="true" v-model="isLoading"></b-loading>
   </div>
 </template>

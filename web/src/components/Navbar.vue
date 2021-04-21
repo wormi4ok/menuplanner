@@ -1,5 +1,5 @@
 <template>
-  <b-navbar>
+  <b-navbar class="mb-2">
     <template #brand>
       <b-navbar-item tag="router-link" :to="{ path: '/' }">
         <img src="https://flaningo.ru/wp-content/uploads/2019/03/cropped-99-1.jpg" alt="MenuPlanner logo">
@@ -16,7 +16,7 @@
       </b-navbar-item>
       <b-navbar-item>
         <b-button label="Add Recipe" @click="showAddRecipeForm = true"/>
-        <b-modal v-model="showAddRecipeForm">
+        <b-modal v-model="showAddRecipeForm" scroll="keep">
           <AddRecipeForm @close="showAddRecipeForm = false"/>
         </b-modal>
       </b-navbar-item>
