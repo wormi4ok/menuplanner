@@ -25,12 +25,14 @@ export default {
     this.isLoading = true;
     this.fetchCurrentWeek();
     this.fetchRecipes();
+    this.fetchCourses();
     this.isLoading = false;
   },
   methods: {
     ...mapActions([
       'fetchCurrentWeek',
       'fetchRecipes',
+      'fetchCourses',
     ]),
   },
   mixins: [

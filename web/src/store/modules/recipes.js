@@ -5,15 +5,8 @@ const state = () => ({
   recipes: [],
 });
 
-const courses = [
-  'breakfast',
-  'main',
-  'pudding',
-];
-
 const getters = {
   listRecipes: (state) => state.recipes,
-  listCourses: () => courses,
 };
 
 const actions = {

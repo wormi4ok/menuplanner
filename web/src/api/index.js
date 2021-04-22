@@ -28,6 +28,15 @@ const recipe = {
   },
 };
 
+const course = {
+  list() {
+    return client.get('/course');
+  },
+  get(id) {
+    return client.get(`/course/${id}`);
+  },
+};
+
 const week = {
   getCurrent() {
     return client.get('/week');
@@ -50,5 +59,6 @@ const week = {
 
 export default {
   recipe,
+  course,
   week,
 };

@@ -15,12 +15,12 @@
               required
               expanded/>
             <b-checkbox-button v-model="courses"
-                               v-for="value in listCourses"
-                               :value="value"
-                               :key="value"
-                               :native-value="value"
-                               :type="courseColorCode(value)">
-              <span class="is-capitalized">{{ value }}</span>
+                               v-for="course in listCourses"
+                               :value="course.name"
+                               :key="course.id"
+                               :native-value="course"
+                               :type="courseColorCode(course)">
+              <span class="is-capitalized">{{ course.name }}</span>
             </b-checkbox-button>
           </b-field>
         </b-field>
@@ -57,18 +57,18 @@
         <b-collapse :open="false" position="is-bottom" aria-id="contentIdForA11y1">
           <template #trigger="data">
             <a aria-controls="contentIdForA11y1">
-              <b-icon :icon="!data.showQuantityInput ? 'menu-down' : 'menu-up'"></b-icon>
+              <b-icon :icon="!data.showQuantityInput ? 'caret-down' : 'caret-up'"></b-icon>
               Specify Quantity
             </a>
           </template>
           <b-field grouped position="is-centered">
-            <b-field label="Quantity">
+            <b-field label="Quantity (g)">
               <b-numberinput v-model="quantity"
                              step="50"
                              min-step="1"
                              controls-position="compact"/>
             </b-field>
-            <b-field label="Portion">
+            <b-field label="Portion (g)">
               <b-numberinput v-model="portion"
                              step="50"
                              min-step="1"
@@ -99,8 +99,8 @@ export default {
     protein: 0,
     fat: 0,
     carbs: 0,
-    quantity: 0,
-    portion: 0,
+    quantity: 100,
+    portion: 350,
     showQuantityInput: false,
   }),
   computed: {
@@ -134,7 +134,7 @@ export default {
         main: 'is-info',
         pudding: 'is-danger',
       };
-      return map[course];
+      return map[course.name];
     },
   },
 };
