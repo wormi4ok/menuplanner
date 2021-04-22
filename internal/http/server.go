@@ -24,6 +24,7 @@ func (s *Server) Shutdown(ctx context.Context) error {
 func NewServer(
 	host string, port int,
 	recipes internal.RecipeRepository,
+	courses internal.CourseReader,
 	weeks internal.WeekRepository,
 	docs []byte,
 ) *Server {
@@ -33,6 +34,7 @@ func NewServer(
 	r.Get("/", we.Get())
 	r.Mount("/week", we.Routes())
 	r.Mount("/recipe", recipeEndpoint{recipes}.Routes())
+	r.Mount("/course", courseEndpoint{courses}.Routes())
 	r.Handle("/docs*", docsEndpoint{docs})
 	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)

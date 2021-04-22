@@ -18,7 +18,7 @@ type recipeEndpoint struct {
 	storage internal.RecipeRepository
 }
 
-// Routes creates a REST router for the todos resource
+// Routes creates a REST router for the recipe resource
 func (e recipeEndpoint) Routes() chi.Router {
 	r := chi.NewRouter()
 

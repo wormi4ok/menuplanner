@@ -26,14 +26,3 @@ func (s *DB) ReadAll(ctx context.Context) (rr []*internal.Recipe) {
 	s.db.WithContext(ctx).Preload("Courses").Find(&rr)
 	return
 }
-
-func (s *DB) preloadCourses() {
-	courses := []internal.Course{
-		{Name: internal.CourseBreakfast},
-		{Name: internal.CourseMain},
-		{Name: internal.CoursePudding},
-	}
-	for _, course := range courses {
-		s.db.FirstOrCreate(&course, &course)
-	}
-}

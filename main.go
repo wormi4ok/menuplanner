@@ -35,16 +35,17 @@ func main() {
 	var (
 		weekStorage   internal.WeekRepository
 		recipeStorage internal.RecipeRepository
+		courseStorage internal.CourseReader
 	)
 
 	if c.MysqlDSN != "" {
 		db := loadDB(c)
-		weekStorage, recipeStorage = db, db
+		weekStorage, recipeStorage, courseStorage = db, db, db
 	} else {
 		recipeStorage, weekStorage = loadMocks(c)
 	}
 
-	srv := http.NewServer(c.Host, c.Port, recipeStorage, weekStorage, docs)
+	srv := http.NewServer(c.Host, c.Port, recipeStorage, courseStorage, weekStorage, docs)
 	log.Printf("Starting service on %s port %d...\n", c.Host, c.Port)
 
 	handleServerShutdown(srv)

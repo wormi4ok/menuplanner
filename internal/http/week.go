@@ -16,7 +16,7 @@ type weekEndpoint struct {
 	filler  *internal.GapFiller
 }
 
-// Routes creates a REST router for the todos resource
+// Routes creates a REST router for the week resource
 func (e weekEndpoint) Routes() chi.Router {
 	r := chi.NewRouter()
 

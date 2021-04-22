@@ -21,17 +21,6 @@ type RecipeWriter interface {
 	Delete(ctx context.Context, id int) bool
 }
 
-const (
-	CourseBreakfast = "breakfast"
-	CourseMain      = "main"
-	CoursePudding   = "pudding"
-)
-
-type Course struct {
-	ID   int    `json:"id"`
-	Name string `json:"name" gorm:"not null;size:255"`
-}
-
 type Recipe struct {
 	ID          int      `json:"id"`
 	Name        string   `json:"name" validate:"required" gorm:"not null"`

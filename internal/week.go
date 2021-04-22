@@ -2,13 +2,11 @@ package internal
 
 import "context"
 
-type (
-	WeekRepository interface {
-		ReadCurrent(context.Context) *Week
-		UpdateCurrent(context.Context, *Week) *Week
-		DeleteSlot(ctx context.Context, week, day, slot int) error
-	}
-)
+type WeekRepository interface {
+	ReadCurrent(context.Context) *Week
+	UpdateCurrent(context.Context, *Week) *Week
+	DeleteSlot(ctx context.Context, week, day, slot int) error
+}
 
 type DailyMenu struct {
 	Recipes map[int]*Recipe `json:"recipes"`
