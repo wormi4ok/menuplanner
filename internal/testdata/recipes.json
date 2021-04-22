@@ -2,33 +2,73 @@
   {
     "id": 1,
     "name": "Bolognese",
+    "courses": [
+      {
+        "id": 2,
+        "name": "main"
+      }
+    ],
     "calories": 600,
     "protein": 40,
     "fat": 50,
-    "carbs": 200
+    "carbs": 200,
+    "quantity": 100,
+    "portion": 350
   },
   {
     "id": 2,
     "name": "Moroccan Carrot Soup",
+    "courses": [
+      {
+        "id": 2,
+        "name": "main"
+      }
+    ],
     "calories": 700,
     "protein": 60,
     "fat": 50,
-    "carbs": 50
+    "carbs": 50,
+    "quantity": 100,
+    "portion": 350
   },
   {
     "id": 3,
     "name": "Pancake",
+    "courses": [
+      {
+        "id": 1,
+        "name": "breakfast"
+      },
+      {
+        "id": 3,
+        "name": "pudding"
+      }
+    ],
     "calories": 450,
     "protein": 50,
     "fat": 10,
-    "carbs": 300
+    "carbs": 300,
+    "quantity": 100,
+    "portion": 200
   },
   {
     "id": 4,
-    "name": "Pasta Carbonara",
+    "name": "Oatmeal porridge",
+    "courses": [
+      {
+        "id": 1,
+        "name": "breakfast"
+      },
+      {
+        "id": 2,
+        "name": "main"
+      }
+    ],
     "calories": 300,
     "protein": 120,
     "fat": 80,
-    "carbs": 260
+    "carbs": 260,
+    "quantity": 100,
+    "portion": 350
   }
 ]

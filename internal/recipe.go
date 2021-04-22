@@ -14,6 +14,7 @@ type RecipeRepository interface {
 type RecipeReader interface {
 	Read(ctx context.Context, id int) *Recipe
 	ReadAll(ctx context.Context) []*Recipe
+	ReadRandom(ctx context.Context, course Course) *Recipe
 }
 
 type RecipeWriter interface {

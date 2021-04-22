@@ -4,13 +4,31 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"math/rand"
 	"os"
+	"time"
 
 	"github.com/wormi4ok/menuplanner/internal"
 )
 
 type Recipes struct {
 	all []*internal.Recipe
+}
+
+func (rs *Recipes) ReadRandom(_ context.Context, course internal.Course) *internal.Recipe {
+	rand.Seed(time.Now().UnixNano())
+	var rr []*internal.Recipe
+	for _, r := range rs.all {
+		for _, c := range r.Courses {
+			if course.ID == c.ID {
+				rr = append(rr, r)
+			}
+		}
+	}
+	if rr == nil {
+		return nil
+	}
+	return rr[rand.Intn(len(rr))]
 }
 
 func (rs *Recipes) LoadFromFile(path string) error {
