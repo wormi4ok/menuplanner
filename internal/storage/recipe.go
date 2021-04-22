@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/wormi4ok/menuplanner/internal"
+	"gorm.io/gorm/clause"
 )
 
 func (s *DB) Create(ctx context.Context, recipe *internal.Recipe) (*internal.Recipe, error) {
@@ -11,16 +12,28 @@ func (s *DB) Create(ctx context.Context, recipe *internal.Recipe) (*internal.Rec
 }
 
 func (s *DB) Delete(ctx context.Context, id int) bool {
-	return s.db.WithContext(ctx).Delete(&internal.Recipe{}, id).Error == nil
+	r := &internal.Recipe{ID: id}
+	return s.db.WithContext(ctx).Model(&r).Select(clause.Associations).Delete(&r).Error == nil
 }
 
 func (s *DB) Read(ctx context.Context, id int) *internal.Recipe {
 	r := &internal.Recipe{}
-	s.db.WithContext(ctx).First(&r, id)
+	s.db.WithContext(ctx).Preload("Courses").First(&r, id)
 	return r
 }
 
 func (s *DB) ReadAll(ctx context.Context) (rr []*internal.Recipe) {
-	s.db.WithContext(ctx).Find(&rr)
+	s.db.WithContext(ctx).Preload("Courses").Find(&rr)
 	return
+}
+
+func (s *DB) preloadCourses() {
+	courses := []internal.Course{
+		{Name: internal.CourseBreakfast},
+		{Name: internal.CourseMain},
+		{Name: internal.CoursePudding},
+	}
+	for _, course := range courses {
+		s.db.FirstOrCreate(&course, &course)
+	}
 }

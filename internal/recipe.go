@@ -27,12 +27,17 @@ const (
 	CoursePudding   = "pudding"
 )
 
+type Course struct {
+	ID   int    `json:"id"`
+	Name string `json:"name" gorm:"not null;size:255"`
+}
+
 type Recipe struct {
-	ID          int    `json:"id"`
-	Name        string `json:"name" validate:"required" gorm:"not null"`
-	Course      string `json:"course" validate:"oneof:breakfast main pudding" gorm:"size:255 not null"`
-	Description string `json:"description,omitempty"`
-	ImageURL    string `json:"imageUrl" validate:"omitempty,url"`
+	ID          int      `json:"id"`
+	Name        string   `json:"name" validate:"required" gorm:"not null"`
+	Courses     []Course `json:"courses" gorm:"many2many:recipe_courses;"`
+	Description string   `json:"description,omitempty"`
+	ImageURL    string   `json:"imageUrl" validate:"omitempty,url"`
 
 	Calories int `json:"calories" validate:"required"`
 	Protein  int `json:"protein" validate:"required"`

@@ -20,5 +20,9 @@ func InitDB(dsn string) (*DB, error) {
 		return nil, err
 	}
 
-	return &DB{db: db}, nil
+	instance := &DB{db: db}
+
+	instance.preloadCourses()
+
+	return instance, nil
 }
