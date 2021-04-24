@@ -1,39 +1,39 @@
 [
   {
     "id": 1,
-    "name": "Bolognese",
+    "name": "Spicy Poblano Bolognese",
     "courses": [
       {
         "id": 2,
         "name": "main"
       }
     ],
-    "calories": 600,
-    "protein": 40,
-    "fat": 50,
-    "carbs": 200,
+    "calories": 239,
+    "protein": 13,
+    "fat": 10,
+    "carbs": 30,
     "quantity": 100,
     "portion": 350
   },
   {
     "id": 2,
-    "name": "Moroccan Carrot Soup",
+    "name": "Moroccan-Style Chickpea & Tomato Stew",
     "courses": [
       {
         "id": 2,
         "name": "main"
       }
     ],
-    "calories": 700,
-    "protein": 60,
-    "fat": 50,
-    "carbs": 50,
+    "calories": 163,
+    "protein": 6,
+    "fat": 3,
+    "carbs": 27,
     "quantity": 100,
-    "portion": 350
+    "portion": 400
   },
   {
     "id": 3,
-    "name": "Pancake",
+    "name": "Lemon Ricotta Pancakes",
     "courses": [
       {
         "id": 1,
@@ -44,31 +44,59 @@
         "name": "pudding"
       }
     ],
-    "calories": 450,
-    "protein": 50,
-    "fat": 10,
-    "carbs": 300,
+    "calories": 180,
+    "protein": 8,
+    "fat": 9,
+    "carbs": 20,
     "quantity": 100,
-    "portion": 200
+    "portion": 300
   },
   {
     "id": 4,
-    "name": "Oatmeal porridge",
+    "name": "Chocolate Fudgy Brownies",
     "courses": [
       {
-        "id": 1,
-        "name": "breakfast"
-      },
+        "id": 3,
+        "name": "pudding"
+      }
+    ],
+    "calories": 320,
+    "protein": 4,
+    "fat": 12,
+    "carbs": 46,
+    "quantity": 100,
+    "portion": 50
+  },
+  {
+    "id": 5,
+    "name": "Chicken Gyro Couscous Bowls",
+    "courses": [
       {
         "id": 2,
         "name": "main"
       }
     ],
-    "calories": 300,
-    "protein": 120,
-    "fat": 80,
-    "carbs": 260,
-    "quantity": 100,
-    "portion": 350
+    "calories": 630,
+    "protein": 41,
+    "fat": 28,
+    "carbs": 51,
+    "quantity": 0,
+    "portion": 0
+  },
+  {
+    "id": 6,
+    "name": "Apple Pecan Breakfast Oatmeal Bake",
+    "courses": [
+      {
+        "id": 1,
+        "name": "breakfast"
+      }
+    ],
+    "calories": 490,
+    "protein": 11,
+    "fat": 24,
+    "carbs": 61,
+    "quantity": 0,
+    "portion": 0
   }
 ]

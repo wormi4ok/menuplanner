@@ -46,6 +46,10 @@ func (r *Recipe) EnergyAmount() int {
 	return r.Calories
 }
 
+func (r *Recipe) IsEmpty() bool {
+	return r.ID == 0
+}
+
 type Validator interface {
 	StructCtx(ctx context.Context, s interface{}) (err error)
 }
