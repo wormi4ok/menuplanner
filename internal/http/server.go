@@ -30,7 +30,7 @@ func NewServer(
 ) *Server {
 	r := router()
 
-	we := weekEndpoint{storage: weeks, filler: internal.NewGapFiller(recipes)}
+	we := weekEndpoint{storage: weeks, filler: internal.NewGapFiller(recipes, courses)}
 	r.Get("/", we.Get())
 	r.Mount("/week", we.Routes())
 	r.Mount("/recipe", recipeEndpoint{recipes}.Routes())

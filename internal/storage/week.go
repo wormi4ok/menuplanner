@@ -25,12 +25,12 @@ func (s *DB) ReadCurrent(ctx context.Context) *internal.Week {
 	var w []Week
 	s.db.WithContext(ctx).Joins("Recipe").Find(&w, "weeks.id = ?", currentWeek)
 	for _, line := range w {
-		if week.Menu[line.Day].Recipes == nil {
-			week.Menu[line.Day] = &internal.DailyMenu{Recipes: map[int]*internal.Recipe{
-				line.Slot: &line.Recipe,
+		if week.Menu[line.Day] == nil {
+			week.Menu[line.Day] = &internal.DailyMenu{Recipes: map[int]internal.Recipe{
+				line.Slot: line.Recipe,
 			}}
 		} else {
-			week.Menu[line.Day].Recipes[line.Slot] = &line.Recipe
+			week.Menu[line.Day].Recipes[line.Slot] = line.Recipe
 		}
 	}
 
@@ -40,7 +40,7 @@ func (s *DB) ReadCurrent(ctx context.Context) *internal.Week {
 func (s *DB) UpdateCurrent(ctx context.Context, week *internal.Week) *internal.Week {
 	for day, menu := range week.Menu {
 		for slot, recipe := range menu.Recipes {
-			if recipe == nil || recipe.ID == 0 {
+			if recipe.IsEmpty() {
 				continue
 			}
 			w := &Week{

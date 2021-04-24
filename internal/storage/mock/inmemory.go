@@ -105,11 +105,7 @@ func (ws *Weeks) ReadCurrent(_ context.Context) *internal.Week {
 	c := ws.current
 	for i, day := range c.Menu {
 		for k, recipe := range day.Recipes {
-			r := new(internal.Recipe)
-			if recipe != nil {
-				r = ws.Recipes.Read(context.TODO(), recipe.ID)
-			}
-			c.Menu[i].Recipes[k] = r
+			c.Menu[i].Recipes[k] = *ws.Recipes.Read(context.TODO(), recipe.ID)
 		}
 	}
 
@@ -121,7 +117,7 @@ func (ws *Weeks) DeleteSlot(_ context.Context, _, day, slot int) error {
 	if menu != nil {
 		if _, exists := menu[day]; exists {
 			if _, exists = menu[day].Recipes[slot]; exists {
-				ws.current.Menu[day].Recipes[slot] = nil
+				ws.current.Menu[day].Recipes[slot] = internal.Recipe{}
 				return nil
 			}
 		}

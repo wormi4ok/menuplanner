@@ -38,7 +38,7 @@ type Recipe struct {
 	Portion  int `json:"portion,omitempty" validate:"required_with=Quantity"`
 }
 
-func (r *Recipe) EnergyAmount() int {
+func (r Recipe) EnergyAmount() int {
 	if r.Quantity > 0 {
 		return r.Calories / r.Quantity * r.Portion
 	}
@@ -46,7 +46,7 @@ func (r *Recipe) EnergyAmount() int {
 	return r.Calories
 }
 
-func (r *Recipe) IsEmpty() bool {
+func (r Recipe) IsEmpty() bool {
 	return r.ID == 0
 }
 

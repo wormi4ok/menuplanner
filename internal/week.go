@@ -12,7 +12,7 @@ type WeekRepository interface {
 }
 
 type DailyMenu struct {
-	Recipes  map[int]*Recipe `json:"recipes"`
+	Recipes  map[int]Recipe `json:"recipes"`
 	calories int
 }
 
@@ -37,7 +37,7 @@ func (gf *GapFiller) FillWeek(ctx context.Context, week *Week) *Week {
 		for j, recipe := range menu.Recipes {
 			if recipe.IsEmpty() {
 				for attempts := 3; attempts > 0; attempts-- {
-					r := gf.r.ReadRandom(ctx, *gf.courseName(j))
+					r := *gf.r.ReadRandom(ctx, *gf.courseName(j))
 					week.Menu[i].AddRecipe(j, r)
 					if menu.CheckRecipe(r) == nil {
 						break
@@ -74,26 +74,24 @@ func (gf *GapFiller) courseName(index int) *Course {
 func (gf *GapFiller) prepareSkeleton(ctx context.Context, week *Week) {
 	for i := 0; i < 6; i++ {
 		if _, exists := week.Menu[i]; !exists {
-			week.Menu[i] = &DailyMenu{Recipes: map[int]*Recipe{}}
+			week.Menu[i] = &DailyMenu{Recipes: map[int]Recipe{}}
 		}
 		for j := 0; j < 3; j++ {
 			if _, exists := week.Menu[i].Recipes[j]; !exists {
-				week.Menu[i].Recipes[j] = &Recipe{}
+				week.Menu[i].Recipes[j] = Recipe{}
 			}
 			if !week.Menu[i].Recipes[j].IsEmpty() {
 				r := gf.r.Read(ctx, week.Menu[i].Recipes[j].ID)
 				if r != nil {
-					week.Menu[i].AddRecipe(j, r)
+					week.Menu[i].AddRecipe(j, *r)
 				}
 			}
 		}
 	}
 }
 
-func (dm *DailyMenu) AddRecipe(slot int, recipe *Recipe) {
-	if dm.Recipes == nil {
-		dm.Recipes = make(map[int]*Recipe, 4)
-	} else if r, exists := dm.Recipes[slot]; exists {
+func (dm *DailyMenu) AddRecipe(slot int, recipe Recipe) {
+	if r, exists := dm.Recipes[slot]; exists && !r.IsEmpty() {
 		dm.calories -= r.EnergyAmount()
 	}
 
@@ -101,7 +99,7 @@ func (dm *DailyMenu) AddRecipe(slot int, recipe *Recipe) {
 	dm.Recipes[slot] = recipe
 }
 
-func (dm *DailyMenu) CheckRecipe(recipe *Recipe) error {
+func (dm *DailyMenu) CheckRecipe(recipe Recipe) error {
 	if dm.calories+recipe.EnergyAmount() > MaxCalories {
 		return errors.New("max calories per day exceeded")
 	}
