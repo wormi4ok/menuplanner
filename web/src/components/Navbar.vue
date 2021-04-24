@@ -2,7 +2,7 @@
   <b-navbar class="mb-2">
     <template #brand>
       <b-navbar-item tag="router-link" :to="{ path: '/' }">
-        <img src="https://flaningo.ru/wp-content/uploads/2019/03/cropped-99-1.jpg" alt="MenuPlanner logo">
+        <img src="@/assets/flaningo.jpeg" alt="MenuPlanner logo"/>
       </b-navbar-item>
     </template>
     <template #start>
