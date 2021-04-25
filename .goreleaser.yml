@@ -1,0 +1,16 @@
+archives:
+  - format: binary
+before:
+  hooks:
+    - make api-docs
+builds:
+  - goos:
+      - linux
+    goarch:
+      - amd64
+    env:
+      - CGO_ENABLED=0
+release:
+  draft: true
+  extra_files:
+    - glob: ./release/web*

@@ -63,6 +63,19 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/recipe"
+    delete:
+      description: Delete recipe by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: Recipe deleted
+        422:
+          description: Recipe cannot be deleted
   /week:
     get:
       description: Get current week

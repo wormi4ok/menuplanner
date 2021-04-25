@@ -949,6 +949,9 @@ ul.nav-tabs {
                     <li data-group="Default" data-name="recipeGet" class="">
                       <a href="#api-Default-recipeGet">recipeGet</a>
                     </li>
+                    <li data-group="Default" data-name="recipeIdDelete" class="">
+                      <a href="#api-Default-recipeIdDelete">recipeIdDelete</a>
+                    </li>
                     <li data-group="Default" data-name="recipeIdGet" class="">
                       <a href="#api-Default-recipeIdGet">recipeIdGet</a>
                     </li>
@@ -1526,6 +1529,308 @@ pub fn main() {
                                   </div>
                                   <input id='responses-Default-recipeGet-200-schema-data' type='hidden' value=''></input>
                                 </div>
+                            </div>
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Default-recipeIdDelete">
+                      <article id="api-Default-recipeIdDelete-0" data-group="User" data-name="recipeIdDelete" data-version="0">
+                        <div class="pull-left">
+                          <h1>recipeIdDelete</h1>
+                          <p></p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Delete recipe by id</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="delete"><code><span class="pln">/recipe/{id}</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Default-recipeIdDelete-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-recipeIdDelete-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-recipeIdDelete-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-recipeIdDelete-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-recipeIdDelete-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-recipeIdDelete-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-recipeIdDelete-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-recipeIdDelete-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-recipeIdDelete-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-recipeIdDelete-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-recipeIdDelete-0-python">Python</a></li>
+                          <li class=""><a href="#examples-Default-recipeIdDelete-0-rust">Rust</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Default-recipeIdDelete-0-curl">
+                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
+ "http://localhost:8081/recipe/{id}"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Default-recipeIdDelete-0-java">
+                            <pre class="prettyprint"><code class="language-java">import org.openapitools.client.*;
+import org.openapitools.client.auth.*;
+import org.openapitools.client.model.*;
+import org.openapitools.client.api.DefaultApi;
+
+import java.io.File;
+import java.util.*;
+
+public class DefaultApiExample {
+    public static void main(String[] args) {
+        
+        // Create an instance of the API class
+        DefaultApi apiInstance = new DefaultApi();
+        Integer id = 56; // Integer | 
+        
+        try {
+            apiInstance.recipeIdDelete(id);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#recipeIdDelete");
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Default-recipeIdDelete-0-android">
+                            <pre class="prettyprint"><code class="language-java">import org.openapitools.client.api.DefaultApi;
+
+public class DefaultApiExample {
+    public static void main(String[] args) {
+        DefaultApi apiInstance = new DefaultApi();
+        Integer id = 56; // Integer | 
+        
+        try {
+            apiInstance.recipeIdDelete(id);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#recipeIdDelete");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Default-recipeIdDelete-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Default-recipeIdDelete-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">
+
+// Create an instance of the API class
+DefaultApi *apiInstance = [[DefaultApi alloc] init];
+Integer *id = 56; //  (default to null)
+
+[apiInstance recipeIdDeleteWith:id
+              completionHandler: ^(NSError* error) {
+    if (error) {
+        NSLog(@"Error: %@", error);
+    }
+}];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-recipeIdDelete-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var MenuPlanner = require('menu_planner');
+
+// Create an instance of the API class
+var api = new MenuPlanner.DefaultApi()
+var id = 56; // {Integer} 
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully.');
+  }
+};
+api.recipeIdDelete(id, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Default-recipeIdDelete-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Default-recipeIdDelete-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using Org.OpenAPITools.Api;
+using Org.OpenAPITools.Client;
+using Org.OpenAPITools.Model;
+
+namespace Example
+{
+    public class recipeIdDeleteExample
+    {
+        public void main()
+        {
+            
+            // Create an instance of the API class
+            var apiInstance = new DefaultApi();
+            var id = 56;  // Integer |  (default to null)
+
+            try {
+                apiInstance.recipeIdDelete(id);
+            } catch (Exception e) {
+                Debug.Print("Exception when calling DefaultApi.recipeIdDelete: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-recipeIdDelete-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+// Create an instance of the API class
+$api_instance = new OpenAPITools\Client\Api\DefaultApi();
+$id = 56; // Integer | 
+
+try {
+    $api_instance->recipeIdDelete($id);
+} catch (Exception $e) {
+    echo 'Exception when calling DefaultApi->recipeIdDelete: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-recipeIdDelete-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::OPenAPIClient::Configuration;
+use WWW::OPenAPIClient::DefaultApi;
+
+# Create an instance of the API class
+my $api_instance = WWW::OPenAPIClient::DefaultApi->new();
+my $id = 56; # Integer | 
+
+eval { 
+    $api_instance->recipeIdDelete(id => $id);
+};
+if ($@) {
+    warn "Exception when calling DefaultApi->recipeIdDelete: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-recipeIdDelete-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import openapi_client
+from openapi_client.rest import ApiException
+from pprint import pprint
+
+# Create an instance of the API class
+api_instance = openapi_client.DefaultApi()
+id = 56 # Integer |  (default to null)
+
+try: 
+    api_instance.recipe_id_delete(id)
+except ApiException as e:
+    print("Exception when calling DefaultApi->recipeIdDelete: %s\n" % e)</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-recipeIdDelete-0-rust">
+                              <pre class="prettyprint"><code class="language-rust">extern crate DefaultApi;
+
+pub fn main() {
+    let id = 56; // Integer
+
+    let mut context = DefaultApi::Context::default();
+    let result = client.recipeIdDelete(id, &context).wait();
+
+    println!("{:?}", result);
+}
+</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Scopes</h2>
+                          <table>
+                            
+                          </table>
+
+                          <h2>Parameters</h2>
+
+                            <div class="methodsubtabletitle">Path parameters</div>
+                            <table id="methodsubtable">
+                                <tr>
+                                  <th width="150px">Name</th>
+                                  <th>Description</th>
+                                </tr>
+                                  <tr><td style="width:150px;">id*</td>
+<td>
+
+
+    <div id="d2e199_recipeIdDelete_id">
+        <div class="json-schema-view">
+            <div class="primitive">
+                <span class="type">
+                    Integer
+                </span>
+
+            </div>
+                <div class="inner required">
+                    Required
+                </div>
+        </div>
+    </div>
+</td>
+</tr>
+
+                            </table>
+
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3 id="examples-Default-recipeIdDelete-title-204"></h3>
+                            <p id="examples-Default-recipeIdDelete-description-204" class="marked"></p>
+                            <script>
+                              var responseDefault204_description = `Recipe deleted`;
+                              var responseDefault204_description_break = responseDefault204_description.indexOf('\n');
+                              if (responseDefault204_description_break == -1) {
+                                $("#examples-Default-recipeIdDelete-title-204").text("Status: 204 - " + responseDefault204_description);
+                              } else {
+                                $("#examples-Default-recipeIdDelete-title-204").text("Status: 204 - " + responseDefault204_description.substring(0, responseDefault204_description_break));
+                                $("#examples-Default-recipeIdDelete-description-204").html(responseDefault204_description.substring(responseDefault204_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Default-recipeIdDelete-204" class="nav nav-tabs nav-tabs-examples" >
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Default-recipeIdDelete-204-wrapper" style='margin-bottom: 10px;'>
+                            </div>
+                            <h3 id="examples-Default-recipeIdDelete-title-422"></h3>
+                            <p id="examples-Default-recipeIdDelete-description-422" class="marked"></p>
+                            <script>
+                              var responseDefault422_description = `Recipe cannot be deleted`;
+                              var responseDefault422_description_break = responseDefault422_description.indexOf('\n');
+                              if (responseDefault422_description_break == -1) {
+                                $("#examples-Default-recipeIdDelete-title-422").text("Status: 422 - " + responseDefault422_description);
+                              } else {
+                                $("#examples-Default-recipeIdDelete-title-422").text("Status: 422 - " + responseDefault422_description.substring(0, responseDefault422_description_break));
+                                $("#examples-Default-recipeIdDelete-description-422").html(responseDefault422_description.substring(responseDefault422_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Default-recipeIdDelete-422" class="nav nav-tabs nav-tabs-examples" >
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Default-recipeIdDelete-422-wrapper" style='margin-bottom: 10px;'>
                             </div>
                         </article>
                       </div>
