@@ -95,6 +95,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import CourseColor from '@/mixins/CourseColor';
 
 export default {
   name: 'AddRecipeForm',
@@ -136,15 +137,10 @@ export default {
       this.createRecipe(recipe);
       this.$emit('close');
     },
-    courseColorCode: (course) => {
-      const map = {
-        breakfast: 'is-warning',
-        main: 'is-info',
-        pudding: 'is-danger',
-      };
-      return map[course.name];
-    },
   },
+  mixins: [
+    CourseColor,
+  ],
 };
 </script>
 

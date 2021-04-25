@@ -29,6 +29,13 @@ const actions = {
       commit('setError', error.response.data);
     });
   },
+  async deleteRecipe({ commit }, id) {
+    api.recipe.delete(id).then(() => {
+      commit('removeRecipe', id);
+    }).catch((error) => {
+      commit('setError', error.response.data);
+    });
+  },
 };
 
 const mutations = {
@@ -37,6 +44,9 @@ const mutations = {
   },
   pushNewRecipe: (state, recipe) => {
     state.recipes.push(recipe);
+  },
+  removeRecipe: (state, id) => {
+    state.recipes = state.recipes.filter((recipes) => recipes.id !== id);
   },
 };
 

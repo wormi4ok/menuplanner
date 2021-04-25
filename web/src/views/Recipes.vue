@@ -1,21 +1,69 @@
 <template>
   <div class="about">
-    <h1>Recipes</h1>
-    <div v-for="recipe in data" :key="recipe.id">
-      <RecipeCard v-bind="recipe"/>
-    </div>
+    <b-table
+      :data="data"
+      detailed
+      detail-key="id"
+      :show-detail-icon="false" striped>
+
+      <b-table-column field="name" label="Recipe" width="80" v-slot="props">
+        <a @click="props.toggleDetails(props.row)">
+          {{ props.row.name }}
+        </a>
+      </b-table-column>
+
+      <b-table-column field="courses" label="Course" width="30" v-slot="props">
+        <b-tag
+          v-for="course in props.row.courses"
+          :key="course.id"
+          :type="courseColorCode(course)"
+          rounded>
+          {{ course.name }}
+        </b-tag>
+      </b-table-column>
+
+      <b-table-column field="calories" label="Calories" width="40" numeric v-slot="props">
+        {{ props.row.calories }}
+      </b-table-column>
+
+      <b-table-column field="protein" label="Protein" width="40" numeric v-slot="props">
+        {{ props.row.protein }}
+      </b-table-column>
+
+      <b-table-column field="fat" label="Fat" width="40" numeric v-slot="props">
+        {{ props.row.fat }}
+      </b-table-column>
+
+      <b-table-column field="carbs" label="Carbs" width="40" numeric v-slot="props">
+        {{ props.row.carbs }}
+      </b-table-column>
+
+      <b-table-column field="quantity" label="Quantity" width="40" numeric v-slot="props">
+        {{ props.row.quantity }}
+      </b-table-column>
+
+      <b-table-column field="portion" label="Portion" width="40" numeric v-slot="props">
+        {{ props.row.portion }}
+      </b-table-column>
+
+      <b-table-column field="id" label="Actions" width="20" v-slot="props">
+        <b-button type="is-danger" inverted icon-right="trash" @click="onDelete(props.row)" />
+      </b-table-column>
+
+      <template #detail="props">
+        {{ props.row.description }}
+      </template>
+
+    </b-table>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import RecipeCard from '@/components/RecipeCard.vue';
+import CourseColor from '@/mixins/CourseColor';
 
 export default {
   name: 'Recipes',
-  components: {
-    RecipeCard,
-  },
   computed: mapGetters({
     data: 'listRecipes',
   }),
@@ -25,7 +73,19 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['fetchRecipes']),
+    ...mapActions([
+      'fetchRecipes',
+      'deleteRecipe',
+    ]),
+    onDelete(recipe) {
+      this.$buefy.dialog.confirm({
+        message: `Remove ${recipe.name}?`,
+        onConfirm: () => this.deleteRecipe(recipe.id),
+      });
+    },
   },
+  mixins: [
+    CourseColor,
+  ],
 };
 </script>

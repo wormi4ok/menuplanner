@@ -26,6 +26,10 @@ const recipe = {
   create(data) {
     return client.post('/recipe', data);
   },
+
+  delete(id) {
+    return client.delete(`/recipe/${id}`);
+  },
 };
 
 const course = {
