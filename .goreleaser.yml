@@ -1,8 +1,5 @@
 archives:
   - format: binary
-before:
-  hooks:
-    - make api-docs
 builds:
   - goos:
       - linux

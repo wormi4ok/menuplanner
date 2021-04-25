@@ -46,13 +46,17 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: 1.16.x
-#      - name: Test
-#        run: go test ./...
+      #      - name: Test
+      #        run: go test ./...
       - name: Download Web UI artifact
         uses: actions/download-artifact@v2
         with:
           name: web-ui
           path: release
+      - name: Build API docs
+        uses: kpurdon/openapi-generator-action@v0.0.3
+        with:
+          args: generate -i api.yml -g html2 -o docs
       - name: Release
         uses: goreleaser/goreleaser-action@v2
         with:
