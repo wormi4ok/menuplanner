@@ -60,6 +60,10 @@ const state = () => ({
 
 const getters = {
   weekMenu: (state) => state.week.menu,
+  hasGaps: (state) => Object.values(state.week.menu).some((day) => {
+    const hasGap = Object.values(day.recipes).some((r) => !r || r.id === 0);
+    return hasGap;
+  }),
 };
 
 const actions = {
@@ -93,6 +97,14 @@ const actions = {
       commit('setCurrentWeek', response.data);
     }).catch((error) => {
       commit('setError', error.response.data);
+    });
+  },
+  emptyWeek({ dispatch, state }) {
+    Object.entries(state.week.menu).forEach((weekday) => {
+      const [day, menu] = weekday;
+      Object.keys(menu.recipes).forEach((slot) => {
+        dispatch('emptySlot', { day, slot });
+      });
     });
   },
 };

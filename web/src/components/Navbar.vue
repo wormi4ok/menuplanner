@@ -7,8 +7,11 @@
     </template>
     <template #start>
       <b-navbar-item>
-        <a class="button is-primary" @click="onFillGaps">
+        <a v-if="hasGaps" class="button is-primary" @click="onFillGaps">
           <strong>Fill gaps</strong>
+        </a>
+        <a v-else class="button is-danger" @click="onClearWeek">
+          <strong>Clear week</strong>
         </a>
       </b-navbar-item>
       <b-navbar-item>
@@ -26,7 +29,7 @@
 
 <script>
 import AddRecipeForm from '@/components/AddRecipeForm.vue';
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'Navbar',
@@ -36,10 +39,21 @@ export default {
   data: () => ({
     showAddRecipeForm: false,
   }),
+  computed: {
+    ...mapGetters([
+      'hasGaps',
+    ]),
+  },
   methods: {
-    ...mapActions(['fillGaps']),
+    ...mapActions(['fillGaps', 'emptyWeek']),
     onFillGaps() {
       this.fillGaps();
+    },
+    onClearWeek() {
+      this.$buefy.dialog.confirm({
+        message: 'Remove all recipes chosen for the week?',
+        onConfirm: () => this.emptyWeek(),
+      });
     },
   },
 };

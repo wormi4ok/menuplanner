@@ -72,7 +72,7 @@ func (gf *GapFiller) courseName(index int) *Course {
 }
 
 func (gf *GapFiller) prepareSkeleton(ctx context.Context, week *Week) {
-	for i := 0; i < 6; i++ {
+	for i := 0; i < 7; i++ {
 		if _, exists := week.Menu[i]; !exists {
 			week.Menu[i] = &DailyMenu{Recipes: map[int]Recipe{}}
 		}
