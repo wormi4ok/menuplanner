@@ -22,21 +22,30 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'EmptySlot',
+  props: {
+    course: {
+      type: Object,
+      required: true,
+    },
+  },
   data: () => ({
     name: '',
   }),
   computed: {
     filteredDataObj() {
-      return this.data.filter((option) => (
+      return this.recipes.filter((option) => (
         option.name
           .toString()
           .toLowerCase()
           .indexOf(this.name.toLowerCase()) >= 0
       ));
     },
-    ...mapGetters({
-      data: 'listRecipes',
-    }),
+    recipes() {
+      return this.recipesByCourse(this.course);
+    },
+    ...mapGetters([
+      'recipesByCourse',
+    ]),
   },
   methods: {
     pickRecipe(option) {

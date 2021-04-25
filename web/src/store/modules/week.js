@@ -60,10 +60,11 @@ const state = () => ({
 
 const getters = {
   weekMenu: (state) => state.week.menu,
-  hasGaps: (state) => Object.values(state.week.menu).some((day) => {
-    const hasGap = Object.values(day.recipes).some((r) => !r || r.id === 0);
-    return hasGap;
-  }),
+  hasGaps: (state) => Object.values(state.week.menu).some(
+    (day) => Object.values(day.recipes).some(
+      (r) => !r || r.id === 0,
+    ),
+  ),
 };
 
 const actions = {

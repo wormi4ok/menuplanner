@@ -1,7 +1,7 @@
 <template>
   <div class="block">
     <RecipeCard v-if="!isEmpty" v-bind="recipe" @delete-recipe="deleteRecipe"/>
-    <EmptySlot v-else @pick-recipe="pickRecipe($event)"></EmptySlot>
+    <EmptySlot v-else :course="course" @pick-recipe="pickRecipe($event)"/>
   </div>
 </template>
 
@@ -17,6 +17,7 @@ export default {
   },
   props: {
     recipe: Object,
+    course: Object,
   },
   computed: {
     isEmpty() {
