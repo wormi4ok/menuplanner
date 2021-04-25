@@ -54,13 +54,21 @@
                            size="is-small"/>
           </b-field>
         </b-field>
-        <b-collapse :open="false" position="is-bottom" aria-id="contentIdForA11y1">
-          <template #trigger="data">
-            <a aria-controls="contentIdForA11y1">
-              <b-icon :icon="!data.showQuantityInput ? 'caret-down' : 'caret-up'"></b-icon>
-              Specify Quantity
-            </a>
-          </template>
+        <b-field aria-controls="quantityPerServing" position="is-centered">
+          <b-radio-button
+            v-model="showQuantityInput"
+            :native-value="false"
+            type="is-primary is-light is-outlined">
+            <span>Per serving</span>
+          </b-radio-button>
+          <b-radio-button
+            v-model="showQuantityInput"
+            :native-value="true"
+            type="is-info is-light is-outlined">
+            <span>Specify Quantity</span>
+          </b-radio-button>
+        </b-field>
+        <b-collapse aria-id="quantityPerServing" class="panel" v-model="showQuantityInput">
           <b-field grouped position="is-centered">
             <b-field label="Quantity (g)">
               <b-numberinput v-model="quantity"
@@ -122,8 +130,8 @@ export default {
         protein: this.protein,
         fat: this.fat,
         carbs: this.carbs,
-        quantity: this.quantity,
-        portion: this.portion,
+        quantity: this.showQuantityInput ? this.quantity : 0,
+        portion: this.showQuantityInput ? this.portion : 0,
       };
       this.createRecipe(recipe);
       this.$emit('close');
