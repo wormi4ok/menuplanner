@@ -7,7 +7,14 @@
               @delete-recipe="deleteRecipe(slot)"
               @pick-recipe="pickRecipe(slot, $event)"/>
     <div class="block">
-      Summary
+      <ul>
+        <li>Protein: {{ totalProtein }}</li>
+        <li>Fat: {{ totalFat }}</li>
+        <li>Carbs: {{ totalCarbs }}</li>
+        <li>
+          <span :class="isOverLimit ? 'has-text-danger' : ''">Calories:{{ totalCalories }}</span>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -28,6 +35,21 @@ export default {
     ...mapGetters([
       'listCourses',
     ]),
+    totalProtein() {
+      return Object.values(this.recipes).reduce((t, r) => (r ? t + r.protein : t), 0);
+    },
+    totalFat() {
+      return Object.values(this.recipes).reduce((t, r) => (r ? t + r.fat : t), 0);
+    },
+    totalCarbs() {
+      return Object.values(this.recipes).reduce((t, r) => (r ? t + r.carbs : t), 0);
+    },
+    totalCalories() {
+      return Object.values(this.recipes).reduce((t, r) => (r ? t + r.calories : t), 0);
+    },
+    isOverLimit() {
+      return this.totalCalories > 1700;
+    },
   },
   methods: {
     deleteRecipe(slot) {
