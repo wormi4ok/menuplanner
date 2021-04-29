@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const client = axios.create({
-  baseURL: process.env.VUE_APP_API_ADDRESS,
+  baseURL: window.config.API_ADDRESS || process.env.VUE_APP_API_ADDRESS,
   timeout: 1000,
   headers: {
     Accept: 'application/json',
