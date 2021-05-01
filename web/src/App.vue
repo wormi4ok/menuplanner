@@ -4,6 +4,13 @@
     <div class="container is-fullhd">
       <router-view/>
     </div>
+    <footer class="footer">
+      <div class="content has-text-centered">
+        <p>
+          Made with ♥️ by <a href="https://petrashov.ru" target="_blank">wormi4ok</a>.
+        </p>
+      </div>
+    </footer>
     <b-loading :is-full-page="true" v-model="isLoading"></b-loading>
   </div>
 </template>
