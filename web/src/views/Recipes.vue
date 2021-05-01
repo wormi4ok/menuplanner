@@ -1,5 +1,5 @@
 <template>
-  <div class="about">
+  <section>
     <b-table
       :data="data"
       detailed
@@ -47,15 +47,18 @@
       </b-table-column>
 
       <b-table-column field="id" label="Actions" width="20" v-slot="props">
-        <b-button type="is-danger" inverted icon-right="trash" @click="onDelete(props.row)" />
+        <b-button type="is-danger" inverted icon-right="trash" @click="onDelete(props.row)"/>
       </b-table-column>
 
       <template #detail="props">
         {{ props.row.description }}
       </template>
 
+      <template #empty>
+        <div class="has-text-centered">No recipes</div>
+      </template>
     </b-table>
-  </div>
+  </section>
 </template>
 
 <script>

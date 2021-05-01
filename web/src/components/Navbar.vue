@@ -1,28 +1,35 @@
 <template>
   <b-navbar class="mb-2">
     <template #brand>
-      <b-navbar-item tag="router-link" :to="{ path: '/' }">
+
+      <b-navbar-item tag="router-link" :to="{ name: 'Home' }">
         <img src="@/assets/flaningo.jpeg" alt="MenuPlanner logo"/>
       </b-navbar-item>
+
     </template>
     <template #start>
-      <b-navbar-item>
-        <a v-if="hasGaps" class="button is-primary" @click="onFillGaps">
-          <strong>Fill gaps</strong>
-        </a>
-        <a v-else class="button is-danger" @click="onClearWeek">
-          <strong>Clear week</strong>
-        </a>
+
+      <b-navbar-item class="is-tab" tag="router-link" :to="{ name: 'Home' }">
+        Week
       </b-navbar-item>
-      <b-navbar-item>
-        <b-button label="Recipes" tag="router-link" :to="{ path: '/recipes' }"/>
+
+      <b-navbar-item class="is-tab"  tag="router-link" :to="{ name: 'Recipes' }">
+        Recipes
       </b-navbar-item>
-      <b-navbar-item>
-        <b-button label="Add Recipe" @click="showAddRecipeForm = true"/>
+
+      <b-navbar-item tag="div" v-if="$route.name === 'Recipes'">
+        <b-button class="is-primary" label="Add Recipe" @click="showAddRecipeForm = true"/>
         <b-modal v-model="showAddRecipeForm" scroll="keep">
           <AddRecipeForm @close="showAddRecipeForm = false"/>
         </b-modal>
       </b-navbar-item>
+      <b-navbar-item tag="div" v-else>
+
+        <b-button v-if="hasGaps" label="Fill gaps" class="is-primary" @click="onFillGaps"/>
+        <b-button v-else label="Clear week" class="is-danger" @click="onClearWeek"/>
+
+      </b-navbar-item>
+
     </template>
   </b-navbar>
 </template>
