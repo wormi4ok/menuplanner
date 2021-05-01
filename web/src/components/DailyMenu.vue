@@ -22,6 +22,7 @@
 <script>
 import MenuSlot from '@/components/MenuSlot.vue';
 import { mapGetters } from 'vuex';
+import RecipeCalories from '@/mixins/RecipeCalories';
 
 export default {
   name: 'DailyMenu',
@@ -45,7 +46,7 @@ export default {
       return Object.values(this.recipes).reduce((t, r) => (r ? t + r.carbs : t), 0);
     },
     totalCalories() {
-      return Object.values(this.recipes).reduce((t, r) => (r ? t + r.calories : t), 0);
+      return Object.values(this.recipes).reduce((t, r) => (r ? t + this.recipeCalories(r) : t), 0);
     },
     isOverLimit() {
       return this.totalCalories > 1700;
@@ -68,6 +69,9 @@ export default {
       return this.listCourses.find((course) => course.name === map[slot]);
     },
   },
+  mixins: [
+    RecipeCalories,
+  ],
 };
 </script>
 
