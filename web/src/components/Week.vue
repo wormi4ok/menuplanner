@@ -1,6 +1,7 @@
 <template>
   <div class="columns">
     <div :key="day" v-for="(today, day) in menu" class="column">
+      <div class="subtitle">{{ weekDayName(day) }}</div>
       <DailyMenu
         :recipes="today.recipes"
         @empty-slot="removeSlot(day,$event)"
@@ -27,6 +28,10 @@ export default {
     },
     fillSlot(day, { slot, recipe }) {
       this.$store.dispatch('fillSlot', { day, slot, recipe });
+    },
+    weekDayName(day) {
+      const week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      return week[day];
     },
   },
 };
