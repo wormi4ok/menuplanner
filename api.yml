@@ -63,6 +63,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/recipe"
+    put:
+      description: Update recipe
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        202:
+          description: Recipe updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/recipe"
+        400:
+          $ref: "#/components/responses/InvalidPayload"
+
     delete:
       description: Delete recipe by id
       parameters:

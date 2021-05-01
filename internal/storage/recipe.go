@@ -11,6 +11,19 @@ func (s *DB) Create(ctx context.Context, recipe *internal.Recipe) (*internal.Rec
 	return recipe, s.db.WithContext(ctx).Create(recipe).Error
 }
 
+func (s *DB) Update(ctx context.Context, recipe *internal.Recipe) (*internal.Recipe, error) {
+	oldRecipe := internal.Recipe{ID: recipe.ID}
+	if err := s.db.WithContext(ctx).Model(&oldRecipe).Association("Courses").Clear(); err != nil {
+		return nil, err
+	}
+
+	if res := s.db.WithContext(ctx).Save(recipe); res.Error != nil {
+		return nil, res.Error
+	}
+
+	return recipe, nil
+}
+
 func (s *DB) Delete(ctx context.Context, id int) bool {
 	r := &internal.Recipe{ID: id}
 	return s.db.WithContext(ctx).Model(&r).Select(clause.Associations).Delete(&r).Error == nil

@@ -27,6 +27,10 @@ const recipe = {
     return client.post('/recipe', data);
   },
 
+  update(id, data) {
+    return client.put(`/recipe/${id}`, data);
+  },
+
   delete(id) {
     return client.delete(`/recipe/${id}`);
   },

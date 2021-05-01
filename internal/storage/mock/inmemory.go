@@ -52,6 +52,16 @@ func (rs *Recipes) Create(_ context.Context, r *internal.Recipe) (*internal.Reci
 	return r, nil
 }
 
+func (rs *Recipes) Update(_ context.Context, recipe *internal.Recipe) (*internal.Recipe, error) {
+	for i, r := range rs.all {
+		if r.ID == recipe.ID {
+			rs.all[i] = recipe
+			return recipe, nil
+		}
+	}
+	return nil, errors.New("not found")
+}
+
 func (rs *Recipes) Read(_ context.Context, id int) *internal.Recipe {
 	for _, r := range rs.all {
 		if r.ID == id {

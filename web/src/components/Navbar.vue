@@ -13,15 +13,12 @@
         Week
       </b-navbar-item>
 
-      <b-navbar-item class="is-tab"  tag="router-link" :to="{ name: 'Recipes' }">
+      <b-navbar-item class="is-tab" tag="router-link" :to="{ name: 'Recipes' }">
         Recipes
       </b-navbar-item>
 
       <b-navbar-item tag="div" v-if="$route.name === 'Recipes'">
-        <b-button class="is-primary" label="Add Recipe" @click="showAddRecipeForm = true"/>
-        <b-modal v-model="showAddRecipeForm" scroll="keep">
-          <AddRecipeForm @close="showAddRecipeForm = false"/>
-        </b-modal>
+        <b-button class="is-primary" label="Add Recipe" @click="onAddRecipe"/>
       </b-navbar-item>
       <b-navbar-item tag="div" v-else>
 
@@ -40,9 +37,6 @@ import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'Navbar',
-  components: {
-    AddRecipeForm,
-  },
   data: () => ({
     showAddRecipeForm: false,
   }),
@@ -60,6 +54,13 @@ export default {
       this.$buefy.dialog.confirm({
         message: 'Remove all recipes chosen for the week?',
         onConfirm: () => this.emptyWeek(),
+      });
+    },
+    onAddRecipe() {
+      this.$buefy.modal.open({
+        parent: this,
+        component: AddRecipeForm,
+        hasModalCard: true,
       });
     },
   },

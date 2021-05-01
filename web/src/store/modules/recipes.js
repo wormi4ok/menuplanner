@@ -29,6 +29,13 @@ const actions = {
       commit('setError', error.response.data);
     });
   },
+  async updateRecipe({ commit }, recipe) {
+    api.recipe.update(recipe.id, recipe).then((response) => {
+      commit('modifyRecipe', response.data);
+    }).catch((error) => {
+      commit('setError', error.response.data);
+    });
+  },
   async deleteRecipe({ commit }, id) {
     api.recipe.delete(id).then(() => {
       commit('removeRecipe', id);
@@ -44,6 +51,15 @@ const mutations = {
   },
   pushNewRecipe: (state, recipe) => {
     state.recipes.push(recipe);
+  },
+  modifyRecipe: (state, recipe) => {
+    state.recipes = state.recipes.map((current) => {
+      if (current.id === recipe.id) {
+        return recipe;
+      }
+
+      return current;
+    });
   },
   removeRecipe: (state, id) => {
     state.recipes = state.recipes.filter((recipes) => recipes.id !== id);

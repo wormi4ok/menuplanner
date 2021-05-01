@@ -4,7 +4,8 @@
       :data="data"
       detailed
       detail-key="id"
-      :show-detail-icon="false" striped>
+      :show-detail-icon="false"
+      striped>
 
       <b-table-column field="name" label="Recipe" width="80" v-slot="props">
         <a @click="props.toggleDetails(props.row)">
@@ -47,6 +48,7 @@
       </b-table-column>
 
       <b-table-column field="id" label="Actions" width="20" v-slot="props">
+        <b-button type="is-ghost" icon-right="edit" @click="onEdit(props.row)"/>
         <b-button type="is-danger" inverted icon-right="trash" @click="onDelete(props.row)"/>
       </b-table-column>
 
@@ -64,6 +66,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import CourseColor from '@/mixins/CourseColor';
+import AddRecipeForm from '@/components/AddRecipeForm.vue';
 
 export default {
   name: 'Recipes',
@@ -84,6 +87,16 @@ export default {
       this.$buefy.dialog.confirm({
         message: `Remove ${recipe.name}?`,
         onConfirm: () => this.deleteRecipe(recipe.id),
+      });
+    },
+    onEdit(recipe) {
+      this.$buefy.modal.open({
+        parent: this,
+        component: AddRecipeForm,
+        props: {
+          recipe,
+        },
+        hasModalCard: true,
       });
     },
   },

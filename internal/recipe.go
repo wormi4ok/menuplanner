@@ -19,6 +19,7 @@ type RecipeReader interface {
 
 type RecipeWriter interface {
 	Create(ctx context.Context, r *Recipe) (*Recipe, error)
+	Update(ctx context.Context, r *Recipe) (*Recipe, error)
 	Delete(ctx context.Context, id int) bool
 }
 
@@ -65,5 +66,17 @@ func SaveRecipe(ctx context.Context, recipe Recipe, storage RecipeWriter) (id in
 	if r, err := storage.Create(ctx, &recipe); err == nil {
 		id = r.ID
 	}
+	return
+}
+
+func UpdateRecipe(ctx context.Context, r *Recipe, storage RecipeWriter) (recipe *Recipe, err error) {
+	v := validator.New()
+
+	err = v.StructCtx(ctx, r)
+	if err != nil {
+		return
+	}
+
+	recipe, err = storage.Update(ctx, r)
 	return
 }

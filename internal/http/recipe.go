@@ -28,6 +28,7 @@ func (e recipeEndpoint) Routes() chi.Router {
 	r.Route("/{id}", func(r chi.Router) {
 		r.Use(e.RecipeCtx)
 		r.Get("/", e.Get())
+		r.Put("/", e.Update())
 		r.Delete("/", e.Delete())
 	})
 
@@ -154,6 +155,77 @@ func (e recipeEndpoint) Get() http.HandlerFunc {
 		w.WriteHeader(http.StatusOK)
 
 		err := json.NewEncoder(w).Encode(recipe)
+		if err != nil {
+			log.Printf("Handler error: %v", err)
+			w.WriteHeader(500)
+		}
+	}
+}
+
+func (e recipeEndpoint) Update() http.HandlerFunc {
+	type request internal.Recipe
+
+	type validationError struct {
+		Field   string `json:"field"`
+		Message string `json:"message"`
+	}
+
+	type validationErrorResponse struct {
+		Errors []validationError `json:"errors"`
+	}
+
+	return func(w http.ResponseWriter, r *http.Request) {
+		req := request{}
+
+		ctx := r.Context()
+		_, ok := ctx.Value("recipe").(*internal.Recipe)
+		if !ok {
+			http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
+			return
+		}
+
+		body, err := io.ReadAll(r.Body)
+		if err != nil {
+			_, _ = io.WriteString(w, "Missing or malformed payload")
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		if err := json.Unmarshal(body, &req); err != nil {
+			_, _ = io.WriteString(w, err.Error())
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		recipe := internal.Recipe(req)
+		_, err = internal.UpdateRecipe(r.Context(), &recipe, e.storage)
+		if err != nil {
+			if _, ok := err.(*validator.InvalidValidationError); ok {
+				_, _ = io.WriteString(w, err.Error())
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+			res := validationErrorResponse{}
+			for _, err := range err.(validator.ValidationErrors) {
+
+				res.Errors = append(res.Errors, validationError{
+					Field:   err.Field(),
+					Message: fmt.Sprintf("Validation error (%s)", err.Tag()),
+				})
+			}
+
+			w.WriteHeader(http.StatusBadRequest)
+			if err := json.NewEncoder(w).Encode(res); err != nil {
+				_, _ = io.WriteString(w, err.Error())
+				w.WriteHeader(http.StatusInternalServerError)
+			}
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusAccepted)
+
+		err = json.NewEncoder(w).Encode(recipe)
 		if err != nil {
 			log.Printf("Handler error: %v", err)
 			w.WriteHeader(500)
