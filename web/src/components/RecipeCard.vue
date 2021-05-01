@@ -1,11 +1,20 @@
 <template>
   <div class="card">
-    <header class="card-header">
+    <header
+      :class="{'card-header':true, 'is-clickable': description}"
+      @click="toggleDescription"
+      aria-controls="descriptionBlock">
       <p class="card-header-title">{{ name }}</p>
     </header>
     <div class="card-content">
       <section>
-
+        <b-collapse
+          aria-id="descriptionBlock"
+          class="block"
+          animation="slide"
+          v-model="showDescription">
+          {{ description }}
+        </b-collapse>
         <b-taglist attached>
           <b-tag type="is-success">Protein: {{ protein }}</b-tag>
           <b-tag type="is-info ">Fat: {{ fat }}</b-tag>
@@ -33,12 +42,18 @@ export default {
   props: {
     id: Number,
     name: String,
+    description: String,
     protein: Number,
     fat: Number,
     carbs: Number,
     calories: Number,
     portion: Number,
     quantity: Number,
+  },
+  data() {
+    return {
+      showDescription: false,
+    };
   },
   computed: {
     recipeSize() {
@@ -59,6 +74,9 @@ export default {
   methods: {
     deleteRecipe() {
       this.$emit('delete-recipe');
+    },
+    toggleDescription() {
+      this.showDescription = !this.showDescription;
     },
   },
   mixins: [
