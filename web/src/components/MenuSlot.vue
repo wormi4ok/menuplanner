@@ -1,7 +1,7 @@
 <template>
   <div class="block">
     <RecipeCard v-if="!isEmpty" v-bind="recipe" @delete-recipe="deleteRecipe"/>
-    <EmptySlot v-else :course="course" @pick-recipe="pickRecipe($event)"/>
+    <EmptySlot v-else-if="course" :course="course" @pick-recipe="pickRecipe($event)"/>
   </div>
 </template>
 

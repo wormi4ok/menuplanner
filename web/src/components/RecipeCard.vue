@@ -2,22 +2,23 @@
   <div class="card">
     <header class="card-header">
       <p class="card-header-title">{{ name }}</p>
-      <p class="card-header-icon" aria-label="delete">
-        <b-button icon-right="times" type="is-ghost is-danger" inverted @click="deleteRecipe"/>
-      </p>
     </header>
     <div class="card-content">
       <section>
-        <b-progress :max="total" show-value>
-          <template #bar>
-            <b-progress-bar type="is-success" :value="protein" show-value>P</b-progress-bar>
-            <b-progress-bar type="is-info" :value="fat">F</b-progress-bar>
-            <b-progress-bar type="is-warning" :value="carbs" show-value>C</b-progress-bar>
-          </template>
-        </b-progress>
-        <b-progress :value="calories" :max="1700" show-value>Calories</b-progress>
+
+        <b-taglist attached>
+          <b-tag type="is-success">Protein: {{ protein }}</b-tag>
+          <b-tag type="is-info">Fat: {{ fat }}</b-tag>
+          <b-tag type="is-warning">Carbs: {{ carbs }}</b-tag>
+          <b-tag>{{ recipeSize }}</b-tag>
+        </b-taglist>
       </section>
     </div>
+    <footer class="card-footer">
+      <a class="card-footer-item" @click="deleteRecipe">
+        <b-icon icon="times"></b-icon>
+      </a>
+    </footer>
   </div>
 </template>
 
@@ -31,10 +32,16 @@ export default {
     fat: Number,
     carbs: Number,
     calories: Number,
+    portion: Number,
+    quantity: Number,
   },
   computed: {
-    total() {
-      return this.protein + this.fat + this.carbs;
+    recipeSize() {
+      if (this.portion) {
+        return `${this.portion} g`;
+      }
+
+      return '1 serving';
     },
   },
   methods: {
