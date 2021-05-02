@@ -9,5 +9,3 @@ Frontend is a standalone single-page application located in [web](./web) folder.
 ## Backend
 
 Backend is REST API server written in [Go](https://golang.org) 
-
-

@@ -135,10 +135,13 @@ func (e recipeEndpoint) Delete() http.HandlerFunc {
 			return
 		}
 
-		if e.storage.Delete(r.Context(), recipe.ID) {
-			w.WriteHeader(http.StatusNoContent)
+		if !e.storage.Delete(r.Context(), recipe.ID) {
+			http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
 			return
 		}
+
+		w.WriteHeader(http.StatusNoContent)
+		return
 	}
 }
 

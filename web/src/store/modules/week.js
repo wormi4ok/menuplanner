@@ -65,6 +65,21 @@ const getters = {
       (r) => !r || r.id === 0,
     ),
   ),
+  recipePosition: (state) => (id) => {
+    const position = [];
+    Object.values(state.week.menu).some(
+      (menu, day) => Object.values(menu.recipes).forEach(
+        (recipe, slot) => {
+          if (!recipe || recipe.id !== id) {
+            return false;
+          }
+          position.push({ day, slot });
+          return true;
+        },
+      ),
+    );
+    return position.length > 0 ? position : null;
+  },
 };
 
 const actions = {
