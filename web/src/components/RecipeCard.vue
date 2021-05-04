@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card grid-item">
     <header
       :class="{'card-header':true, 'is-clickable': description}"
       @click="toggleDescription"
@@ -15,8 +15,8 @@
           v-model="showDescription">
           {{ description }}
         </b-collapse>
-        <b-taglist attached>
-          <b-tag type="is-success">Protein: {{ protein }}</b-tag>
+        <b-taglist>
+          <b-tag type="is-success">Prot: {{ protein }}</b-tag>
           <b-tag type="is-info ">Fat: {{ fat }}</b-tag>
           <b-tag type="is-warning ">Carbs: {{ carbs }}</b-tag>
           <b-tag type="is-link "> {{ totalCalories }} kcal</b-tag>
@@ -24,12 +24,12 @@
       </section>
     </div>
     <footer class="card-footer">
-      <div class="card-footer-item">
-        <b-tag>{{ recipeSize }}</b-tag>
-      </div>
       <a class="card-footer-item" @click="deleteRecipe">
         <b-icon icon="times"></b-icon>
       </a>
+      <div class="card-footer-item">
+        <b-tag>{{ recipeSize }}</b-tag>
+      </div>
     </footer>
   </div>
 </template>
@@ -86,5 +86,8 @@ export default {
 </script>
 
 <style scoped>
-
+.card {
+  display: grid;
+  grid-template-rows: min-content 1fr min-content;
+}
 </style>

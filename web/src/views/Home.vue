@@ -1,15 +1,15 @@
 <template>
-  <Week :menu="data"/>
+  <WeekGrid :menu="data"/>
 </template>
 
 <script>
-import Week from '@/components/Week.vue';
+import WeekGrid from '@/components/WeekGrid.vue';
 import { mapGetters } from 'vuex';
 
 export default {
   name: 'Home',
   components: {
-    Week,
+    WeekGrid,
   },
   computed: mapGetters({
     data: 'weekMenu',

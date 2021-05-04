@@ -1,6 +1,5 @@
 <template>
   <div class="card">
-    <div class="box">
       <b-field label="Pick a recipe">
         <b-autocomplete
           v-model="name"
@@ -13,7 +12,6 @@
           <template #empty>No recipes found</template>
         </b-autocomplete>
       </b-field>
-    </div>
   </div>
 </template>
 
@@ -56,5 +54,9 @@ export default {
 </script>
 
 <style scoped>
-
+.card {
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+}
 </style>
