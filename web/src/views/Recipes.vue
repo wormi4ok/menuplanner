@@ -1,54 +1,102 @@
 <template>
-  <b-table
-    :data="data"
-    detailed
-    detail-key="id"
-    :show-detail-icon="false"
-    striped>
-
-    <b-table-column field="name" label="Recipe" width="80" v-slot="props">
+  <b-table :data="data" detailed detail-key="id" :show-detail-icon="false" striped>
+    <b-table-column
+      cell-class="is-align-middle"
+      field="name"
+      label="Recipe"
+      width="80" v-slot="props">
       <a @click="props.toggleDetails(props.row)">
         {{ props.row.name }}
       </a>
     </b-table-column>
 
-    <b-table-column field="courses" label="Course" width="30" v-slot="props">
+    <b-table-column
+      cell-class="is-align-middle"
+      field="courses"
+      label="Course"
+      width="30"
+      v-slot="props"
+    >
       <b-tag
         v-for="course in props.row.courses"
         :key="course.id"
         :type="courseColorCode(course)"
-        rounded>
+        rounded
+      >
         {{ course.name }}
       </b-tag>
     </b-table-column>
 
-    <b-table-column field="calories" label="Calories" width="40" numeric v-slot="props">
+    <b-table-column
+      cell-class="is-align-middle"
+      field="calories"
+      label="Calories"
+      width="40"
+      numeric
+      v-slot="props"
+      centered
+    >
       {{ props.row.calories }}
     </b-table-column>
 
-    <b-table-column field="protein" label="Protein" width="40" numeric v-slot="props">
+    <b-table-column
+      cell-class="is-align-middle"
+      field="protein"
+      label="Protein"
+      width="40"
+      numeric
+      v-slot="props"
+    >
       {{ props.row.protein }}
     </b-table-column>
 
-    <b-table-column field="fat" label="Fat" width="40" numeric v-slot="props">
+    <b-table-column
+      cell-class="is-align-middle"
+      field="fat"
+      label="Fat"
+      width="40"
+      numeric
+      v-slot="props"
+    >
       {{ props.row.fat }}
     </b-table-column>
 
-    <b-table-column field="carbs" label="Carbs" width="40" numeric v-slot="props">
+    <b-table-column
+      cell-class="is-align-middle"
+      field="carbs"
+      label="Carbs"
+      width="40"
+      numeric
+      v-slot="props"
+    >
       {{ props.row.carbs }}
     </b-table-column>
 
-    <b-table-column field="quantity" label="Quantity" width="40" numeric v-slot="props">
+    <b-table-column
+      cell-class="is-align-middle"
+      field="quantity"
+      label="Quantity"
+      width="40"
+      numeric
+      v-slot="props"
+    >
       {{ props.row.quantity }}
     </b-table-column>
 
-    <b-table-column field="portion" label="Portion" width="40" numeric v-slot="props">
+    <b-table-column
+      cell-class="is-align-middle"
+      field="portion"
+      label="Portion"
+      width="40"
+      numeric
+      v-slot="props"
+    >
       {{ props.row.portion }}
     </b-table-column>
 
-    <b-table-column field="id" label="Actions" width="20" v-slot="props">
-      <b-button type="is-ghost" icon-right="edit" @click="onEdit(props.row)"/>
-      <b-button type="is-danger" inverted icon-right="trash" @click="onDelete(props.row)"/>
+    <b-table-column class="is-align-middle" field="id" label="Actions" width="20" v-slot="props">
+      <b-button type="is-ghost" icon-right="edit" @click="onEdit(props.row)" />
+      <b-button type="is-danger" inverted icon-right="trash" @click="onDelete(props.row)" />
     </b-table-column>
 
     <template #detail="props">
@@ -116,3 +164,9 @@ export default {
   ],
 };
 </script>
+
+<style>
+.is-align-middle {
+  vertical-align: middle !important;
+}
+</style>
