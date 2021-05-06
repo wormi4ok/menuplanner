@@ -1,5 +1,5 @@
 <template>
-  <RecipeCard class="tile is-child" v-if="!isEmpty" v-bind="recipe" @delete-recipe="deleteRecipe"/>
+  <RecipeCard v-if="!isEmpty" v-bind="recipe" @delete-recipe="deleteRecipe"/>
   <EmptySlot v-else-if="course" :course="course" @pick-recipe="pickRecipe($event)"/>
 </template>
 

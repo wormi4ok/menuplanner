@@ -51,7 +51,6 @@ export default {
       this.$store.dispatch('emptySlot', { day, slot });
     },
     fillSlot({ day, slot }, recipe) {
-      console.log(day, slot);
       this.$store.dispatch('fillSlot', { day, slot, recipe });
     },
     course(slot) {
