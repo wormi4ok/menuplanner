@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <PseudoWindow @resize.passive="onResize"/>
     <Navbar/>
     <div class="container is-fluid">
       <router-view/>
@@ -18,11 +19,13 @@
 <script>
 import Navbar from '@/components/Navbar.vue';
 import ErrorHandler from '@/mixins/ErrorHandler';
+import PseudoWindow from 'vue-pseudo-window';
 import { mapActions } from 'vuex';
 
 export default {
   name: 'App',
   components: {
+    PseudoWindow,
     Navbar,
   },
   data: () => ({
@@ -41,6 +44,9 @@ export default {
       'fetchRecipes',
       'fetchCourses',
     ]),
+    onResize() {
+      this.$root.isMobile = window.innerWidth <= 768;
+    },
   },
   mixins: [
     ErrorHandler,

@@ -21,5 +21,10 @@ Vue.config.productionTip = false;
 new Vue({
   store,
   router,
+  data() {
+    return {
+      isMobile: window.innerWidth <= 768,
+    };
+  },
   render: (h) => h(App),
 }).$mount('#app');
