@@ -1,5 +1,10 @@
 <template>
-  <b-tabs expanded type="is-toggle-rounded">
+  <b-tabs
+    v-model="selectedDay"
+    v-touch:swipe.left="onSwipeLeft"
+    v-touch:swipe.right="onSwipeRight"
+    expanded type="is-toggle-rounded"
+  >
     <b-tab-item v-for="(day, i) in menu" :key="i" :label="weekDays[i]">
       <MenuSlot
         v-for="(recipe, slot) in day.recipes"
@@ -35,7 +40,9 @@ export default {
   },
   data() {
     return {
+      weekDaysFull: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
       weekDays: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+      selectedDay: (new Date().getDay() || 7) - 1,
     };
   },
   computed: {
@@ -49,6 +56,24 @@ export default {
     },
     fillSlot({ day, slot }, recipe) {
       this.$store.dispatch('fillSlot', { day, slot, recipe });
+    },
+    onSwipeLeft() {
+      this.selectedDay += 1;
+      this.$buefy.toast.open({
+        duration: 1300,
+        message: this.weekDaysFull[this.selectedDay],
+        position: 'is-bottom',
+        type: 'is-light',
+      });
+    },
+    onSwipeRight() {
+      this.selectedDay -= 1;
+      this.$buefy.toast.open({
+        duration: 1300,
+        message: this.weekDaysFull[this.selectedDay],
+        position: 'is-bottom',
+        type: 'is-light',
+      });
     },
     course(slot) {
       const map = {
