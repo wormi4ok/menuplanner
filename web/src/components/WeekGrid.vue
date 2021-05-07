@@ -1,7 +1,7 @@
 <template>
   <div class="grid">
-    <div :key="day" v-for="day in weekDays" class="has-text-centered">
-      <div class="subtitle">{{ day }}</div>
+    <div :key="day" v-for="(day, i) in weekDays" class="has-text-centered">
+      <div class="subtitle" :class="{ 'has-text-weight-bold': today === i }">{{ day }}</div>
     </div>
     <template v-for="slot in courses">
       <MenuSlot
@@ -38,6 +38,7 @@ export default {
   data() {
     return {
       weekDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+      today: (new Date().getDay() || 7) - 1,
       courses: [0, 1, 2],
     };
   },
