@@ -40,7 +40,7 @@
     </b-table-column>
 
     <b-table-column
-      cell-class="is-align-middle"
+      cell-class="is-align-middle is-hidden-mobile"
       field="protein"
       label="Protein"
       width="40"
@@ -51,7 +51,7 @@
     </b-table-column>
 
     <b-table-column
-      cell-class="is-align-middle"
+      cell-class="is-align-middle is-hidden-mobile"
       field="fat"
       label="Fat"
       width="40"
@@ -62,7 +62,7 @@
     </b-table-column>
 
     <b-table-column
-      cell-class="is-align-middle"
+      cell-class="is-align-middle is-hidden-mobile"
       field="carbs"
       label="Carbs"
       width="40"
@@ -73,7 +73,7 @@
     </b-table-column>
 
     <b-table-column
-      cell-class="is-align-middle"
+      cell-class="is-align-middle is-hidden-mobile"
       field="quantity"
       label="Quantity"
       width="40"
@@ -84,7 +84,7 @@
     </b-table-column>
 
     <b-table-column
-      cell-class="is-align-middle"
+      cell-class="is-align-middle is-hidden-mobile"
       field="portion"
       label="Portion"
       width="40"
