@@ -16,17 +16,19 @@
       <b-navbar-item class="is-tab" tag="router-link" :to="{ name: 'Recipes' }">
         Recipes
       </b-navbar-item>
+    </template>
+    <template #end>
 
       <b-navbar-item tag="div" v-if="$route.name === 'Recipes'">
         <b-button class="is-primary" label="Add Recipe" @click="onAddRecipe"/>
       </b-navbar-item>
-      <b-navbar-item tag="div" v-else>
+
+      <b-navbar-item tag="div" class="mr-5" v-else>
 
         <b-button v-if="hasGaps" label="Fill gaps" class="is-primary" @click="onFillGaps"/>
         <b-button v-else label="Clear week" class="is-danger" @click="onClearWeek"/>
 
       </b-navbar-item>
-
     </template>
   </b-navbar>
 </template>
