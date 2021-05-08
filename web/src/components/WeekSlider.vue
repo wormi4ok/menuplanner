@@ -58,6 +58,9 @@ export default {
       this.$store.dispatch('fillSlot', { day, slot, recipe });
     },
     onSwipeLeft() {
+      if (this.selectedDay >= this.weekDaysFull.length - 1) {
+        return;
+      }
       this.selectedDay += 1;
       this.$buefy.toast.open({
         duration: 1300,
@@ -67,6 +70,9 @@ export default {
       });
     },
     onSwipeRight() {
+      if (this.selectedDay <= 0) {
+        return;
+      }
       this.selectedDay -= 1;
       this.$buefy.toast.open({
         duration: 1300,
