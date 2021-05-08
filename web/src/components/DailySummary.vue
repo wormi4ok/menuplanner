@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import RecipeCalories from '@/mixins/RecipeCalories';
+import RecipeNutrition from '@/mixins/RecipeNutrition';
 
 export default {
   name: 'DailySummary',
@@ -21,13 +21,13 @@ export default {
   },
   computed: {
     totalProtein() {
-      return Object.values(this.recipes).reduce((t, r) => (r ? t + r.protein : t), 0);
+      return Object.values(this.recipes).reduce((t, r) => (r ? t + this.recipeProtein(r) : t), 0);
     },
     totalFat() {
-      return Object.values(this.recipes).reduce((t, r) => (r ? t + r.fat : t), 0);
+      return Object.values(this.recipes).reduce((t, r) => (r ? t + this.recipeFat(r) : t), 0);
     },
     totalCarbs() {
-      return Object.values(this.recipes).reduce((t, r) => (r ? t + r.carbs : t), 0);
+      return Object.values(this.recipes).reduce((t, r) => (r ? t + this.recipeCarbs(r) : t), 0);
     },
     totalCalories() {
       return Object.values(this.recipes).reduce((t, r) => (r ? t + this.recipeCalories(r) : t), 0);
@@ -37,7 +37,7 @@ export default {
     },
   },
   mixins: [
-    RecipeCalories,
+    RecipeNutrition,
   ],
 };
 </script>

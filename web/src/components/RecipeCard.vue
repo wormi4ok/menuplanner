@@ -16,9 +16,9 @@
           {{ description }}
         </b-collapse>
         <b-taglist>
-          <b-tag type="is-success">Prot: {{ protein }}</b-tag>
-          <b-tag type="is-info ">Fat: {{ fat }}</b-tag>
-          <b-tag type="is-warning ">Carbs: {{ carbs }}</b-tag>
+          <b-tag type="is-success">Prot: {{ totalProtein }}</b-tag>
+          <b-tag type="is-info ">Fat: {{ totalFat }}</b-tag>
+          <b-tag type="is-warning ">Carbs: {{ totalCarbs }}</b-tag>
           <b-tag type="is-link "> {{ totalCalories }} kcal</b-tag>
         </b-taglist>
       </section>
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import RecipeCalories from '@/mixins/RecipeCalories';
+import RecipeNutrition from '@/mixins/RecipeNutrition';
 
 export default {
   name: 'Recipe',
@@ -63,6 +63,27 @@ export default {
 
       return '1 serving';
     },
+    totalProtein() {
+      return this.recipeProtein({
+        protein: this.protein,
+        quantity: this.quantity,
+        portion: this.portion,
+      });
+    },
+    totalFat() {
+      return this.recipeFat({
+        fat: this.fat,
+        quantity: this.quantity,
+        portion: this.portion,
+      });
+    },
+    totalCarbs() {
+      return this.recipeCarbs({
+        carbs: this.carbs,
+        quantity: this.quantity,
+        portion: this.portion,
+      });
+    },
     totalCalories() {
       return this.recipeCalories({
         calories: this.calories,
@@ -80,7 +101,7 @@ export default {
     },
   },
   mixins: [
-    RecipeCalories,
+    RecipeNutrition,
   ],
 };
 </script>
