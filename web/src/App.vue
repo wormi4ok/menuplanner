@@ -8,7 +8,8 @@
     <footer class="footer">
       <div class="content has-text-centered">
         <p>
-          Made with ♥️ by <a href="https://petrashov.ru" target="_blank">wormi4ok</a>.
+          Made with ♥️ by <a href="https://petrashov.ru" target="_blank">wormi4ok</a>
+          © {{ (new Date).getFullYear() }}, Menuplanner {{ appVersion }}
         </p>
       </div>
     </footer>
@@ -30,6 +31,7 @@ export default {
   },
   data: () => ({
     isLoading: false,
+    appVersion: window.config.MP_VERSION || '',
   }),
   mounted() {
     this.isLoading = true;
