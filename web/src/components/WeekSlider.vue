@@ -1,5 +1,6 @@
 <template>
   <b-tabs
+    class="recipes"
     v-model="selectedDay"
     v-touch:swipe.left="onSwipeLeft"
     v-touch:swipe.right="onSwipeRight"
@@ -94,6 +95,8 @@ export default {
 };
 </script>
 
-<style scoped>
-
+<style>
+.b-tabs.recipes .is-toggle-rounded a {
+  padding: 0.5em 0.5em;
+}
 </style>
