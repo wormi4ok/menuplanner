@@ -2,7 +2,7 @@
   <div id="app">
     <PseudoWindow @resize.passive="onResize"/>
     <Navbar/>
-    <div class="container is-fluid">
+    <div class="container" :class="{ 'is-fluid': !this.$root.isMobile }">
       <router-view/>
     </div>
     <footer class="footer">
