@@ -10,7 +10,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/kelseyhightower/envconfig"
+	"github.com/sethvargo/go-envconfig"
 	"github.com/wormi4ok/menuplanner/internal"
 	"github.com/wormi4ok/menuplanner/internal/http"
 	"github.com/wormi4ok/menuplanner/internal/storage"
@@ -18,19 +18,26 @@ import (
 )
 
 type Config struct {
-	Host        string `default:"localhost"`
-	Port        int    `default:"8081"`
-	RecipesJSON string `split_words:"true"`
-	WeekJSON    string `split_words:"true"`
-	MysqlDSN    string `split_words:"true"`
+	Host        string `env:"HOST,default=localhost"`
+	Port        int    `env:"PORT,default=8081"`
+	RecipesJSON string `env:"RECIPES_JSON"`
+	WeekJSON    string `env:"WEEK_JSON"`
+
+	MysqlDSN string `env:"MYSQL_DSN,required"`
+
+	ClientID     string `env:"CLIENT_ID"`
+	ClientSecret string `env:"CLIENT_SECRET"`
 }
 
 //go:embed docs/index.html
 var docs []byte
 
 func main() {
-	c := new(Config)
-	envconfig.MustProcess("MP", c)
+	var c Config
+	l := envconfig.PrefixLookuper("MP_", envconfig.OsLookuper())
+	if err := envconfig.ProcessWith(context.Background(), &c, l); err != nil {
+		panic(err)
+	}
 
 	var (
 		weekStorage   internal.WeekRepository
@@ -39,10 +46,10 @@ func main() {
 	)
 
 	if c.MysqlDSN != "" {
-		db := loadDB(c)
+		db := loadDB(&c)
 		weekStorage, recipeStorage, courseStorage = db, db, db
 	} else {
-		recipeStorage, weekStorage = loadMocks(c)
+		recipeStorage, weekStorage = loadMocks(&c)
 	}
 
 	srv := http.NewServer(c.Host, c.Port, recipeStorage, courseStorage, weekStorage, docs)
