@@ -1,8 +1,6 @@
 package http
 
 import (
-	"encoding/json"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -26,14 +24,7 @@ func (e courseEndpoint) Routes() chi.Router {
 
 func (e courseEndpoint) List() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-
-		err := json.NewEncoder(w).Encode(e.storage.ReadAllCourses(r.Context()))
-		if err != nil {
-			log.Printf("Course handler error: %v", err)
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		}
+		responseJSON(w, e.storage.ReadAllCourses(r.Context()))
 	}
 }
 
@@ -50,13 +41,6 @@ func (e courseEndpoint) Get() http.HandlerFunc {
 			return
 		}
 
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-
-		err = json.NewEncoder(w).Encode(course)
-		if err != nil {
-			log.Printf("Course handler error: %v", err)
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		}
+		responseJSON(w, course)
 	}
 }

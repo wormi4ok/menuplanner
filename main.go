@@ -25,6 +25,9 @@ type Config struct {
 
 	MysqlDSN string `env:"MYSQL_DSN,required"`
 
+	JWTSecret string `env:"JWT_SECRET,required"`
+
+	// Oauth2 credentials
 	ClientID     string `env:"CLIENT_ID"`
 	ClientSecret string `env:"CLIENT_SECRET"`
 }
@@ -43,16 +46,17 @@ func main() {
 		weekStorage   internal.WeekRepository
 		recipeStorage internal.RecipeRepository
 		courseStorage internal.CourseReader
+		userStorage   internal.UserRepository
 	)
 
 	if c.MysqlDSN != "" {
 		db := loadDB(&c)
-		weekStorage, recipeStorage, courseStorage = db, db, db
+		weekStorage, recipeStorage, courseStorage, userStorage = db, db, db, db
 	} else {
 		recipeStorage, weekStorage = loadMocks(&c)
 	}
 
-	srv := http.NewServer(c.Host, c.Port, recipeStorage, courseStorage, weekStorage, docs)
+	srv := http.NewServer(c.Host, c.Port, c.JWTSecret, recipeStorage, courseStorage, weekStorage, userStorage, docs)
 	log.Printf("Starting service on %s port %d...\n", c.Host, c.Port)
 
 	handleServerShutdown(srv)

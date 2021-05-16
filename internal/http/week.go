@@ -1,9 +1,6 @@
 package http
 
 import (
-	"encoding/json"
-	"io"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -29,13 +26,7 @@ func (e weekEndpoint) Routes() chi.Router {
 
 func (e *weekEndpoint) Get() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		err := json.NewEncoder(w).Encode(e.storage.ReadCurrent(r.Context()))
-		if err != nil {
-			log.Printf("Handler error: %v", err)
-			w.WriteHeader(500)
-		}
+		responseJSON(w, e.storage.ReadCurrent(r.Context()))
 	}
 }
 
@@ -45,17 +36,10 @@ func (e *weekEndpoint) Update() http.HandlerFunc {
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := &request{}
-		body, err := io.ReadAll(r.Body)
-		if err != nil {
-			_, _ = io.WriteString(w, "Missing or malformed payload")
-			w.WriteHeader(http.StatusBadRequest)
-			return
-		}
+		var req request
 
-		if err := json.Unmarshal(body, req); err != nil {
-			_, _ = io.WriteString(w, err.Error())
-			w.WriteHeader(http.StatusBadRequest)
+		if err := readJSON(r, &req); err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
@@ -66,10 +50,7 @@ func (e *weekEndpoint) Update() http.HandlerFunc {
 		res := e.storage.UpdateCurrent(r.Context(), week)
 
 		w.WriteHeader(http.StatusAccepted)
-		if err := json.NewEncoder(w).Encode(res); err != nil {
-			_, _ = io.WriteString(w, err.Error())
-			w.WriteHeader(http.StatusInternalServerError)
-		}
+		responseJSON(w, res)
 	}
 }
 
