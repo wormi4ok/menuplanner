@@ -1,9 +1,13 @@
 package jwt
 
 import (
+	"context"
 	"fmt"
+	"net/http"
+	"strconv"
 	"time"
 
+	"github.com/go-chi/jwtauth"
 	"github.com/lestrrat-go/jwx/jwa"
 	"github.com/lestrrat-go/jwx/jwt"
 
@@ -35,4 +39,20 @@ func (g *Generator) CreateRefreshToken(user *internal.User, expiresIn time.Durat
 	signedToken, err := jwt.Sign(t, jwa.HS512, []byte(g.Secret))
 
 	return string(signedToken), err
+}
+
+func UserID(ctx context.Context) int {
+	token, _ := ctx.Value(jwtauth.TokenCtxKey).(jwt.Token)
+	id, _ := strconv.Atoi(token.Subject())
+
+	return id
+}
+
+func Verifier(jwtSecret string) func(http.Handler) http.Handler {
+	tokenAuth := jwtauth.New("HS512", []byte(jwtSecret), nil)
+	return jwtauth.Verifier(tokenAuth)
+}
+
+func Authenticator(next http.Handler) http.Handler {
+	return jwtauth.Authenticator(next)
 }

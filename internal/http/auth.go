@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/wormi4ok/menuplanner/internal"
+	"github.com/wormi4ok/menuplanner/internal/http/jwt"
 )
 
 const authTokenDuration = time.Hour
@@ -28,7 +29,6 @@ func (e userEndpoint) Routes() chi.Router {
 	r := chi.NewRouter()
 
 	r.Post("/", e.Signup())
-	r.Get("/me", e.Get())
 	r.Post("/login", e.Login())
 	r.Post("/login/google", e.GoogleAuth())
 
@@ -94,7 +94,26 @@ func (e *userEndpoint) Signup() http.HandlerFunc {
 }
 
 func (e *userEndpoint) Get() http.HandlerFunc {
-	panic("not implemented yet")
+	type response struct {
+		Name  string `json:"name"`
+		Email string `json:"email"`
+	}
+
+	return func(w http.ResponseWriter, r *http.Request) {
+		id := jwt.UserID(r.Context())
+		user, err := e.storage.ReadUser(r.Context(), id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		res := response{
+			Name:  user.Name,
+			Email: user.Email,
+		}
+
+		responseJSON(w, res)
+	}
 }
 
 func (e *userEndpoint) Login() http.HandlerFunc {
@@ -139,7 +158,7 @@ func (e *userEndpoint) Login() http.HandlerFunc {
 }
 
 func (e *userEndpoint) GoogleAuth() http.HandlerFunc {
-	panic("not implemented yet")
+	return nil
 }
 
 func (e *userEndpoint) tokenPair(user *internal.User) (string, string, error) {
