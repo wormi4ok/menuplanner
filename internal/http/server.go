@@ -36,11 +36,18 @@ func NewServer(
 	r := router()
 
 	we := weekEndpoint{storage: weeks, filler: internal.NewGapFiller(recipes, courses)}
+	ue := userEndpoint{&jwt.Generator{Secret: jwtSecret}, users}
 	r.Get("/", we.Get())
-	r.Mount("/week", we.Routes())
-	r.Mount("/recipe", recipeEndpoint{recipes}.Routes())
-	r.Mount("/course", courseEndpoint{courses}.Routes())
-	r.Mount("/user", userEndpoint{&jwt.Generator{Secret: jwtSecret}, users}.Routes())
+	r.Group(func(r chi.Router) {
+		r.Use(jwt.Verifier(jwtSecret))
+		r.Use(jwt.Authenticator)
+
+		r.Get("/user/me", ue.Get())
+		r.Mount("/week", we.Routes())
+		r.Mount("/recipe", recipeEndpoint{recipes}.Routes())
+		r.Mount("/course", courseEndpoint{courses}.Routes())
+	})
+	r.Mount("/user", ue.Routes())
 	r.Handle("/docs*", docsEndpoint{docs})
 	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
