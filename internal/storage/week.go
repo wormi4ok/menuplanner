@@ -52,7 +52,7 @@ func (s *DB) UpdateCurrent(ctx context.Context, week *internal.Week) *internal.W
 			result := s.db.WithContext(ctx).Clauses(clause.OnConflict{UpdateAll: true}).Create(w)
 
 			if result.Error != nil {
-				log.Printf("Error wle insering: %s", result.Error)
+				log.Printf("Error while insering: %s", result.Error)
 			}
 		}
 	}

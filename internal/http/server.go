@@ -2,7 +2,10 @@ package http
 
 import (
 	"context"
+	"encoding/json"
+	"errors"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"time"
@@ -11,6 +14,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 	"github.com/wormi4ok/menuplanner/internal"
+	"github.com/wormi4ok/menuplanner/internal/http/jwt"
 )
 
 type Server struct {
@@ -22,10 +26,11 @@ func (s *Server) Shutdown(ctx context.Context) error {
 }
 
 func NewServer(
-	host string, port int,
+	host string, port int, jwtSecret string,
 	recipes internal.RecipeRepository,
 	courses internal.CourseReader,
 	weeks internal.WeekRepository,
+	users internal.UserRepository,
 	docs []byte,
 ) *Server {
 	r := router()
@@ -35,6 +40,7 @@ func NewServer(
 	r.Mount("/week", we.Routes())
 	r.Mount("/recipe", recipeEndpoint{recipes}.Routes())
 	r.Mount("/course", courseEndpoint{courses}.Routes())
+	r.Mount("/user", userEndpoint{&jwt.Generator{Secret: jwtSecret}, users}.Routes())
 	r.Handle("/docs*", docsEndpoint{docs})
 	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
@@ -71,4 +77,22 @@ func router() *chi.Mux {
 		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	}))
 	return r
+}
+
+func readJSON(r *http.Request, req interface{}) error {
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		return errors.New("missing or malformed payload")
+	}
+
+	return json.Unmarshal(body, &req)
+}
+
+func responseJSON(w http.ResponseWriter, res interface{}) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(res); err != nil {
+		_, _ = io.WriteString(w, err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
+	}
 }

@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -65,18 +64,10 @@ func (e recipeEndpoint) Create() http.HandlerFunc {
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := request{}
+		var req request
 
-		body, err := io.ReadAll(r.Body)
-		if err != nil {
-			_, _ = io.WriteString(w, "Missing or malformed payload")
-			w.WriteHeader(http.StatusBadRequest)
-			return
-		}
-
-		if err := json.Unmarshal(body, &req); err != nil {
-			_, _ = io.WriteString(w, err.Error())
-			w.WriteHeader(http.StatusBadRequest)
+		if err := readJSON(r, &req); err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
@@ -115,14 +106,7 @@ func (e recipeEndpoint) Create() http.HandlerFunc {
 
 func (e recipeEndpoint) List() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-
-		err := json.NewEncoder(w).Encode(e.storage.ReadAll(r.Context()))
-		if err != nil {
-			log.Printf("Handler error: %v", err)
-			w.WriteHeader(500)
-		}
+		responseJSON(w, e.storage.ReadAll(r.Context()))
 	}
 }
 
@@ -154,14 +138,7 @@ func (e recipeEndpoint) Get() http.HandlerFunc {
 			return
 		}
 
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-
-		err := json.NewEncoder(w).Encode(recipe)
-		if err != nil {
-			log.Printf("Handler error: %v", err)
-			w.WriteHeader(500)
-		}
+		responseJSON(w, recipe)
 	}
 }
 
@@ -178,7 +155,7 @@ func (e recipeEndpoint) Update() http.HandlerFunc {
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		req := request{}
+		var req request
 
 		ctx := r.Context()
 		_, ok := ctx.Value("recipe").(*internal.Recipe)
@@ -187,21 +164,13 @@ func (e recipeEndpoint) Update() http.HandlerFunc {
 			return
 		}
 
-		body, err := io.ReadAll(r.Body)
-		if err != nil {
-			_, _ = io.WriteString(w, "Missing or malformed payload")
-			w.WriteHeader(http.StatusBadRequest)
-			return
-		}
-
-		if err := json.Unmarshal(body, &req); err != nil {
-			_, _ = io.WriteString(w, err.Error())
-			w.WriteHeader(http.StatusBadRequest)
+		if err := readJSON(r, &req); err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
 		recipe := internal.Recipe(req)
-		_, err = internal.UpdateRecipe(r.Context(), &recipe, e.storage)
+		_, err := internal.UpdateRecipe(r.Context(), &recipe, e.storage)
 		if err != nil {
 			if _, ok := err.(*validator.InvalidValidationError); ok {
 				_, _ = io.WriteString(w, err.Error())
@@ -225,13 +194,7 @@ func (e recipeEndpoint) Update() http.HandlerFunc {
 			return
 		}
 
-		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusAccepted)
-
-		err = json.NewEncoder(w).Encode(recipe)
-		if err != nil {
-			log.Printf("Handler error: %v", err)
-			w.WriteHeader(500)
-		}
+		responseJSON(w, recipe)
 	}
 }

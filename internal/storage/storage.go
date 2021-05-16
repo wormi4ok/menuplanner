@@ -16,7 +16,7 @@ func InitDB(dsn string) (*DB, error) {
 		return nil, err
 	}
 
-	if err := db.AutoMigrate(&internal.Recipe{}, &Week{}); err != nil {
+	if err := db.AutoMigrate(&internal.Recipe{}, &Week{}, &internal.User{}); err != nil {
 		return nil, err
 	}
 
