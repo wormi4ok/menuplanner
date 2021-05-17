@@ -28,7 +28,7 @@ func (e userEndpoint) Routes() chi.Router {
 	rand.Seed(time.Now().UTC().UnixNano())
 	r := chi.NewRouter()
 
-	r.Post("/", e.Signup())
+	r.Post("/signup", e.Signup())
 	r.Post("/login", e.Login())
 	r.Post("/login/google", e.GoogleAuth())
 
@@ -157,7 +157,35 @@ func (e *userEndpoint) Login() http.HandlerFunc {
 	}
 }
 
+func (e *userEndpoint) Refresh() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id := jwt.UserID(r.Context())
+
+		user, err := e.storage.ReadUser(r.Context(), id)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		at, rt, err := e.tokenPair(user)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		res := authTokenResponse{
+			AccessToken:  at,
+			TokenType:    "bearer",
+			ExpiresIn:    int(authTokenDuration.Seconds()),
+			RefreshToken: rt,
+		}
+
+		responseJSON(w, res)
+	}
+}
+
 func (e *userEndpoint) GoogleAuth() http.HandlerFunc {
+	// TODO
 	return nil
 }
 

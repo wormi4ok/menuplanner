@@ -1,8 +1,11 @@
 package jwt
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"strconv"
 	"time"
@@ -48,11 +51,65 @@ func UserID(ctx context.Context) int {
 	return id
 }
 
-func Verifier(jwtSecret string) func(http.Handler) http.Handler {
+func AccessTokenVerifier(jwtSecret string) func(http.Handler) http.Handler {
 	tokenAuth := jwtauth.New("HS512", []byte(jwtSecret), nil)
 	return jwtauth.Verifier(tokenAuth)
 }
 
-func Authenticator(next http.Handler) http.Handler {
+func AccessTokenAuthenticator(next http.Handler) http.Handler {
 	return jwtauth.Authenticator(next)
+}
+
+func RefreshTokenVerifier(jwtSecret string) func(http.Handler) http.Handler {
+	tokenAuth := jwtauth.New("HS512", []byte(jwtSecret), nil)
+	return func(next http.Handler) http.Handler {
+		return jwtauth.Verify(tokenAuth, TokenFromBody, jwtauth.TokenFromHeader)(next)
+	}
+}
+
+func RefreshTokenAuthenticator(reader internal.UserReader) func(next http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			token, _, err := jwtauth.FromContext(r.Context())
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusUnauthorized)
+				return
+			}
+
+			id, err := strconv.Atoi(token.Subject())
+			if err != nil {
+				http.Error(w, "malformed token", http.StatusNotAcceptable)
+				return
+			}
+
+			u, err := reader.ReadUser(r.Context(), id)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusPreconditionFailed)
+				return
+			}
+
+			if token == nil || jwt.Validate(token, jwt.WithClaimValue("key", u.Key)) != nil {
+				http.Error(w, http.StatusText(401), http.StatusUnauthorized)
+				return
+			}
+
+			next.ServeHTTP(w, r)
+		})
+	}
+}
+
+func TokenFromBody(r *http.Request) string {
+	var req struct {
+		RefreshToken string `json:"refresh_token"`
+	}
+
+	b := bytes.NewBuffer(make([]byte, 0))
+	reader := io.TeeReader(r.Body, b)
+
+	if err := json.NewDecoder(reader).Decode(&req); err != nil {
+		return ""
+	}
+
+	r.Body = io.NopCloser(b)
+	return req.RefreshToken
 }
