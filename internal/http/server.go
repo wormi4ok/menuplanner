@@ -37,21 +37,29 @@ func NewServer(
 
 	we := weekEndpoint{storage: weeks, filler: internal.NewGapFiller(recipes, courses)}
 	ue := userEndpoint{&jwt.Generator{Secret: jwtSecret}, users}
-	r.Get("/", we.Get())
-	r.Group(func(r chi.Router) {
-		r.Use(jwt.Verifier(jwtSecret))
-		r.Use(jwt.Authenticator)
 
+	// Public routes
+	r.Mount("/auth", ue.Routes())
+	r.Handle("/docs*", docsEndpoint{docs})
+	r.Get("/health", healthEndpoint)
+
+	// Protected routes
+	r.Group(func(r chi.Router) {
+		r.Use(jwt.AccessTokenVerifier(jwtSecret))
+		r.Use(jwt.AccessTokenAuthenticator)
+
+		r.Get("/", we.Get())
 		r.Get("/user/me", ue.Get())
 		r.Mount("/week", we.Routes())
 		r.Mount("/recipe", recipeEndpoint{recipes}.Routes())
 		r.Mount("/course", courseEndpoint{courses}.Routes())
 	})
-	r.Mount("/user", ue.Routes())
-	r.Handle("/docs*", docsEndpoint{docs})
-	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		_, _ = fmt.Fprintln(w, "What's on the menu?")
+
+	r.Group(func(r chi.Router) {
+		r.Use(jwt.RefreshTokenVerifier(jwtSecret))
+		r.Use(jwt.RefreshTokenAuthenticator(users))
+
+		r.Post("/token/refresh", ue.Refresh())
 	})
 
 	srv := &http.Server{
@@ -86,11 +94,17 @@ func router() *chi.Mux {
 	return r
 }
 
+func healthEndpoint(w http.ResponseWriter, _ *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	_, _ = fmt.Fprintln(w, "What's on the menu?")
+}
+
 func readJSON(r *http.Request, req interface{}) error {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		return errors.New("missing or malformed payload")
 	}
+	_ = r.Body.Close()
 
 	return json.Unmarshal(body, &req)
 }
