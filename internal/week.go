@@ -6,9 +6,9 @@ import (
 )
 
 type WeekRepository interface {
-	ReadCurrent(context.Context) *Week
-	UpdateCurrent(context.Context, *Week) *Week
-	DeleteSlot(ctx context.Context, week, day, slot int) error
+	ReadCurrent(ctx context.Context, userID int) *Week
+	UpdateCurrent(ctx context.Context, userID int, week *Week) *Week
+	DeleteSlot(ctx context.Context, userID int, week int, day int, slot int) error
 }
 
 type DailyMenu struct {
@@ -31,13 +31,13 @@ func NewGapFiller(recipes RecipeReader, courses CourseReader) *GapFiller {
 	return &GapFiller{r: recipes, c: courses}
 }
 
-func (gf *GapFiller) FillWeek(ctx context.Context, week *Week) *Week {
-	gf.prepareSkeleton(ctx, week)
+func (gf *GapFiller) FillWeek(ctx context.Context, userID int, week *Week) *Week {
+	gf.prepareSkeleton(ctx, userID, week)
 	for i, menu := range week.Menu {
 		for j, recipe := range menu.Recipes {
 			if recipe.IsEmpty() {
 				for attempts := 3; attempts > 0; attempts-- {
-					r := *gf.r.ReadRandom(ctx, *gf.courseName(j))
+					r := *gf.r.ReadRandom(ctx, *gf.courseName(j), userID)
 					week.Menu[i].AddRecipe(j, r)
 					if menu.CheckRecipe(r) == nil {
 						break
@@ -71,7 +71,7 @@ func (gf *GapFiller) courseName(index int) *Course {
 	return gf.indexedCourses[index]
 }
 
-func (gf *GapFiller) prepareSkeleton(ctx context.Context, week *Week) {
+func (gf *GapFiller) prepareSkeleton(ctx context.Context, userID int, week *Week) {
 	for i := 0; i < 7; i++ {
 		if _, exists := week.Menu[i]; !exists {
 			week.Menu[i] = &DailyMenu{Recipes: map[int]Recipe{}}
@@ -81,7 +81,7 @@ func (gf *GapFiller) prepareSkeleton(ctx context.Context, week *Week) {
 				week.Menu[i].Recipes[j] = Recipe{}
 			}
 			if !week.Menu[i].Recipes[j].IsEmpty() {
-				r := gf.r.Read(ctx, week.Menu[i].Recipes[j].ID)
+				r := gf.r.Read(ctx, userID, week.Menu[i].Recipes[j].ID)
 				if r != nil {
 					week.Menu[i].AddRecipe(j, *r)
 				}

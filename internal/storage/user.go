@@ -29,7 +29,7 @@ func (s *DB) ReadUserByEmail(ctx context.Context, email string) (*internal.User,
 	var user internal.User
 	err := s.db.WithContext(ctx).Where("email = ?", email).First(&user).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, nil
+		return nil, internal.NewError(err, internal.ErrorNotFound)
 	}
 	return &user, err
 }
