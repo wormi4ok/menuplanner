@@ -2,6 +2,7 @@ package internal
 
 import (
 	"context"
+	"errors"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -12,9 +13,9 @@ type RecipeRepository interface {
 }
 
 type RecipeReader interface {
-	Read(ctx context.Context, id int) *Recipe
-	ReadAll(ctx context.Context) []*Recipe
-	ReadRandom(ctx context.Context, course Course) *Recipe
+	Read(ctx context.Context, userID int, id int) *Recipe
+	ReadAll(ctx context.Context, userID int) []*Recipe
+	ReadRandom(ctx context.Context, course Course, userID int) *Recipe
 }
 
 type RecipeWriter interface {
@@ -37,6 +38,9 @@ type Recipe struct {
 
 	Quantity int `json:"quantity,omitempty"`
 	Portion  int `json:"portion,omitempty" validate:"required_with=Quantity"`
+
+	UserID int  `json:"-" validate:"required" gorm:"not null;default:1"`
+	User   User `json:"-"`
 }
 
 func (r Recipe) EnergyAmount() int {
@@ -55,11 +59,17 @@ type Validator interface {
 	StructCtx(ctx context.Context, s interface{}) (err error)
 }
 
-func SaveRecipe(ctx context.Context, recipe Recipe, storage RecipeWriter) (id int, err error) {
+func SaveRecipe(ctx context.Context, userID int, recipe Recipe, storage RecipeWriter) (id int, err error) {
+	recipe.ensureUserID(userID)
 	v := validator.New()
 
 	err = v.StructCtx(ctx, recipe)
 	if err != nil {
+		return
+	}
+
+	if recipe.UserID != userID {
+		err = NewError(errors.New("user ID doesn't match recipe.User"), ErrorUnauthorized)
 		return
 	}
 
@@ -69,7 +79,8 @@ func SaveRecipe(ctx context.Context, recipe Recipe, storage RecipeWriter) (id in
 	return
 }
 
-func UpdateRecipe(ctx context.Context, r *Recipe, storage RecipeWriter) (recipe *Recipe, err error) {
+func UpdateRecipe(ctx context.Context, userID int, r *Recipe, storage RecipeWriter) (recipe *Recipe, err error) {
+	r.ensureUserID(userID)
 	v := validator.New()
 
 	err = v.StructCtx(ctx, r)
@@ -77,6 +88,29 @@ func UpdateRecipe(ctx context.Context, r *Recipe, storage RecipeWriter) (recipe 
 		return
 	}
 
+	if r.UserID != userID {
+		err = NewError(errors.New("user is not authorized to modify this recipe"), ErrorUnauthorized)
+		return
+	}
+
 	recipe, err = storage.Update(ctx, r)
 	return
+}
+
+func DeleteRecipe(ctx context.Context, userID int, recipe *Recipe, storage RecipeWriter) error {
+	if userID != recipe.UserID {
+		return NewError(errors.New("user is not authorized to modify this recipe"), ErrorUnauthorized)
+	}
+
+	if !storage.Delete(ctx, recipe.ID) {
+		return errors.New("failed to delete database record")
+	}
+
+	return nil
+}
+
+func (r *Recipe) ensureUserID(userID int) {
+	if r.UserID == 0 {
+		r.UserID = userID
+	}
 }

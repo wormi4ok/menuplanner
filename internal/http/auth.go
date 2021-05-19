@@ -57,17 +57,17 @@ func (e *userEndpoint) Signup() http.HandlerFunc {
 			return
 		}
 
-		if existingUser, err := e.storage.ReadUserByEmail(r.Context(), req.Email); err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		} else if existingUser != nil {
+		if existingUser, err := e.storage.ReadUserByEmail(r.Context(), req.Email); existingUser != nil {
 			http.Error(w, "User with this email already exists", http.StatusConflict)
+			return
+		} else if !internal.ErrorIs(err, internal.ErrorNotFound) {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
 		user, err := internal.NewUser(req.Email, req.Password)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 

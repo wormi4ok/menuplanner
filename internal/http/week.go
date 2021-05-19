@@ -6,6 +6,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/wormi4ok/menuplanner/internal"
+	"github.com/wormi4ok/menuplanner/internal/http/jwt"
 )
 
 type weekEndpoint struct {
@@ -26,7 +27,7 @@ func (e weekEndpoint) Routes() chi.Router {
 
 func (e *weekEndpoint) Get() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		responseJSON(w, e.storage.ReadCurrent(r.Context()))
+		responseJSON(w, e.storage.ReadCurrent(r.Context(), jwt.UserID(r.Context())))
 	}
 }
 
@@ -45,9 +46,9 @@ func (e *weekEndpoint) Update() http.HandlerFunc {
 
 		week := &req.Week
 		if r.URL.Query().Get("fillGaps") != "" {
-			e.filler.FillWeek(r.Context(), week)
+			e.filler.FillWeek(r.Context(), jwt.UserID(r.Context()), week)
 		}
-		res := e.storage.UpdateCurrent(r.Context(), week)
+		res := e.storage.UpdateCurrent(r.Context(), jwt.UserID(r.Context()), week)
 
 		w.WriteHeader(http.StatusAccepted)
 		responseJSON(w, res)
@@ -66,7 +67,7 @@ func (e *weekEndpoint) Delete() http.HandlerFunc {
 			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 			return
 		}
-		err = e.storage.DeleteSlot(r.Context(), 1, day, slot)
+		err = e.storage.DeleteSlot(r.Context(), jwt.UserID(r.Context()), 1, day, slot)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusNotFound)
 			return

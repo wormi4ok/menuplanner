@@ -29,18 +29,18 @@ func (s *DB) Delete(ctx context.Context, id int) bool {
 	return s.db.WithContext(ctx).Model(&r).Select(clause.Associations).Delete(&r).Error == nil
 }
 
-func (s *DB) Read(ctx context.Context, id int) *internal.Recipe {
+func (s *DB) Read(ctx context.Context, userID int, id int) *internal.Recipe {
 	r := &internal.Recipe{}
-	s.db.WithContext(ctx).Preload("Courses").First(&r, id)
+	s.db.WithContext(ctx).Preload("Courses").First(&r, "user_id = ? AND id = ?", userID, id)
 	return r
 }
 
-func (s *DB) ReadAll(ctx context.Context) (rr []*internal.Recipe) {
-	s.db.WithContext(ctx).Preload("Courses").Find(&rr)
+func (s *DB) ReadAll(ctx context.Context, userID int) (rr []*internal.Recipe) {
+	s.db.WithContext(ctx).Preload("Courses").Find(&rr, "user_id = ?", userID)
 	return
 }
 
-func (s *DB) ReadRandom(ctx context.Context, course internal.Course) (r *internal.Recipe) {
+func (s *DB) ReadRandom(ctx context.Context, course internal.Course, userID int) (r *internal.Recipe) {
 	var id int
 	s.db.
 		Table("recipe_courses").

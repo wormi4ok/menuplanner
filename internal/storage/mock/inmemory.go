@@ -15,7 +15,7 @@ type Recipes struct {
 	all []*internal.Recipe
 }
 
-func (rs *Recipes) ReadRandom(_ context.Context, course internal.Course) *internal.Recipe {
+func (rs *Recipes) ReadRandom(ctx context.Context, course internal.Course, userID int) *internal.Recipe {
 	rand.Seed(time.Now().UnixNano())
 	var rr []*internal.Recipe
 	for _, r := range rs.all {
@@ -62,7 +62,7 @@ func (rs *Recipes) Update(_ context.Context, recipe *internal.Recipe) (*internal
 	return nil, errors.New("not found")
 }
 
-func (rs *Recipes) Read(_ context.Context, id int) *internal.Recipe {
+func (rs *Recipes) Read(ctx context.Context, userID int, id int) *internal.Recipe {
 	for _, r := range rs.all {
 		if r.ID == id {
 			return r
@@ -71,7 +71,7 @@ func (rs *Recipes) Read(_ context.Context, id int) *internal.Recipe {
 	return nil
 }
 
-func (rs *Recipes) ReadAll(_ context.Context) []*internal.Recipe {
+func (rs *Recipes) ReadAll(ctx context.Context, userID int) []*internal.Recipe {
 	return rs.all
 }
 
@@ -106,23 +106,23 @@ func (ws *Weeks) LoadFromFile(path string) error {
 	return nil
 }
 
-func (ws *Weeks) UpdateCurrent(_ context.Context, week *internal.Week) *internal.Week {
+func (ws *Weeks) UpdateCurrent(_ context.Context, _ int, week *internal.Week) *internal.Week {
 	ws.current = week
 	return ws.current
 }
 
-func (ws *Weeks) ReadCurrent(_ context.Context) *internal.Week {
+func (ws *Weeks) ReadCurrent(_ context.Context, _ int) *internal.Week {
 	c := ws.current
 	for i, day := range c.Menu {
 		for k, recipe := range day.Recipes {
-			c.Menu[i].Recipes[k] = *ws.Recipes.Read(context.TODO(), recipe.ID)
+			c.Menu[i].Recipes[k] = *ws.Recipes.Read(context.TODO(), 1, recipe.ID)
 		}
 	}
 
 	return c
 }
 
-func (ws *Weeks) DeleteSlot(_ context.Context, _, day, slot int) error {
+func (ws *Weeks) DeleteSlot(_ context.Context, _ int, _ int, day int, slot int) error {
 	menu := ws.current.Menu
 	if menu != nil {
 		if _, exists := menu[day]; exists {

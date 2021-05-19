@@ -6,6 +6,8 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	jwt2 "github.com/wormi4ok/menuplanner/internal/http/jwt"
 )
 
 func TestGapFiller_FillWeek(t *testing.T) {
@@ -31,7 +33,7 @@ func TestGapFiller_FillWeek(t *testing.T) {
 				r: m,
 				c: m,
 			}
-			got := gf.FillWeek(context.TODO(), tt.input)
+			got := gf.FillWeek(context.TODO(), jwt2.UserID(r.Context()), tt.input)
 			for i, day := range tt.want.Menu {
 				if _, exists := got.Menu[i]; !exists {
 					t.Errorf("Missing menu for day %d", i)
@@ -100,7 +102,7 @@ type mock struct {
 	seed int
 }
 
-func (m *mock) Read(_ context.Context, id int) *Recipe {
+func (m *mock) Read(ctx context.Context, userID int, id int) *Recipe {
 	for _, r := range m.Recipes {
 		if r.ID == id {
 			return r
@@ -109,11 +111,11 @@ func (m *mock) Read(_ context.Context, id int) *Recipe {
 	return nil
 }
 
-func (m *mock) ReadAll(_ context.Context) []*Recipe {
+func (m *mock) ReadAll(ctx context.Context, userID int) []*Recipe {
 	return m.Recipes
 }
 
-func (m *mock) ReadRandom(_ context.Context, course Course) *Recipe {
+func (m *mock) ReadRandom(ctx context.Context, course Course, userID int) *Recipe {
 	var rr []*Recipe
 	for i := 0; i < len(m.Recipes); i++ {
 		r := m.Recipes[i]
