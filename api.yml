@@ -12,8 +12,84 @@ paths:
       responses:
         200:
           description: Service is healthy
+  /auth/signup:
+    post:
+      description: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: s@petrashov.ru
+                password:
+                  type: string
+                passwordConfirm:
+                  type: string
+              required:
+                - email
+                - password
+                - passwordConfirm
+      responses:
+        200:
+          description: User created
+          content:
+            applicatin/json:
+              schema:
+                $ref: "#/components/schemas/authToken"
+        400:
+          description: Failed to parse request payload
+        409:
+          description: User with the same email already exists
+  /auth/login:
+    post:
+      description: Authenticate using login and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: Succesfully authenticated
+          content:
+            applicatin/json:
+              schema:
+                $ref: "#/components/schemas/authToken"
+        400:
+          description: Failed to parse request payload
+        401:
+          description: Invalid email or password
+  /token/refresh:
+    post:
+      description: Provide refresh token in Authorization header to get a new access token
+      security:
+        - tokenAuth: [ ]
+      responses:
+        200:
+          description: Tokens refreshed
+          content:
+            applicatin/json:
+              schema:
+                $ref: "#/components/schemas/authToken"
+        401:
+          description: Refresh token is not valid
+        409:
+          description: Failed to verify secret key
   /recipe:
     get:
+      security:
+        - tokenAuth: [ ]
       description: Get a list of all recipes
       responses:
         200:
@@ -24,7 +100,11 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/recipe"
+        403:
+          description: Unauthorized access
     post:
+      security:
+        - tokenAuth: [ ]
       description: Add a new recipe
       requestBody:
         required: true
@@ -47,8 +127,12 @@ paths:
                 $ref: "#/components/schemas/recipe"
         400:
           $ref: "#/components/responses/InvalidPayload"
+        403:
+          description: Unauthorized access
   /recipe/{id}:
     get:
+      security:
+        - tokenAuth: [ ]
       description: Get recipe by id
       parameters:
         - name: id
@@ -63,7 +147,11 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/recipe"
+        403:
+          description: Unauthorized access
     put:
+      security:
+        - tokenAuth: [ ]
       description: Update recipe
       parameters:
         - name: id
@@ -80,8 +168,11 @@ paths:
                 $ref: "#/components/schemas/recipe"
         400:
           $ref: "#/components/responses/InvalidPayload"
-
+        403:
+          description: Unauthorized access
     delete:
+      security:
+        - tokenAuth: [ ]
       description: Delete recipe by id
       parameters:
         - name: id
@@ -92,10 +183,14 @@ paths:
       responses:
         204:
           description: Recipe deleted
+        403:
+          description: Unauthorized access
         422:
           description: Recipe cannot be deleted
   /week:
     get:
+      security:
+        - tokenAuth: [ ]
       description: Get current week
       responses:
         200:
@@ -105,6 +200,8 @@ paths:
               schema:
                 $ref: "#/components/schemas/week"
     put:
+      security:
+        - tokenAuth: [ ]
       description: Update current week
       parameters:
         - name: fillGaps
@@ -122,6 +219,8 @@ paths:
                 $ref: "#/components/schemas/week"
   /week/day/{day}/slot/{slot}:
     delete:
+      security:
+        - tokenAuth: [ ]
       description: Make a slot for a given day available
       parameters:
         - name: day
@@ -140,6 +239,11 @@ paths:
         404:
           description: Not found
 components:
+  securitySchemes:
+    tokenAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     recipe:
       properties:
@@ -193,6 +297,19 @@ components:
         field:
           type: string
         message:
+          type: string
+    authToken:
+      type: object
+      properties:
+        access_token:
+          type: string
+        token_type:
+          type: string
+          default: bearer
+        expires_in:
+          type: integer
+          default: 3600
+        refresh_token:
           type: string
   responses:
     InvalidPayload:
