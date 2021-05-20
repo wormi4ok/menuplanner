@@ -846,6 +846,53 @@ ul.nav-tabs {
   <script>
     // Script section to load models into a JS Var
     var defs = {}
+    defs["authToken"] = {
+  "type" : "object",
+  "properties" : {
+    "access_token" : {
+      "type" : "string"
+    },
+    "token_type" : {
+      "type" : "string",
+      "default" : "bearer"
+    },
+    "expires_in" : {
+      "type" : "integer",
+      "default" : 3600
+    },
+    "refresh_token" : {
+      "type" : "string"
+    }
+  }
+};
+    defs["inline_object"] = {
+  "required" : [ "email", "password", "passwordConfirm" ],
+  "type" : "object",
+  "properties" : {
+    "email" : {
+      "type" : "string",
+      "format" : "email",
+      "example" : "s@petrashov.ru"
+    },
+    "password" : {
+      "type" : "string"
+    },
+    "passwordConfirm" : {
+      "type" : "string"
+    }
+  }
+};
+    defs["inline_object_1"] = {
+  "type" : "object",
+  "properties" : {
+    "email" : {
+      "type" : "string"
+    },
+    "password" : {
+      "type" : "string"
+    }
+  }
+};
     defs["inline_response_400"] = {
   "type" : "object",
   "properties" : {
@@ -943,6 +990,12 @@ ul.nav-tabs {
             <li class="nav-fixed nav-header active" data-group="_"><a href="#api-_">API Summary</a></li>
 
                   <li class="nav-header" data-group="Default"><a href="#api-Default">API Methods - Default</a></li>
+                    <li data-group="Default" data-name="authLoginPost" class="">
+                      <a href="#api-Default-authLoginPost">authLoginPost</a>
+                    </li>
+                    <li data-group="Default" data-name="authSignupPost" class="">
+                      <a href="#api-Default-authSignupPost">authSignupPost</a>
+                    </li>
                     <li data-group="Default" data-name="healthGet" class="">
                       <a href="#api-Default-healthGet">healthGet</a>
                     </li>
@@ -960,6 +1013,9 @@ ul.nav-tabs {
                     </li>
                     <li data-group="Default" data-name="recipePost" class="">
                       <a href="#api-Default-recipePost">recipePost</a>
+                    </li>
+                    <li data-group="Default" data-name="tokenRefreshPost" class="">
+                      <a href="#api-Default-tokenRefreshPost">tokenRefreshPost</a>
                     </li>
                     <li data-group="Default" data-name="weekDayDaySlotSlotDelete" class="">
                       <a href="#api-Default-weekDayDaySlotSlotDelete">weekDayDaySlotSlotDelete</a>
@@ -993,6 +1049,802 @@ ul.nav-tabs {
         <div id="sections">
                 <section id="api-Default">
                   <h1>Default</h1>
+                    <div id="api-Default-authLoginPost">
+                      <article id="api-Default-authLoginPost-0" data-group="User" data-name="authLoginPost" data-version="0">
+                        <div class="pull-left">
+                          <h1>authLoginPost</h1>
+                          <p></p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Authenticate using login and password</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/auth/login</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Default-authLoginPost-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-authLoginPost-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-authLoginPost-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-authLoginPost-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-authLoginPost-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-authLoginPost-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-authLoginPost-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-authLoginPost-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-authLoginPost-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-authLoginPost-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-authLoginPost-0-python">Python</a></li>
+                          <li class=""><a href="#examples-Default-authLoginPost-0-rust">Rust</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Default-authLoginPost-0-curl">
+                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
+ -H "Accept: applicatin/json"\
+ -H "Content-Type: application/json"\
+ "http://localhost:8081/auth/login"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Default-authLoginPost-0-java">
+                            <pre class="prettyprint"><code class="language-java">import org.openapitools.client.*;
+import org.openapitools.client.auth.*;
+import org.openapitools.client.model.*;
+import org.openapitools.client.api.DefaultApi;
+
+import java.io.File;
+import java.util.*;
+
+public class DefaultApiExample {
+    public static void main(String[] args) {
+        
+        // Create an instance of the API class
+        DefaultApi apiInstance = new DefaultApi();
+        InlineObject1 inlineObject1 = ; // InlineObject1 | 
+        
+        try {
+            authToken result = apiInstance.authLoginPost(inlineObject1);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#authLoginPost");
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Default-authLoginPost-0-android">
+                            <pre class="prettyprint"><code class="language-java">import org.openapitools.client.api.DefaultApi;
+
+public class DefaultApiExample {
+    public static void main(String[] args) {
+        DefaultApi apiInstance = new DefaultApi();
+        InlineObject1 inlineObject1 = ; // InlineObject1 | 
+        
+        try {
+            authToken result = apiInstance.authLoginPost(inlineObject1);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#authLoginPost");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Default-authLoginPost-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Default-authLoginPost-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">
+
+// Create an instance of the API class
+DefaultApi *apiInstance = [[DefaultApi alloc] init];
+InlineObject1 *inlineObject1 = ; // 
+
+[apiInstance authLoginPostWith:inlineObject1
+              completionHandler: ^(authToken output, NSError* error) {
+    if (output) {
+        NSLog(@"%@", output);
+    }
+    if (error) {
+        NSLog(@"Error: %@", error);
+    }
+}];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-authLoginPost-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var MenuPlanner = require('menu_planner');
+
+// Create an instance of the API class
+var api = new MenuPlanner.DefaultApi()
+var inlineObject1 = ; // {InlineObject1} 
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.authLoginPost(inlineObject1, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Default-authLoginPost-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Default-authLoginPost-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using Org.OpenAPITools.Api;
+using Org.OpenAPITools.Client;
+using Org.OpenAPITools.Model;
+
+namespace Example
+{
+    public class authLoginPostExample
+    {
+        public void main()
+        {
+            
+            // Create an instance of the API class
+            var apiInstance = new DefaultApi();
+            var inlineObject1 = new InlineObject1(); // InlineObject1 | 
+
+            try {
+                authToken result = apiInstance.authLoginPost(inlineObject1);
+                Debug.WriteLine(result);
+            } catch (Exception e) {
+                Debug.Print("Exception when calling DefaultApi.authLoginPost: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-authLoginPost-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+// Create an instance of the API class
+$api_instance = new OpenAPITools\Client\Api\DefaultApi();
+$inlineObject1 = ; // InlineObject1 | 
+
+try {
+    $result = $api_instance->authLoginPost($inlineObject1);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling DefaultApi->authLoginPost: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-authLoginPost-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::OPenAPIClient::Configuration;
+use WWW::OPenAPIClient::DefaultApi;
+
+# Create an instance of the API class
+my $api_instance = WWW::OPenAPIClient::DefaultApi->new();
+my $inlineObject1 = WWW::OPenAPIClient::Object::InlineObject1->new(); # InlineObject1 | 
+
+eval { 
+    my $result = $api_instance->authLoginPost(inlineObject1 => $inlineObject1);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling DefaultApi->authLoginPost: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-authLoginPost-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import openapi_client
+from openapi_client.rest import ApiException
+from pprint import pprint
+
+# Create an instance of the API class
+api_instance = openapi_client.DefaultApi()
+inlineObject1 =  # InlineObject1 | 
+
+try: 
+    api_response = api_instance.auth_login_post(inlineObject1)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DefaultApi->authLoginPost: %s\n" % e)</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-authLoginPost-0-rust">
+                              <pre class="prettyprint"><code class="language-rust">extern crate DefaultApi;
+
+pub fn main() {
+    let inlineObject1 = ; // InlineObject1
+
+    let mut context = DefaultApi::Context::default();
+    let result = client.authLoginPost(inlineObject1, &context).wait();
+
+    println!("{:?}", result);
+}
+</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Scopes</h2>
+                          <table>
+                            
+                          </table>
+
+                          <h2>Parameters</h2>
+
+
+
+                            <div class="methodsubtabletitle">Body parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">inlineObject1 <span style="color:red;">*</span></td>
+<td>
+<p class="marked"></p>
+<script>
+$(document).ready(function() {
+  var schemaWrapper = {
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/inline_object_1"
+      }
+    }
+  },
+  "required" : true
+};
+
+  var schema = findNode('schema',schemaWrapper).schema;
+  if (!schema) {
+    schema = schemaWrapper.schema;
+  }
+  if (schema.$ref != null) {
+    schema = defsParser.$refs.get(schema.$ref);
+  } else {
+    schemaWrapper.definitions = Object.assign({}, defs);
+    $RefParser.dereference(schemaWrapper).catch(function(err) {
+      console.log(err);
+    });
+  }
+
+  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
+  var result = $('#d2e199_authLoginPost_inlineObject1');
+  result.empty();
+  result.append(view.render());
+});
+</script>
+<div id="d2e199_authLoginPost_inlineObject1"></div>
+</td>
+</tr>
+
+                            </table>
+
+
+
+                          <h2>Responses</h2>
+                            <h3 id="examples-Default-authLoginPost-title-200"></h3>
+                            <p id="examples-Default-authLoginPost-description-200" class="marked"></p>
+                            <script>
+                              var responseDefault200_description = `Succesfully authenticated`;
+                              var responseDefault200_description_break = responseDefault200_description.indexOf('\n');
+                              if (responseDefault200_description_break == -1) {
+                                $("#examples-Default-authLoginPost-title-200").text("Status: 200 - " + responseDefault200_description);
+                              } else {
+                                $("#examples-Default-authLoginPost-title-200").text("Status: 200 - " + responseDefault200_description.substring(0, responseDefault200_description_break));
+                                $("#examples-Default-authLoginPost-description-200").html(responseDefault200_description.substring(responseDefault200_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Default-authLoginPost-200" class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-Default-authLoginPost-200-schema">Schema</a>
+                                </li>
+
+
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Default-authLoginPost-200-wrapper" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-Default-authLoginPost-200-schema">
+                                  <div id="responses-Default-authLoginPost-schema-200" class="exampleStyle">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Succesfully authenticated",
+  "content" : {
+    "applicatin/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/authToken"
+      }
+    }
+  }
+};
+                                        var schema = findNode('schema',schemaWrapper).schema;
+                                        if (!schema) {
+                                          schema = schemaWrapper.schema;
+                                        }
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else if (schema.items != null && schema.items.$ref != null) {
+                                            schema.items = defsParser.$refs.get(schema.items.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-Default-authLoginPost-200-schema-data').val(JSON.stringify(schema));
+                                        var result = $('#responses-Default-authLoginPost-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-Default-authLoginPost-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+                            <h3 id="examples-Default-authLoginPost-title-400"></h3>
+                            <p id="examples-Default-authLoginPost-description-400" class="marked"></p>
+                            <script>
+                              var responseDefault400_description = `Failed to parse request payload`;
+                              var responseDefault400_description_break = responseDefault400_description.indexOf('\n');
+                              if (responseDefault400_description_break == -1) {
+                                $("#examples-Default-authLoginPost-title-400").text("Status: 400 - " + responseDefault400_description);
+                              } else {
+                                $("#examples-Default-authLoginPost-title-400").text("Status: 400 - " + responseDefault400_description.substring(0, responseDefault400_description_break));
+                                $("#examples-Default-authLoginPost-description-400").html(responseDefault400_description.substring(responseDefault400_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Default-authLoginPost-400" class="nav nav-tabs nav-tabs-examples" >
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Default-authLoginPost-400-wrapper" style='margin-bottom: 10px;'>
+                            </div>
+                            <h3 id="examples-Default-authLoginPost-title-401"></h3>
+                            <p id="examples-Default-authLoginPost-description-401" class="marked"></p>
+                            <script>
+                              var responseDefault401_description = `Invalid email or password`;
+                              var responseDefault401_description_break = responseDefault401_description.indexOf('\n');
+                              if (responseDefault401_description_break == -1) {
+                                $("#examples-Default-authLoginPost-title-401").text("Status: 401 - " + responseDefault401_description);
+                              } else {
+                                $("#examples-Default-authLoginPost-title-401").text("Status: 401 - " + responseDefault401_description.substring(0, responseDefault401_description_break));
+                                $("#examples-Default-authLoginPost-description-401").html(responseDefault401_description.substring(responseDefault401_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Default-authLoginPost-401" class="nav nav-tabs nav-tabs-examples" >
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Default-authLoginPost-401-wrapper" style='margin-bottom: 10px;'>
+                            </div>
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Default-authSignupPost">
+                      <article id="api-Default-authSignupPost-0" data-group="User" data-name="authSignupPost" data-version="0">
+                        <div class="pull-left">
+                          <h1>authSignupPost</h1>
+                          <p></p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Register a new user</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/auth/signup</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Default-authSignupPost-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-authSignupPost-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-authSignupPost-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-authSignupPost-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-authSignupPost-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-authSignupPost-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-authSignupPost-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-authSignupPost-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-authSignupPost-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-authSignupPost-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-authSignupPost-0-python">Python</a></li>
+                          <li class=""><a href="#examples-Default-authSignupPost-0-rust">Rust</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Default-authSignupPost-0-curl">
+                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
+ -H "Accept: applicatin/json"\
+ -H "Content-Type: application/json"\
+ "http://localhost:8081/auth/signup"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Default-authSignupPost-0-java">
+                            <pre class="prettyprint"><code class="language-java">import org.openapitools.client.*;
+import org.openapitools.client.auth.*;
+import org.openapitools.client.model.*;
+import org.openapitools.client.api.DefaultApi;
+
+import java.io.File;
+import java.util.*;
+
+public class DefaultApiExample {
+    public static void main(String[] args) {
+        
+        // Create an instance of the API class
+        DefaultApi apiInstance = new DefaultApi();
+        InlineObject inlineObject = ; // InlineObject | 
+        
+        try {
+            authToken result = apiInstance.authSignupPost(inlineObject);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#authSignupPost");
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Default-authSignupPost-0-android">
+                            <pre class="prettyprint"><code class="language-java">import org.openapitools.client.api.DefaultApi;
+
+public class DefaultApiExample {
+    public static void main(String[] args) {
+        DefaultApi apiInstance = new DefaultApi();
+        InlineObject inlineObject = ; // InlineObject | 
+        
+        try {
+            authToken result = apiInstance.authSignupPost(inlineObject);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#authSignupPost");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Default-authSignupPost-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Default-authSignupPost-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">
+
+// Create an instance of the API class
+DefaultApi *apiInstance = [[DefaultApi alloc] init];
+InlineObject *inlineObject = ; // 
+
+[apiInstance authSignupPostWith:inlineObject
+              completionHandler: ^(authToken output, NSError* error) {
+    if (output) {
+        NSLog(@"%@", output);
+    }
+    if (error) {
+        NSLog(@"Error: %@", error);
+    }
+}];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-authSignupPost-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var MenuPlanner = require('menu_planner');
+
+// Create an instance of the API class
+var api = new MenuPlanner.DefaultApi()
+var inlineObject = ; // {InlineObject} 
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.authSignupPost(inlineObject, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Default-authSignupPost-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Default-authSignupPost-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using Org.OpenAPITools.Api;
+using Org.OpenAPITools.Client;
+using Org.OpenAPITools.Model;
+
+namespace Example
+{
+    public class authSignupPostExample
+    {
+        public void main()
+        {
+            
+            // Create an instance of the API class
+            var apiInstance = new DefaultApi();
+            var inlineObject = new InlineObject(); // InlineObject | 
+
+            try {
+                authToken result = apiInstance.authSignupPost(inlineObject);
+                Debug.WriteLine(result);
+            } catch (Exception e) {
+                Debug.Print("Exception when calling DefaultApi.authSignupPost: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-authSignupPost-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+// Create an instance of the API class
+$api_instance = new OpenAPITools\Client\Api\DefaultApi();
+$inlineObject = ; // InlineObject | 
+
+try {
+    $result = $api_instance->authSignupPost($inlineObject);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling DefaultApi->authSignupPost: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-authSignupPost-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::OPenAPIClient::Configuration;
+use WWW::OPenAPIClient::DefaultApi;
+
+# Create an instance of the API class
+my $api_instance = WWW::OPenAPIClient::DefaultApi->new();
+my $inlineObject = WWW::OPenAPIClient::Object::InlineObject->new(); # InlineObject | 
+
+eval { 
+    my $result = $api_instance->authSignupPost(inlineObject => $inlineObject);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling DefaultApi->authSignupPost: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-authSignupPost-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import openapi_client
+from openapi_client.rest import ApiException
+from pprint import pprint
+
+# Create an instance of the API class
+api_instance = openapi_client.DefaultApi()
+inlineObject =  # InlineObject | 
+
+try: 
+    api_response = api_instance.auth_signup_post(inlineObject)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DefaultApi->authSignupPost: %s\n" % e)</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-authSignupPost-0-rust">
+                              <pre class="prettyprint"><code class="language-rust">extern crate DefaultApi;
+
+pub fn main() {
+    let inlineObject = ; // InlineObject
+
+    let mut context = DefaultApi::Context::default();
+    let result = client.authSignupPost(inlineObject, &context).wait();
+
+    println!("{:?}", result);
+}
+</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Scopes</h2>
+                          <table>
+                            
+                          </table>
+
+                          <h2>Parameters</h2>
+
+
+
+                            <div class="methodsubtabletitle">Body parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">inlineObject <span style="color:red;">*</span></td>
+<td>
+<p class="marked"></p>
+<script>
+$(document).ready(function() {
+  var schemaWrapper = {
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/inline_object"
+      }
+    }
+  },
+  "required" : true
+};
+
+  var schema = findNode('schema',schemaWrapper).schema;
+  if (!schema) {
+    schema = schemaWrapper.schema;
+  }
+  if (schema.$ref != null) {
+    schema = defsParser.$refs.get(schema.$ref);
+  } else {
+    schemaWrapper.definitions = Object.assign({}, defs);
+    $RefParser.dereference(schemaWrapper).catch(function(err) {
+      console.log(err);
+    });
+  }
+
+  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
+  var result = $('#d2e199_authSignupPost_inlineObject');
+  result.empty();
+  result.append(view.render());
+});
+</script>
+<div id="d2e199_authSignupPost_inlineObject"></div>
+</td>
+</tr>
+
+                            </table>
+
+
+
+                          <h2>Responses</h2>
+                            <h3 id="examples-Default-authSignupPost-title-200"></h3>
+                            <p id="examples-Default-authSignupPost-description-200" class="marked"></p>
+                            <script>
+                              var responseDefault200_description = `User created`;
+                              var responseDefault200_description_break = responseDefault200_description.indexOf('\n');
+                              if (responseDefault200_description_break == -1) {
+                                $("#examples-Default-authSignupPost-title-200").text("Status: 200 - " + responseDefault200_description);
+                              } else {
+                                $("#examples-Default-authSignupPost-title-200").text("Status: 200 - " + responseDefault200_description.substring(0, responseDefault200_description_break));
+                                $("#examples-Default-authSignupPost-description-200").html(responseDefault200_description.substring(responseDefault200_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Default-authSignupPost-200" class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-Default-authSignupPost-200-schema">Schema</a>
+                                </li>
+
+
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Default-authSignupPost-200-wrapper" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-Default-authSignupPost-200-schema">
+                                  <div id="responses-Default-authSignupPost-schema-200" class="exampleStyle">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "User created",
+  "content" : {
+    "applicatin/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/authToken"
+      }
+    }
+  }
+};
+                                        var schema = findNode('schema',schemaWrapper).schema;
+                                        if (!schema) {
+                                          schema = schemaWrapper.schema;
+                                        }
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else if (schema.items != null && schema.items.$ref != null) {
+                                            schema.items = defsParser.$refs.get(schema.items.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-Default-authSignupPost-200-schema-data').val(JSON.stringify(schema));
+                                        var result = $('#responses-Default-authSignupPost-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-Default-authSignupPost-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+                            <h3 id="examples-Default-authSignupPost-title-400"></h3>
+                            <p id="examples-Default-authSignupPost-description-400" class="marked"></p>
+                            <script>
+                              var responseDefault400_description = `Failed to parse request payload`;
+                              var responseDefault400_description_break = responseDefault400_description.indexOf('\n');
+                              if (responseDefault400_description_break == -1) {
+                                $("#examples-Default-authSignupPost-title-400").text("Status: 400 - " + responseDefault400_description);
+                              } else {
+                                $("#examples-Default-authSignupPost-title-400").text("Status: 400 - " + responseDefault400_description.substring(0, responseDefault400_description_break));
+                                $("#examples-Default-authSignupPost-description-400").html(responseDefault400_description.substring(responseDefault400_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Default-authSignupPost-400" class="nav nav-tabs nav-tabs-examples" >
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Default-authSignupPost-400-wrapper" style='margin-bottom: 10px;'>
+                            </div>
+                            <h3 id="examples-Default-authSignupPost-title-409"></h3>
+                            <p id="examples-Default-authSignupPost-description-409" class="marked"></p>
+                            <script>
+                              var responseDefault409_description = `User with the same email already exists`;
+                              var responseDefault409_description_break = responseDefault409_description.indexOf('\n');
+                              if (responseDefault409_description_break == -1) {
+                                $("#examples-Default-authSignupPost-title-409").text("Status: 409 - " + responseDefault409_description);
+                              } else {
+                                $("#examples-Default-authSignupPost-title-409").text("Status: 409 - " + responseDefault409_description.substring(0, responseDefault409_description_break));
+                                $("#examples-Default-authSignupPost-description-409").html(responseDefault409_description.substring(responseDefault409_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Default-authSignupPost-409" class="nav nav-tabs nav-tabs-examples" >
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Default-authSignupPost-409-wrapper" style='margin-bottom: 10px;'>
+                            </div>
+                        </article>
+                      </div>
+                      <hr>
                     <div id="api-Default-healthGet">
                       <article id="api-Default-healthGet-0" data-group="User" data-name="healthGet" data-version="0">
                         <div class="pull-left">
@@ -1270,6 +2122,7 @@ pub fn main() {
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Default-recipeGet-0-curl">
                             <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+ -H "Authorization: Bearer [[accessToken]]"\
  -H "Accept: application/json"\
  "http://localhost:8081/recipe"</code></pre>
                           </div>
@@ -1284,6 +2137,11 @@ import java.util.*;
 
 public class DefaultApiExample {
     public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        
+        // Configure Bearer (JWT) access token for authorization: tokenAuth
+        HttpBearerAuth tokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("tokenAuth");
+        tokenAuth.setBearerToken("BEARER TOKEN");
         
         // Create an instance of the API class
         DefaultApi apiInstance = new DefaultApi();
@@ -1322,7 +2180,10 @@ public class DefaultApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Default-recipeGet-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+[apiConfig setAccessToken:@"YOUR_ACCESS_TOKEN"];
 
 // Create an instance of the API class
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
@@ -1341,6 +2202,11 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
                             <div class="tab-pane" id="examples-Default-recipeGet-0-javascript">
                               <pre class="prettyprint"><code class="language-js">var MenuPlanner = require('menu_planner');
+var defaultClient = MenuPlanner.ApiClient.instance;
+
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+var tokenAuth = defaultClient.authentications['tokenAuth'];
+tokenAuth.accessToken = "YOUR ACCESS TOKEN";
 
 // Create an instance of the API class
 var api = new MenuPlanner.DefaultApi()
@@ -1371,6 +2237,8 @@ namespace Example
     {
         public void main()
         {
+            // Configure Bearer (JWT) access token for authorization: tokenAuth
+            Configuration.Default.AccessToken = "YOUR_ACCESS_TOKEN";
             
             // Create an instance of the API class
             var apiInstance = new DefaultApi();
@@ -1391,6 +2259,9 @@ namespace Example
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+OpenAPITools\Client\Configuration::getDefaultConfiguration()->setAccessToken('', 'YOUR_ACCESS_TOKEN');
+
 // Create an instance of the API class
 $api_instance = new OpenAPITools\Client\Api\DefaultApi();
 
@@ -1407,6 +2278,9 @@ try {
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::OPenAPIClient::Configuration;
 use WWW::OPenAPIClient::DefaultApi;
+
+# Configure Bearer (JWT) access token for authorization: tokenAuth
+$WWW::OPenAPIClient::Configuration::access_token = 'YOUR_ACCESS_TOKEN';
 
 # Create an instance of the API class
 my $api_instance = WWW::OPenAPIClient::DefaultApi->new();
@@ -1426,6 +2300,9 @@ import time
 import openapi_client
 from openapi_client.rest import ApiException
 from pprint import pprint
+
+# Configure Bearer (JWT) access token for authorization: tokenAuth
+openapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
 
 # Create an instance of the API class
 api_instance = openapi_client.DefaultApi()
@@ -1533,6 +2410,28 @@ pub fn main() {
                                   <input id='responses-Default-recipeGet-200-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
+                            <h3 id="examples-Default-recipeGet-title-403"></h3>
+                            <p id="examples-Default-recipeGet-description-403" class="marked"></p>
+                            <script>
+                              var responseDefault403_description = `Unauthorized access`;
+                              var responseDefault403_description_break = responseDefault403_description.indexOf('\n');
+                              if (responseDefault403_description_break == -1) {
+                                $("#examples-Default-recipeGet-title-403").text("Status: 403 - " + responseDefault403_description);
+                              } else {
+                                $("#examples-Default-recipeGet-title-403").text("Status: 403 - " + responseDefault403_description.substring(0, responseDefault403_description_break));
+                                $("#examples-Default-recipeGet-description-403").html(responseDefault403_description.substring(responseDefault403_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Default-recipeGet-403" class="nav nav-tabs nav-tabs-examples" >
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Default-recipeGet-403-wrapper" style='margin-bottom: 10px;'>
+                            </div>
                         </article>
                       </div>
                       <hr>
@@ -1570,6 +2469,7 @@ pub fn main() {
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Default-recipeIdDelete-0-curl">
                             <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
+ -H "Authorization: Bearer [[accessToken]]"\
  "http://localhost:8081/recipe/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-recipeIdDelete-0-java">
@@ -1583,6 +2483,11 @@ import java.util.*;
 
 public class DefaultApiExample {
     public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        
+        // Configure Bearer (JWT) access token for authorization: tokenAuth
+        HttpBearerAuth tokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("tokenAuth");
+        tokenAuth.setBearerToken("BEARER TOKEN");
         
         // Create an instance of the API class
         DefaultApi apiInstance = new DefaultApi();
@@ -1621,7 +2526,10 @@ public class DefaultApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Default-recipeIdDelete-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+[apiConfig setAccessToken:@"YOUR_ACCESS_TOKEN"];
 
 // Create an instance of the API class
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
@@ -1638,6 +2546,11 @@ Integer *id = 56; //  (default to null)
 
                             <div class="tab-pane" id="examples-Default-recipeIdDelete-0-javascript">
                               <pre class="prettyprint"><code class="language-js">var MenuPlanner = require('menu_planner');
+var defaultClient = MenuPlanner.ApiClient.instance;
+
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+var tokenAuth = defaultClient.authentications['tokenAuth'];
+tokenAuth.accessToken = "YOUR ACCESS TOKEN";
 
 // Create an instance of the API class
 var api = new MenuPlanner.DefaultApi()
@@ -1670,6 +2583,8 @@ namespace Example
     {
         public void main()
         {
+            // Configure Bearer (JWT) access token for authorization: tokenAuth
+            Configuration.Default.AccessToken = "YOUR_ACCESS_TOKEN";
             
             // Create an instance of the API class
             var apiInstance = new DefaultApi();
@@ -1690,6 +2605,9 @@ namespace Example
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+OpenAPITools\Client\Configuration::getDefaultConfiguration()->setAccessToken('', 'YOUR_ACCESS_TOKEN');
+
 // Create an instance of the API class
 $api_instance = new OpenAPITools\Client\Api\DefaultApi();
 $id = 56; // Integer | 
@@ -1706,6 +2624,9 @@ try {
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::OPenAPIClient::Configuration;
 use WWW::OPenAPIClient::DefaultApi;
+
+# Configure Bearer (JWT) access token for authorization: tokenAuth
+$WWW::OPenAPIClient::Configuration::access_token = 'YOUR_ACCESS_TOKEN';
 
 # Create an instance of the API class
 my $api_instance = WWW::OPenAPIClient::DefaultApi->new();
@@ -1725,6 +2646,9 @@ import time
 import openapi_client
 from openapi_client.rest import ApiException
 from pprint import pprint
+
+# Configure Bearer (JWT) access token for authorization: tokenAuth
+openapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
 
 # Create an instance of the API class
 api_instance = openapi_client.DefaultApi()
@@ -1813,6 +2737,28 @@ pub fn main() {
 
                             <div class="tab-content" id="responses-Default-recipeIdDelete-204-wrapper" style='margin-bottom: 10px;'>
                             </div>
+                            <h3 id="examples-Default-recipeIdDelete-title-403"></h3>
+                            <p id="examples-Default-recipeIdDelete-description-403" class="marked"></p>
+                            <script>
+                              var responseDefault403_description = `Unauthorized access`;
+                              var responseDefault403_description_break = responseDefault403_description.indexOf('\n');
+                              if (responseDefault403_description_break == -1) {
+                                $("#examples-Default-recipeIdDelete-title-403").text("Status: 403 - " + responseDefault403_description);
+                              } else {
+                                $("#examples-Default-recipeIdDelete-title-403").text("Status: 403 - " + responseDefault403_description.substring(0, responseDefault403_description_break));
+                                $("#examples-Default-recipeIdDelete-description-403").html(responseDefault403_description.substring(responseDefault403_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Default-recipeIdDelete-403" class="nav nav-tabs nav-tabs-examples" >
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Default-recipeIdDelete-403-wrapper" style='margin-bottom: 10px;'>
+                            </div>
                             <h3 id="examples-Default-recipeIdDelete-title-422"></h3>
                             <p id="examples-Default-recipeIdDelete-description-422" class="marked"></p>
                             <script>
@@ -1872,6 +2818,7 @@ pub fn main() {
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Default-recipeIdGet-0-curl">
                             <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+ -H "Authorization: Bearer [[accessToken]]"\
  -H "Accept: application/json"\
  "http://localhost:8081/recipe/{id}"</code></pre>
                           </div>
@@ -1886,6 +2833,11 @@ import java.util.*;
 
 public class DefaultApiExample {
     public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        
+        // Configure Bearer (JWT) access token for authorization: tokenAuth
+        HttpBearerAuth tokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("tokenAuth");
+        tokenAuth.setBearerToken("BEARER TOKEN");
         
         // Create an instance of the API class
         DefaultApi apiInstance = new DefaultApi();
@@ -1926,7 +2878,10 @@ public class DefaultApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Default-recipeIdGet-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+[apiConfig setAccessToken:@"YOUR_ACCESS_TOKEN"];
 
 // Create an instance of the API class
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
@@ -1946,6 +2901,11 @@ Integer *id = 56; //  (default to null)
 
                             <div class="tab-pane" id="examples-Default-recipeIdGet-0-javascript">
                               <pre class="prettyprint"><code class="language-js">var MenuPlanner = require('menu_planner');
+var defaultClient = MenuPlanner.ApiClient.instance;
+
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+var tokenAuth = defaultClient.authentications['tokenAuth'];
+tokenAuth.accessToken = "YOUR ACCESS TOKEN";
 
 // Create an instance of the API class
 var api = new MenuPlanner.DefaultApi()
@@ -1978,6 +2938,8 @@ namespace Example
     {
         public void main()
         {
+            // Configure Bearer (JWT) access token for authorization: tokenAuth
+            Configuration.Default.AccessToken = "YOUR_ACCESS_TOKEN";
             
             // Create an instance of the API class
             var apiInstance = new DefaultApi();
@@ -1999,6 +2961,9 @@ namespace Example
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+OpenAPITools\Client\Configuration::getDefaultConfiguration()->setAccessToken('', 'YOUR_ACCESS_TOKEN');
+
 // Create an instance of the API class
 $api_instance = new OpenAPITools\Client\Api\DefaultApi();
 $id = 56; // Integer | 
@@ -2016,6 +2981,9 @@ try {
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::OPenAPIClient::Configuration;
 use WWW::OPenAPIClient::DefaultApi;
+
+# Configure Bearer (JWT) access token for authorization: tokenAuth
+$WWW::OPenAPIClient::Configuration::access_token = 'YOUR_ACCESS_TOKEN';
 
 # Create an instance of the API class
 my $api_instance = WWW::OPenAPIClient::DefaultApi->new();
@@ -2036,6 +3004,9 @@ import time
 import openapi_client
 from openapi_client.rest import ApiException
 from pprint import pprint
+
+# Configure Bearer (JWT) access token for authorization: tokenAuth
+openapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
 
 # Create an instance of the API class
 api_instance = openapi_client.DefaultApi()
@@ -2169,6 +3140,28 @@ pub fn main() {
                                   <input id='responses-Default-recipeIdGet-200-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
+                            <h3 id="examples-Default-recipeIdGet-title-403"></h3>
+                            <p id="examples-Default-recipeIdGet-description-403" class="marked"></p>
+                            <script>
+                              var responseDefault403_description = `Unauthorized access`;
+                              var responseDefault403_description_break = responseDefault403_description.indexOf('\n');
+                              if (responseDefault403_description_break == -1) {
+                                $("#examples-Default-recipeIdGet-title-403").text("Status: 403 - " + responseDefault403_description);
+                              } else {
+                                $("#examples-Default-recipeIdGet-title-403").text("Status: 403 - " + responseDefault403_description.substring(0, responseDefault403_description_break));
+                                $("#examples-Default-recipeIdGet-description-403").html(responseDefault403_description.substring(responseDefault403_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Default-recipeIdGet-403" class="nav nav-tabs nav-tabs-examples" >
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Default-recipeIdGet-403-wrapper" style='margin-bottom: 10px;'>
+                            </div>
                         </article>
                       </div>
                       <hr>
@@ -2206,6 +3199,7 @@ pub fn main() {
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Default-recipeIdPut-0-curl">
                             <pre class="prettyprint"><code class="language-bsh">curl -X PUT\
+ -H "Authorization: Bearer [[accessToken]]"\
  -H "Accept: application/json"\
  "http://localhost:8081/recipe/{id}"</code></pre>
                           </div>
@@ -2220,6 +3214,11 @@ import java.util.*;
 
 public class DefaultApiExample {
     public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        
+        // Configure Bearer (JWT) access token for authorization: tokenAuth
+        HttpBearerAuth tokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("tokenAuth");
+        tokenAuth.setBearerToken("BEARER TOKEN");
         
         // Create an instance of the API class
         DefaultApi apiInstance = new DefaultApi();
@@ -2260,7 +3259,10 @@ public class DefaultApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Default-recipeIdPut-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+[apiConfig setAccessToken:@"YOUR_ACCESS_TOKEN"];
 
 // Create an instance of the API class
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
@@ -2280,6 +3282,11 @@ Integer *id = 56; //  (default to null)
 
                             <div class="tab-pane" id="examples-Default-recipeIdPut-0-javascript">
                               <pre class="prettyprint"><code class="language-js">var MenuPlanner = require('menu_planner');
+var defaultClient = MenuPlanner.ApiClient.instance;
+
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+var tokenAuth = defaultClient.authentications['tokenAuth'];
+tokenAuth.accessToken = "YOUR ACCESS TOKEN";
 
 // Create an instance of the API class
 var api = new MenuPlanner.DefaultApi()
@@ -2312,6 +3319,8 @@ namespace Example
     {
         public void main()
         {
+            // Configure Bearer (JWT) access token for authorization: tokenAuth
+            Configuration.Default.AccessToken = "YOUR_ACCESS_TOKEN";
             
             // Create an instance of the API class
             var apiInstance = new DefaultApi();
@@ -2333,6 +3342,9 @@ namespace Example
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+OpenAPITools\Client\Configuration::getDefaultConfiguration()->setAccessToken('', 'YOUR_ACCESS_TOKEN');
+
 // Create an instance of the API class
 $api_instance = new OpenAPITools\Client\Api\DefaultApi();
 $id = 56; // Integer | 
@@ -2350,6 +3362,9 @@ try {
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::OPenAPIClient::Configuration;
 use WWW::OPenAPIClient::DefaultApi;
+
+# Configure Bearer (JWT) access token for authorization: tokenAuth
+$WWW::OPenAPIClient::Configuration::access_token = 'YOUR_ACCESS_TOKEN';
 
 # Create an instance of the API class
 my $api_instance = WWW::OPenAPIClient::DefaultApi->new();
@@ -2370,6 +3385,9 @@ import time
 import openapi_client
 from openapi_client.rest import ApiException
 from pprint import pprint
+
+# Configure Bearer (JWT) access token for authorization: tokenAuth
+openapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
 
 # Create an instance of the API class
 api_instance = openapi_client.DefaultApi()
@@ -2569,6 +3587,28 @@ pub fn main() {
                                   <input id='responses-Default-recipeIdPut-400-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
+                            <h3 id="examples-Default-recipeIdPut-title-403"></h3>
+                            <p id="examples-Default-recipeIdPut-description-403" class="marked"></p>
+                            <script>
+                              var responseDefault403_description = `Unauthorized access`;
+                              var responseDefault403_description_break = responseDefault403_description.indexOf('\n');
+                              if (responseDefault403_description_break == -1) {
+                                $("#examples-Default-recipeIdPut-title-403").text("Status: 403 - " + responseDefault403_description);
+                              } else {
+                                $("#examples-Default-recipeIdPut-title-403").text("Status: 403 - " + responseDefault403_description.substring(0, responseDefault403_description_break));
+                                $("#examples-Default-recipeIdPut-description-403").html(responseDefault403_description.substring(responseDefault403_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Default-recipeIdPut-403" class="nav nav-tabs nav-tabs-examples" >
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Default-recipeIdPut-403-wrapper" style='margin-bottom: 10px;'>
+                            </div>
                         </article>
                       </div>
                       <hr>
@@ -2606,6 +3646,7 @@ pub fn main() {
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Default-recipePost-0-curl">
                             <pre class="prettyprint"><code class="language-bsh">curl -X POST\
+ -H "Authorization: Bearer [[accessToken]]"\
  -H "Accept: application/json"\
  -H "Content-Type: application/json"\
  "http://localhost:8081/recipe"</code></pre>
@@ -2621,6 +3662,11 @@ import java.util.*;
 
 public class DefaultApiExample {
     public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        
+        // Configure Bearer (JWT) access token for authorization: tokenAuth
+        HttpBearerAuth tokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("tokenAuth");
+        tokenAuth.setBearerToken("BEARER TOKEN");
         
         // Create an instance of the API class
         DefaultApi apiInstance = new DefaultApi();
@@ -2661,7 +3707,10 @@ public class DefaultApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Default-recipePost-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+[apiConfig setAccessToken:@"YOUR_ACCESS_TOKEN"];
 
 // Create an instance of the API class
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
@@ -2681,6 +3730,11 @@ Recipe *recipe = {"name":"Pasta","calories":500,"protein":40,"fat":50,"carbs":20
 
                             <div class="tab-pane" id="examples-Default-recipePost-0-javascript">
                               <pre class="prettyprint"><code class="language-js">var MenuPlanner = require('menu_planner');
+var defaultClient = MenuPlanner.ApiClient.instance;
+
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+var tokenAuth = defaultClient.authentications['tokenAuth'];
+tokenAuth.accessToken = "YOUR ACCESS TOKEN";
 
 // Create an instance of the API class
 var api = new MenuPlanner.DefaultApi()
@@ -2713,6 +3767,8 @@ namespace Example
     {
         public void main()
         {
+            // Configure Bearer (JWT) access token for authorization: tokenAuth
+            Configuration.Default.AccessToken = "YOUR_ACCESS_TOKEN";
             
             // Create an instance of the API class
             var apiInstance = new DefaultApi();
@@ -2734,6 +3790,9 @@ namespace Example
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+OpenAPITools\Client\Configuration::getDefaultConfiguration()->setAccessToken('', 'YOUR_ACCESS_TOKEN');
+
 // Create an instance of the API class
 $api_instance = new OpenAPITools\Client\Api\DefaultApi();
 $recipe = {"name":"Pasta","calories":500,"protein":40,"fat":50,"carbs":200}; // Recipe | 
@@ -2751,6 +3810,9 @@ try {
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::OPenAPIClient::Configuration;
 use WWW::OPenAPIClient::DefaultApi;
+
+# Configure Bearer (JWT) access token for authorization: tokenAuth
+$WWW::OPenAPIClient::Configuration::access_token = 'YOUR_ACCESS_TOKEN';
 
 # Create an instance of the API class
 my $api_instance = WWW::OPenAPIClient::DefaultApi->new();
@@ -2771,6 +3833,9 @@ import time
 import openapi_client
 from openapi_client.rest import ApiException
 from pprint import pprint
+
+# Configure Bearer (JWT) access token for authorization: tokenAuth
+openapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
 
 # Create an instance of the API class
 api_instance = openapi_client.DefaultApi()
@@ -2996,6 +4061,394 @@ $(document).ready(function() {
                                   <input id='responses-Default-recipePost-400-schema-data' type='hidden' value=''></input>
                                 </div>
                             </div>
+                            <h3 id="examples-Default-recipePost-title-403"></h3>
+                            <p id="examples-Default-recipePost-description-403" class="marked"></p>
+                            <script>
+                              var responseDefault403_description = `Unauthorized access`;
+                              var responseDefault403_description_break = responseDefault403_description.indexOf('\n');
+                              if (responseDefault403_description_break == -1) {
+                                $("#examples-Default-recipePost-title-403").text("Status: 403 - " + responseDefault403_description);
+                              } else {
+                                $("#examples-Default-recipePost-title-403").text("Status: 403 - " + responseDefault403_description.substring(0, responseDefault403_description_break));
+                                $("#examples-Default-recipePost-description-403").html(responseDefault403_description.substring(responseDefault403_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Default-recipePost-403" class="nav nav-tabs nav-tabs-examples" >
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Default-recipePost-403-wrapper" style='margin-bottom: 10px;'>
+                            </div>
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Default-tokenRefreshPost">
+                      <article id="api-Default-tokenRefreshPost-0" data-group="User" data-name="tokenRefreshPost" data-version="0">
+                        <div class="pull-left">
+                          <h1>tokenRefreshPost</h1>
+                          <p></p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Provide refresh token in Authorization header to get a new access token</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/token/refresh</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Default-tokenRefreshPost-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-tokenRefreshPost-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-tokenRefreshPost-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-tokenRefreshPost-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-tokenRefreshPost-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-tokenRefreshPost-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-tokenRefreshPost-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-tokenRefreshPost-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-tokenRefreshPost-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-tokenRefreshPost-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-tokenRefreshPost-0-python">Python</a></li>
+                          <li class=""><a href="#examples-Default-tokenRefreshPost-0-rust">Rust</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Default-tokenRefreshPost-0-curl">
+                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
+ -H "Authorization: Bearer [[accessToken]]"\
+ -H "Accept: applicatin/json"\
+ "http://localhost:8081/token/refresh"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Default-tokenRefreshPost-0-java">
+                            <pre class="prettyprint"><code class="language-java">import org.openapitools.client.*;
+import org.openapitools.client.auth.*;
+import org.openapitools.client.model.*;
+import org.openapitools.client.api.DefaultApi;
+
+import java.io.File;
+import java.util.*;
+
+public class DefaultApiExample {
+    public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        
+        // Configure Bearer (JWT) access token for authorization: tokenAuth
+        HttpBearerAuth tokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("tokenAuth");
+        tokenAuth.setBearerToken("BEARER TOKEN");
+        
+        // Create an instance of the API class
+        DefaultApi apiInstance = new DefaultApi();
+        
+        try {
+            authToken result = apiInstance.tokenRefreshPost();
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#tokenRefreshPost");
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Default-tokenRefreshPost-0-android">
+                            <pre class="prettyprint"><code class="language-java">import org.openapitools.client.api.DefaultApi;
+
+public class DefaultApiExample {
+    public static void main(String[] args) {
+        DefaultApi apiInstance = new DefaultApi();
+        
+        try {
+            authToken result = apiInstance.tokenRefreshPost();
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#tokenRefreshPost");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Default-tokenRefreshPost-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Default-tokenRefreshPost-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+[apiConfig setAccessToken:@"YOUR_ACCESS_TOKEN"];
+
+// Create an instance of the API class
+DefaultApi *apiInstance = [[DefaultApi alloc] init];
+
+[apiInstance tokenRefreshPostWithCompletionHandler: 
+              ^(authToken output, NSError* error) {
+    if (output) {
+        NSLog(@"%@", output);
+    }
+    if (error) {
+        NSLog(@"Error: %@", error);
+    }
+}];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-tokenRefreshPost-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var MenuPlanner = require('menu_planner');
+var defaultClient = MenuPlanner.ApiClient.instance;
+
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+var tokenAuth = defaultClient.authentications['tokenAuth'];
+tokenAuth.accessToken = "YOUR ACCESS TOKEN";
+
+// Create an instance of the API class
+var api = new MenuPlanner.DefaultApi()
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.tokenRefreshPost(callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Default-tokenRefreshPost-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Default-tokenRefreshPost-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using Org.OpenAPITools.Api;
+using Org.OpenAPITools.Client;
+using Org.OpenAPITools.Model;
+
+namespace Example
+{
+    public class tokenRefreshPostExample
+    {
+        public void main()
+        {
+            // Configure Bearer (JWT) access token for authorization: tokenAuth
+            Configuration.Default.AccessToken = "YOUR_ACCESS_TOKEN";
+            
+            // Create an instance of the API class
+            var apiInstance = new DefaultApi();
+
+            try {
+                authToken result = apiInstance.tokenRefreshPost();
+                Debug.WriteLine(result);
+            } catch (Exception e) {
+                Debug.Print("Exception when calling DefaultApi.tokenRefreshPost: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-tokenRefreshPost-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+OpenAPITools\Client\Configuration::getDefaultConfiguration()->setAccessToken('', 'YOUR_ACCESS_TOKEN');
+
+// Create an instance of the API class
+$api_instance = new OpenAPITools\Client\Api\DefaultApi();
+
+try {
+    $result = $api_instance->tokenRefreshPost();
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling DefaultApi->tokenRefreshPost: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-tokenRefreshPost-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::OPenAPIClient::Configuration;
+use WWW::OPenAPIClient::DefaultApi;
+
+# Configure Bearer (JWT) access token for authorization: tokenAuth
+$WWW::OPenAPIClient::Configuration::access_token = 'YOUR_ACCESS_TOKEN';
+
+# Create an instance of the API class
+my $api_instance = WWW::OPenAPIClient::DefaultApi->new();
+
+eval { 
+    my $result = $api_instance->tokenRefreshPost();
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling DefaultApi->tokenRefreshPost: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-tokenRefreshPost-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import openapi_client
+from openapi_client.rest import ApiException
+from pprint import pprint
+
+# Configure Bearer (JWT) access token for authorization: tokenAuth
+openapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
+
+# Create an instance of the API class
+api_instance = openapi_client.DefaultApi()
+
+try: 
+    api_response = api_instance.token_refresh_post()
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling DefaultApi->tokenRefreshPost: %s\n" % e)</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-tokenRefreshPost-0-rust">
+                              <pre class="prettyprint"><code class="language-rust">extern crate DefaultApi;
+
+pub fn main() {
+
+    let mut context = DefaultApi::Context::default();
+    let result = client.tokenRefreshPost(&context).wait();
+
+    println!("{:?}", result);
+}
+</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Scopes</h2>
+                          <table>
+                            
+                          </table>
+
+                          <h2>Parameters</h2>
+
+
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3 id="examples-Default-tokenRefreshPost-title-200"></h3>
+                            <p id="examples-Default-tokenRefreshPost-description-200" class="marked"></p>
+                            <script>
+                              var responseDefault200_description = `Tokens refreshed`;
+                              var responseDefault200_description_break = responseDefault200_description.indexOf('\n');
+                              if (responseDefault200_description_break == -1) {
+                                $("#examples-Default-tokenRefreshPost-title-200").text("Status: 200 - " + responseDefault200_description);
+                              } else {
+                                $("#examples-Default-tokenRefreshPost-title-200").text("Status: 200 - " + responseDefault200_description.substring(0, responseDefault200_description_break));
+                                $("#examples-Default-tokenRefreshPost-description-200").html(responseDefault200_description.substring(responseDefault200_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Default-tokenRefreshPost-200" class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-Default-tokenRefreshPost-200-schema">Schema</a>
+                                </li>
+
+
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Default-tokenRefreshPost-200-wrapper" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-Default-tokenRefreshPost-200-schema">
+                                  <div id="responses-Default-tokenRefreshPost-schema-200" class="exampleStyle">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "Tokens refreshed",
+  "content" : {
+    "applicatin/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/authToken"
+      }
+    }
+  }
+};
+                                        var schema = findNode('schema',schemaWrapper).schema;
+                                        if (!schema) {
+                                          schema = schemaWrapper.schema;
+                                        }
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else if (schema.items != null && schema.items.$ref != null) {
+                                            schema.items = defsParser.$refs.get(schema.items.$ref);
+                                        } else {
+                                          schemaWrapper.definitions = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-Default-tokenRefreshPost-200-schema-data').val(JSON.stringify(schema));
+                                        var result = $('#responses-Default-tokenRefreshPost-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-Default-tokenRefreshPost-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                            </div>
+                            <h3 id="examples-Default-tokenRefreshPost-title-401"></h3>
+                            <p id="examples-Default-tokenRefreshPost-description-401" class="marked"></p>
+                            <script>
+                              var responseDefault401_description = `Refresh token is not valid`;
+                              var responseDefault401_description_break = responseDefault401_description.indexOf('\n');
+                              if (responseDefault401_description_break == -1) {
+                                $("#examples-Default-tokenRefreshPost-title-401").text("Status: 401 - " + responseDefault401_description);
+                              } else {
+                                $("#examples-Default-tokenRefreshPost-title-401").text("Status: 401 - " + responseDefault401_description.substring(0, responseDefault401_description_break));
+                                $("#examples-Default-tokenRefreshPost-description-401").html(responseDefault401_description.substring(responseDefault401_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Default-tokenRefreshPost-401" class="nav nav-tabs nav-tabs-examples" >
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Default-tokenRefreshPost-401-wrapper" style='margin-bottom: 10px;'>
+                            </div>
+                            <h3 id="examples-Default-tokenRefreshPost-title-409"></h3>
+                            <p id="examples-Default-tokenRefreshPost-description-409" class="marked"></p>
+                            <script>
+                              var responseDefault409_description = `Failed to verify secret key`;
+                              var responseDefault409_description_break = responseDefault409_description.indexOf('\n');
+                              if (responseDefault409_description_break == -1) {
+                                $("#examples-Default-tokenRefreshPost-title-409").text("Status: 409 - " + responseDefault409_description);
+                              } else {
+                                $("#examples-Default-tokenRefreshPost-title-409").text("Status: 409 - " + responseDefault409_description.substring(0, responseDefault409_description_break));
+                                $("#examples-Default-tokenRefreshPost-description-409").html(responseDefault409_description.substring(responseDefault409_description_break));
+                              }
+                            </script>
+
+
+                            <ul id="responses-detail-Default-tokenRefreshPost-409" class="nav nav-tabs nav-tabs-examples" >
+
+
+                            </ul>
+
+
+                            <div class="tab-content" id="responses-Default-tokenRefreshPost-409-wrapper" style='margin-bottom: 10px;'>
+                            </div>
                         </article>
                       </div>
                       <hr>
@@ -3033,6 +4486,7 @@ $(document).ready(function() {
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Default-weekDayDaySlotSlotDelete-0-curl">
                             <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
+ -H "Authorization: Bearer [[accessToken]]"\
  "http://localhost:8081/week/day/{day}/slot/{slot}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Default-weekDayDaySlotSlotDelete-0-java">
@@ -3046,6 +4500,11 @@ import java.util.*;
 
 public class DefaultApiExample {
     public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        
+        // Configure Bearer (JWT) access token for authorization: tokenAuth
+        HttpBearerAuth tokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("tokenAuth");
+        tokenAuth.setBearerToken("BEARER TOKEN");
         
         // Create an instance of the API class
         DefaultApi apiInstance = new DefaultApi();
@@ -3086,7 +4545,10 @@ public class DefaultApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Default-weekDayDaySlotSlotDelete-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+[apiConfig setAccessToken:@"YOUR_ACCESS_TOKEN"];
 
 // Create an instance of the API class
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
@@ -3105,6 +4567,11 @@ Integer *slot = 56; //  (default to null)
 
                             <div class="tab-pane" id="examples-Default-weekDayDaySlotSlotDelete-0-javascript">
                               <pre class="prettyprint"><code class="language-js">var MenuPlanner = require('menu_planner');
+var defaultClient = MenuPlanner.ApiClient.instance;
+
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+var tokenAuth = defaultClient.authentications['tokenAuth'];
+tokenAuth.accessToken = "YOUR ACCESS TOKEN";
 
 // Create an instance of the API class
 var api = new MenuPlanner.DefaultApi()
@@ -3138,6 +4605,8 @@ namespace Example
     {
         public void main()
         {
+            // Configure Bearer (JWT) access token for authorization: tokenAuth
+            Configuration.Default.AccessToken = "YOUR_ACCESS_TOKEN";
             
             // Create an instance of the API class
             var apiInstance = new DefaultApi();
@@ -3159,6 +4628,9 @@ namespace Example
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+OpenAPITools\Client\Configuration::getDefaultConfiguration()->setAccessToken('', 'YOUR_ACCESS_TOKEN');
+
 // Create an instance of the API class
 $api_instance = new OpenAPITools\Client\Api\DefaultApi();
 $day = 56; // Integer | 
@@ -3176,6 +4648,9 @@ try {
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::OPenAPIClient::Configuration;
 use WWW::OPenAPIClient::DefaultApi;
+
+# Configure Bearer (JWT) access token for authorization: tokenAuth
+$WWW::OPenAPIClient::Configuration::access_token = 'YOUR_ACCESS_TOKEN';
 
 # Create an instance of the API class
 my $api_instance = WWW::OPenAPIClient::DefaultApi->new();
@@ -3196,6 +4671,9 @@ import time
 import openapi_client
 from openapi_client.rest import ApiException
 from pprint import pprint
+
+# Configure Bearer (JWT) access token for authorization: tokenAuth
+openapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
 
 # Create an instance of the API class
 api_instance = openapi_client.DefaultApi()
@@ -3365,6 +4843,7 @@ pub fn main() {
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Default-weekGet-0-curl">
                             <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+ -H "Authorization: Bearer [[accessToken]]"\
  -H "Accept: applicatin/json"\
  "http://localhost:8081/week"</code></pre>
                           </div>
@@ -3379,6 +4858,11 @@ import java.util.*;
 
 public class DefaultApiExample {
     public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        
+        // Configure Bearer (JWT) access token for authorization: tokenAuth
+        HttpBearerAuth tokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("tokenAuth");
+        tokenAuth.setBearerToken("BEARER TOKEN");
         
         // Create an instance of the API class
         DefaultApi apiInstance = new DefaultApi();
@@ -3417,7 +4901,10 @@ public class DefaultApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Default-weekGet-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+[apiConfig setAccessToken:@"YOUR_ACCESS_TOKEN"];
 
 // Create an instance of the API class
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
@@ -3436,6 +4923,11 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
                             <div class="tab-pane" id="examples-Default-weekGet-0-javascript">
                               <pre class="prettyprint"><code class="language-js">var MenuPlanner = require('menu_planner');
+var defaultClient = MenuPlanner.ApiClient.instance;
+
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+var tokenAuth = defaultClient.authentications['tokenAuth'];
+tokenAuth.accessToken = "YOUR ACCESS TOKEN";
 
 // Create an instance of the API class
 var api = new MenuPlanner.DefaultApi()
@@ -3466,6 +4958,8 @@ namespace Example
     {
         public void main()
         {
+            // Configure Bearer (JWT) access token for authorization: tokenAuth
+            Configuration.Default.AccessToken = "YOUR_ACCESS_TOKEN";
             
             // Create an instance of the API class
             var apiInstance = new DefaultApi();
@@ -3486,6 +4980,9 @@ namespace Example
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+OpenAPITools\Client\Configuration::getDefaultConfiguration()->setAccessToken('', 'YOUR_ACCESS_TOKEN');
+
 // Create an instance of the API class
 $api_instance = new OpenAPITools\Client\Api\DefaultApi();
 
@@ -3502,6 +4999,9 @@ try {
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::OPenAPIClient::Configuration;
 use WWW::OPenAPIClient::DefaultApi;
+
+# Configure Bearer (JWT) access token for authorization: tokenAuth
+$WWW::OPenAPIClient::Configuration::access_token = 'YOUR_ACCESS_TOKEN';
 
 # Create an instance of the API class
 my $api_instance = WWW::OPenAPIClient::DefaultApi->new();
@@ -3521,6 +5021,9 @@ import time
 import openapi_client
 from openapi_client.rest import ApiException
 from pprint import pprint
+
+# Configure Bearer (JWT) access token for authorization: tokenAuth
+openapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
 
 # Create an instance of the API class
 api_instance = openapi_client.DefaultApi()
@@ -3662,6 +5165,7 @@ pub fn main() {
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Default-weekPut-0-curl">
                             <pre class="prettyprint"><code class="language-bsh">curl -X PUT\
+ -H "Authorization: Bearer [[accessToken]]"\
  -H "Accept: applicatin/json"\
  "http://localhost:8081/week?fillGaps="</code></pre>
                           </div>
@@ -3676,6 +5180,11 @@ import java.util.*;
 
 public class DefaultApiExample {
     public static void main(String[] args) {
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        
+        // Configure Bearer (JWT) access token for authorization: tokenAuth
+        HttpBearerAuth tokenAuth = (HttpBearerAuth) defaultClient.getAuthentication("tokenAuth");
+        tokenAuth.setBearerToken("BEARER TOKEN");
         
         // Create an instance of the API class
         DefaultApi apiInstance = new DefaultApi();
@@ -3716,7 +5225,10 @@ public class DefaultApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Default-weekPut-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">
+                              <pre class="prettyprint"><code class="language-cpp">Configuration *apiConfig = [Configuration sharedConfig];
+
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+[apiConfig setAccessToken:@"YOUR_ACCESS_TOKEN"];
 
 // Create an instance of the API class
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
@@ -3736,6 +5248,11 @@ Boolean *fillGaps = true; // Fill empty slots in the menu with sutable recipes (
 
                             <div class="tab-pane" id="examples-Default-weekPut-0-javascript">
                               <pre class="prettyprint"><code class="language-js">var MenuPlanner = require('menu_planner');
+var defaultClient = MenuPlanner.ApiClient.instance;
+
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+var tokenAuth = defaultClient.authentications['tokenAuth'];
+tokenAuth.accessToken = "YOUR ACCESS TOKEN";
 
 // Create an instance of the API class
 var api = new MenuPlanner.DefaultApi()
@@ -3770,6 +5287,8 @@ namespace Example
     {
         public void main()
         {
+            // Configure Bearer (JWT) access token for authorization: tokenAuth
+            Configuration.Default.AccessToken = "YOUR_ACCESS_TOKEN";
             
             // Create an instance of the API class
             var apiInstance = new DefaultApi();
@@ -3791,6 +5310,9 @@ namespace Example
                               <pre class="prettyprint"><code class="language-php"><&#63;php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+// Configure Bearer (JWT) access token for authorization: tokenAuth
+OpenAPITools\Client\Configuration::getDefaultConfiguration()->setAccessToken('', 'YOUR_ACCESS_TOKEN');
+
 // Create an instance of the API class
 $api_instance = new OpenAPITools\Client\Api\DefaultApi();
 $fillGaps = true; // Boolean | Fill empty slots in the menu with sutable recipes
@@ -3808,6 +5330,9 @@ try {
                               <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
 use WWW::OPenAPIClient::Configuration;
 use WWW::OPenAPIClient::DefaultApi;
+
+# Configure Bearer (JWT) access token for authorization: tokenAuth
+$WWW::OPenAPIClient::Configuration::access_token = 'YOUR_ACCESS_TOKEN';
 
 # Create an instance of the API class
 my $api_instance = WWW::OPenAPIClient::DefaultApi->new();
@@ -3828,6 +5353,9 @@ import time
 import openapi_client
 from openapi_client.rest import ApiException
 from pprint import pprint
+
+# Configure Bearer (JWT) access token for authorization: tokenAuth
+openapi_client.configuration.access_token = 'YOUR_ACCESS_TOKEN'
 
 # Create an instance of the API class
 api_instance = openapi_client.DefaultApi()
