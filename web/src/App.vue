@@ -13,7 +13,6 @@
         </p>
       </div>
     </footer>
-    <b-loading :is-full-page="true" v-model="isLoading"></b-loading>
   </div>
 </template>
 
@@ -21,7 +20,6 @@
 import Navbar from '@/components/Navbar.vue';
 import ErrorHandler from '@/mixins/ErrorHandler';
 import PseudoWindow from 'vue-pseudo-window';
-import { mapActions } from 'vuex';
 
 export default {
   name: 'App',
@@ -30,22 +28,9 @@ export default {
     Navbar,
   },
   data: () => ({
-    isLoading: false,
     appVersion: window.config.MP_VERSION || '',
   }),
-  mounted() {
-    this.isLoading = true;
-    this.fetchCurrentWeek();
-    this.fetchRecipes();
-    this.fetchCourses();
-    this.isLoading = false;
-  },
   methods: {
-    ...mapActions([
-      'fetchCurrentWeek',
-      'fetchRecipes',
-      'fetchCourses',
-    ]),
     onResize() {
       this.$root.isMobile = window.innerWidth <= 768;
     },
