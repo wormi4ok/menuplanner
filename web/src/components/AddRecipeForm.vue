@@ -6,6 +6,13 @@
         <button type="button" class="delete" @click="$emit('close')"/>
       </header>
       <section class="modal-card-body">
+        <b-notification
+          v-if="error"
+          type="is-danger is-light"
+          aria-close-label="Close error message"
+          role="alert">
+          {{ errorMsg }}
+        </b-notification>
         <b-field>
           <b-field label="Recipe" expanded>
             <b-input
@@ -118,6 +125,7 @@ export default {
     quantity: 100,
     portion: 350,
     showQuantityInput: false,
+    error: '',
   }),
   created() {
     if (this.recipe) {
@@ -148,13 +156,25 @@ export default {
     isUpdate() {
       return this.id > 0;
     },
+    errorMsg() {
+      let msg = '';
+      if (Object.prototype.hasOwnProperty.call(this.error, 'errors')) {
+        this.error.errors.forEach((error) => {
+          msg += `${error.message}: ${error.field}\n`;
+        });
+      } else {
+        msg = this.error;
+      }
+      return msg;
+    },
   },
   methods: {
     ...mapActions([
       'createRecipe',
       'updateRecipe',
     ]),
-    submitRecipeForm() {
+    async submitRecipeForm() {
+      this.error = '';
       const recipe = {
         name: this.name,
         courses: this.courses,
@@ -167,13 +187,17 @@ export default {
         quantity: this.showQuantityInput ? this.quantity : 0,
         portion: this.showQuantityInput ? this.portion : 0,
       };
-      if (this.id > 0) {
-        recipe.id = this.id;
-        this.updateRecipe(recipe);
-      } else {
-        this.createRecipe(recipe);
+      try {
+        if (this.id > 0) {
+          recipe.id = this.id;
+          await this.updateRecipe(recipe);
+        } else {
+          await this.createRecipe(recipe);
+        }
+        this.$emit('close');
+      } catch (e) {
+        this.error = e.response.data;
       }
-      this.$emit('close');
     },
   },
   mixins: [
