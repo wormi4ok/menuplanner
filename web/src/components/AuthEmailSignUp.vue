@@ -1,5 +1,12 @@
 <template>
   <form @submit.prevent="signUp">
+    <b-notification
+      v-if="error"
+      type="is-danger is-light"
+      aria-close-label="Close error message"
+      role="alert">
+      {{ error }}
+    </b-notification>
     <b-field label="Email">
       <b-input
         v-model="email"
@@ -39,20 +46,25 @@ export default {
   name: 'AuthEmailSignUp',
   data() {
     return {
-      email: 'tsst@email.ru',
+      email: '',
       password: '',
       passwordConfirm: '',
+      error: '',
     };
   },
   methods: {
-    signUp() {
+    async signUp() {
       if (this.password !== this.passwordConfirm) {
         this.$refs.passwordConfirm.setValidity('is-danger', 'Passwords do not match');
         return;
       }
-
-      // submit form here
-      console.log(this.name);
+      const { email, password, passwordConfirm } = this;
+      try {
+        await this.$store.dispatch('signUp', { email, password, passwordConfirm });
+        await this.$router.push('/');
+      } catch (e) {
+        this.error = e.response.data;
+      }
     },
   },
 };
