@@ -40,7 +40,7 @@ type Recipe struct {
 	Portion  int `json:"portion,omitempty" validate:"required_with=Quantity"`
 
 	UserID int  `json:"-" validate:"required" gorm:"not null;default:1"`
-	User   User `json:"-"`
+	User   User `json:"-" validate:"structonly"`
 }
 
 func (r Recipe) EnergyAmount() int {

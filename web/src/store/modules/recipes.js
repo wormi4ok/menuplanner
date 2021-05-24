@@ -23,18 +23,12 @@ const actions = {
     });
   },
   async createRecipe({ commit }, recipe) {
-    api.recipe.create(recipe).then((response) => {
-      commit('pushNewRecipe', response.data);
-    }).catch((error) => {
-      commit('setError', error.response.data);
-    });
+    const response = await api.recipe.create(recipe);
+    commit('pushNewRecipe', response.data);
   },
   async updateRecipe({ commit }, recipe) {
-    api.recipe.update(recipe.id, recipe).then((response) => {
-      commit('modifyRecipe', response.data);
-    }).catch((error) => {
-      commit('setError', error.response.data);
-    });
+    const response = await api.recipe.update(recipe.id, recipe);
+    commit('modifyRecipe', response.data);
   },
   async deleteRecipe({ commit }, id) {
     api.recipe.delete(id).then(() => {
