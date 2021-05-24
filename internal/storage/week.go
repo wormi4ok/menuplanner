@@ -25,7 +25,7 @@ func (s *DB) ReadCurrent(ctx context.Context, userID int) *internal.Week {
 	week.Menu = make(map[int]*internal.DailyMenu, 7)
 
 	var w []Week
-	s.db.WithContext(ctx).Joins("Recipe").Find(&w, "weeks.id = ? AND user_id = ?", currentWeek, userID)
+	s.db.WithContext(ctx).Joins("Recipe").Find(&w, "weeks.id = ? AND weeks.user_id = ?", currentWeek, userID)
 	for _, line := range w {
 		if week.Menu[line.Day] == nil {
 			week.Menu[line.Day] = &internal.DailyMenu{Recipes: map[int]internal.Recipe{
