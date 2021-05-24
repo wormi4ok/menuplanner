@@ -14,8 +14,13 @@ const getters = {
 const actions = {
   async logIn({ commit }, { email, password }) {
     const response = await api.auth.login(email, password);
-    console.log('login action called');
-    commit('setAuthTokens', response.data);
+    const authData = response.data;
+    commit('setAuthTokens', authData);
+  },
+  async signUp({ commit }, { email, password, passwordConfirm }) {
+    const response = await api.auth.signup(email, password, passwordConfirm);
+    const authData = response.data;
+    commit('setAuthTokens', authData);
   },
   async fetchCurrentUser({ commit }) {
     const response = await api.user.profile();

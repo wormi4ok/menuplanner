@@ -14,6 +14,9 @@ const auth = {
   login(email, password) {
     return client.post('/auth/login', { email, password });
   },
+  signup(email, password, passwordConfirm) {
+    return client.post('/auth/signup', { email, password, passwordConfirm });
+  },
   tokenRefresh() {
     return client.post('/token/refresh', { refresh_token: token.getRefresh() });
   },
@@ -81,8 +84,10 @@ const week = {
 };
 
 client.interceptors.request.use((request) => {
-  // eslint-disable-next-line no-param-reassign
-  request.headers.Authorization = token.header();
+  if (token.get()) {
+    // eslint-disable-next-line no-param-reassign
+    request.headers.Authorization = token.header();
+  }
   return request;
 });
 

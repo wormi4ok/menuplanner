@@ -1,5 +1,12 @@
 <template>
   <form class="block" @submit.prevent="signIn">
+    <b-notification
+      v-if="error"
+      type="is-danger is-light"
+      aria-close-label="Close error message"
+      role="alert">
+      {{ error }}
+    </b-notification>
     <b-field label="Email">
       <b-input
         v-model="email"
@@ -30,14 +37,19 @@ export default {
     return {
       email: '',
       password: '',
+      error: '',
     };
   },
   methods: {
     async signIn() {
+      this.error = '';
       const { email, password } = this;
-      await this.$store.dispatch('logIn', { email, password }).then(() => {
-        this.$router.push('/');
-      });
+      try {
+        await this.$store.dispatch('logIn', { email, password });
+        await this.$router.push('/');
+      } catch (e) {
+        this.error = e.response.data;
+      }
     },
   },
 };
