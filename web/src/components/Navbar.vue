@@ -29,16 +29,21 @@
         <b-button v-else label="Clear week" class="is-danger" @click="onClearWeek"/>
 
       </b-navbar-item>
+      <NavbarUserMenu/>
     </template>
   </b-navbar>
 </template>
 
 <script>
 import AddRecipeForm from '@/components/AddRecipeForm.vue';
+import NavbarUserMenu from '@/components/NavbarUserMenu.vue';
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'Navbar',
+  components: {
+    NavbarUserMenu,
+  },
   data: () => ({
     showAddRecipeForm: false,
   }),
