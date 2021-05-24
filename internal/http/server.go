@@ -87,8 +87,7 @@ func router() *chi.Mux {
 	r.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{"*"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Accept", "Content-Type"},
-		AllowCredentials: false,
+		AllowedHeaders:   []string{"Accept", "Content-Type", "Authorization"},
 		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	}))
 	return r

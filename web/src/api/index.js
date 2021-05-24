@@ -1,4 +1,5 @@
 import axios from 'axios';
+import token from '@/auth/token';
 
 const client = axios.create({
   baseURL: window.config.API_ADDRESS || process.env.VUE_APP_API_ADDRESS,
@@ -9,10 +10,23 @@ const client = axios.create({
   },
 });
 
-client.interceptors.response.use(
-  (response) => response,
-  (error) => Promise.reject(error),
-);
+const auth = {
+  login(email, password) {
+    return client.post('/auth/login', { email, password });
+  },
+  tokenRefresh() {
+    return client.post('/token/refresh', { refresh_token: token.getRefresh() });
+  },
+  // loginViaGoogle(authCode) {
+  //   return client.post('/auth/google', { code: authCode, redirect_uri: 'postmessage' });
+  // },
+};
+
+const user = {
+  profile() {
+    return client.get('/user/me');
+  },
+};
 
 const recipe = {
   list() {
@@ -40,6 +54,7 @@ const course = {
   list() {
     return client.get('/course');
   },
+
   get(id) {
     return client.get(`/course/${id}`);
   },
@@ -65,8 +80,40 @@ const week = {
   },
 };
 
+client.interceptors.request.use((request) => {
+  // eslint-disable-next-line no-param-reassign
+  request.headers.Authorization = token.header();
+  return request;
+});
+
+client.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (error.response.status === 401 && !originalRequest.retry) {
+      originalRequest.retry = true;
+
+      if (!token.getRefresh()) {
+        return Promise.reject(error);
+      }
+      try {
+        const response = await auth.tokenRefresh();
+        token.set(response.data.access_token, response.data.expires_in);
+        originalRequest.headers.Authorization = token.header();
+        return client(originalRequest);
+      } catch (e) {
+        return Promise.reject(error);
+      }
+    }
+    return Promise.reject(error);
+  },
+);
+
 export default {
-  recipe,
+  auth,
   course,
+  recipe,
+  user,
   week,
 };
