@@ -33,9 +33,11 @@ export default {
     };
   },
   methods: {
-    signIn() {
-      // submit form here
-      console.log(this.email);
+    async signIn() {
+      const { email, password } = this;
+      await this.$store.dispatch('logIn', { email, password }).then(() => {
+        this.$router.push('/');
+      });
     },
   },
 };
