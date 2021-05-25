@@ -126,8 +126,16 @@ const actions = {
 };
 
 const mutations = {
-  setCurrentWeek: (state, week) => {
+  setCurrentWeek(state, week) {
     stateMerge(state, week, 'week');
+  },
+  resetCurrentWeek(state) {
+    Object.entries(state.week.menu).forEach((weekday) => {
+      const [day, menu] = weekday;
+      Object.keys(menu.recipes).forEach((slot) => {
+        state.week.menu[day].recipes[slot] = null;
+      });
+    });
   },
 };
 

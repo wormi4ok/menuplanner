@@ -33,6 +33,8 @@ const actions = {
   logOut({ commit }) {
     commit('setAuthTokens', { access_token: '', refresh_token: '', expires_in: 0 });
     commit('setUser', '');
+    commit('setRecipes', []);
+    commit('resetCurrentWeek');
   },
 };
 

@@ -38,6 +38,7 @@ func (e *weekEndpoint) Update() http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req request
+		var userID = jwt.UserID(r.Context())
 
 		if err := readJSON(r, &req); err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
@@ -46,9 +47,9 @@ func (e *weekEndpoint) Update() http.HandlerFunc {
 
 		week := &req.Week
 		if r.URL.Query().Get("fillGaps") != "" {
-			e.filler.FillWeek(r.Context(), jwt.UserID(r.Context()), week)
+			e.filler.FillWeek(r.Context(), userID, week)
 		}
-		res := e.storage.UpdateCurrent(r.Context(), jwt.UserID(r.Context()), week)
+		res := e.storage.UpdateCurrent(r.Context(), userID, week)
 
 		w.WriteHeader(http.StatusAccepted)
 		responseJSON(w, res)
