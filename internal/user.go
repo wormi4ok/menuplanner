@@ -31,6 +31,9 @@ type User struct {
 	Email    string `json:"email" validate:"required,email" gorm:"not null;size:255"`
 	Password string `json:"password" validate:"required" gorm:"not null;size:255"`
 
+	Picture string `json:"picture" gorm:"size:255"`
+	Locale  string `json:"locale" gorm:"size:31"`
+
 	Key string `json:"-" gorm:"size:31"`
 	gorm.Model
 }
