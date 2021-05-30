@@ -49,6 +49,8 @@ func main() {
 		userStorage   internal.UserRepository
 	)
 
+	oAuth := loadOAuth(c)
+
 	if c.MysqlDSN != "" {
 		db := loadDB(&c)
 		weekStorage, recipeStorage, courseStorage, userStorage = db, db, db, db
@@ -56,10 +58,21 @@ func main() {
 		recipeStorage, weekStorage = loadMocks(&c)
 	}
 
-	srv := http.NewServer(c.Host, c.Port, c.JWTSecret, recipeStorage, courseStorage, weekStorage, userStorage, docs)
+	srv := http.NewServer(c.Host, c.Port, c.JWTSecret, oAuth, recipeStorage, courseStorage, weekStorage, userStorage, docs)
 	log.Printf("Starting service on %s port %d...\n", c.Host, c.Port)
 
 	handleServerShutdown(srv)
+}
+
+func loadOAuth(c Config) *http.OAuth {
+	if c.ClientID == "" || c.ClientSecret == "" {
+		return nil
+	}
+	log.Println("OAuth authentication configured...")
+	return &http.OAuth{
+		ClientID:     c.ClientID,
+		ClientSecret: c.ClientSecret,
+	}
 }
 
 func loadDB(c *Config) *storage.DB {

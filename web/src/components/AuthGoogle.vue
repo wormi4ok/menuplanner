@@ -1,9 +1,6 @@
 <template>
-  <b-button id="loginButton" class="is-success" v-if="!isSignIn" @click="onSignIn">
+  <b-button id="loginButton" class="is-success" :loading="loading" @click="onSignIn">
     <span>Sign In with Google</span>
-  </b-button>
-  <b-button v-else @click="onSignOut">
-    <span>Sign Out</span>
   </b-button>
 </template>
 
@@ -12,22 +9,21 @@ export default {
   name: 'AuthGoogle',
   data() {
     return {
-      isSignIn: false,
+      loading: false,
     };
   },
   methods: {
     async onSignIn() {
       try {
+        this.loading = true;
         const authCode = await this.$gAuth.getAuthCode();
-        console.log('authCode', authCode);
-        this.isSignIn = this.$gAuth.isAuthorized;
-      } catch (error) {
-        // On fail do something
-        console.error(error);
+        await this.$store.dispatch('googleLogIn', authCode);
+        await this.$router.push('/');
+      } catch (e) {
+        await this.$store.dispatch('reportError', e.response.data);
+      } finally {
+        this.loading = false;
       }
-    },
-    onSignOut() {
-      this.isSignIn = false;
     },
   },
 };

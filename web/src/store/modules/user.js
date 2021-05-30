@@ -17,6 +17,11 @@ const actions = {
     const authData = response.data;
     commit('setAuthTokens', authData);
   },
+  async googleLogIn({ commit }, authCode) {
+    const response = await api.auth.loginViaGoogle(authCode);
+    const authData = response.data;
+    commit('setAuthTokens', authData);
+  },
   async signUp({ commit }, { email, password, passwordConfirm }) {
     const response = await api.auth.signup(email, password, passwordConfirm);
     const authData = response.data;
