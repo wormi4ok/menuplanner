@@ -15,6 +15,7 @@ import (
 	"github.com/go-chi/cors"
 	"github.com/wormi4ok/menuplanner/internal"
 	"github.com/wormi4ok/menuplanner/internal/http/jwt"
+	"github.com/wormi4ok/menuplanner/internal/http/oauth"
 )
 
 type Server struct {
@@ -27,7 +28,7 @@ func (s *Server) Shutdown(ctx context.Context) error {
 
 func NewServer(
 	host string, port int, jwtSecret string,
-	oAuth *OAuth,
+	oAuth *oauth.Google,
 	recipes internal.RecipeRepository,
 	courses internal.CourseReader,
 	weeks internal.WeekRepository,

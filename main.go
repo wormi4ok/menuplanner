@@ -13,6 +13,7 @@ import (
 	"github.com/sethvargo/go-envconfig"
 	"github.com/wormi4ok/menuplanner/internal"
 	"github.com/wormi4ok/menuplanner/internal/http"
+	"github.com/wormi4ok/menuplanner/internal/http/oauth"
 	"github.com/wormi4ok/menuplanner/internal/storage"
 	"github.com/wormi4ok/menuplanner/internal/storage/mock"
 )
@@ -64,12 +65,12 @@ func main() {
 	handleServerShutdown(srv)
 }
 
-func loadOAuth(c Config) *http.OAuth {
+func loadOAuth(c Config) *oauth.Google {
 	if c.ClientID == "" || c.ClientSecret == "" {
 		return nil
 	}
 	log.Println("OAuth authentication configured...")
-	return &http.OAuth{
+	return &oauth.Google{
 		ClientID:     c.ClientID,
 		ClientSecret: c.ClientSecret,
 	}
