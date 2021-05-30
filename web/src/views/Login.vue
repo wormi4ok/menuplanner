@@ -4,7 +4,7 @@
       <div class="container">
         <div class="columns is-centered">
           <div class="column is-5-tablet is-5-desktop is-4-widescreen">
-            <AuthForm />
+            <AuthForm :has-google-auth="googleAuthEnabled"/>
           </div>
         </div>
       </div>
@@ -18,6 +18,11 @@ import AuthForm from '@/components/AuthForm.vue';
 export default {
   name: 'Login',
   components: { AuthForm },
+  computed: {
+    googleAuthEnabled() {
+      return !!window.config.MP_CLIENT_ID;
+    },
+  },
 };
 </script>
 
