@@ -4,10 +4,10 @@
       <img src="@/assets/flaningo.jpeg" alt="Menuplanner Logo" width="32" class="mr-4"/>
       <span class="title has-text-grey">Menuplanner</span>
     </div>
-    <b-field>
+    <b-field v-if="googleAuthEnabled">
       <AuthGoogle/>
     </b-field>
-    <b-collapse :open.sync="showForm" aria-id="loginForm">
+    <b-collapse :open.sync="registrationForm" aria-id="loginForm">
       <template #trigger="props">
         <div class="has-text-centered">
           <a v-if="!props.open" aria-controls="loginForm" class="icon-text">
@@ -44,6 +44,14 @@ export default {
     return {
       showForm: false,
     };
+  },
+  computed: {
+    googleAuthEnabled() {
+      return !!window.config.MP_CLIENT_ID;
+    },
+    registrationForm() {
+      return this.showForm || !this.googleAuthEnabled;
+    },
   },
 };
 </script>

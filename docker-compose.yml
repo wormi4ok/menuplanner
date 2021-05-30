@@ -41,5 +41,8 @@ services:
     environment:
       MP_HOST: 0.0.0.0
       MP_MYSQL_DSN: menuplanner:menuplanner@tcp(db:3306)/menuplanner?charset=utf8mb4&parseTime=True&loc=Local
+      MP_JWT_SECRET: menuplanner-supersecret
+#      MP_CLIENT_ID: ""
+#      MP_CLIENT_SECRET: ""
 #      MP_RECIPES_JSON: recipes.json
 #      MP_WEEK_JSON: internal/testdata/week_with_gaps.json

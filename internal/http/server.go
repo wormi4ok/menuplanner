@@ -27,6 +27,7 @@ func (s *Server) Shutdown(ctx context.Context) error {
 
 func NewServer(
 	host string, port int, jwtSecret string,
+	oAuth *OAuth,
 	recipes internal.RecipeRepository,
 	courses internal.CourseReader,
 	weeks internal.WeekRepository,
@@ -36,7 +37,7 @@ func NewServer(
 	r := router()
 
 	we := weekEndpoint{storage: weeks, filler: internal.NewGapFiller(recipes, courses)}
-	ue := userEndpoint{&jwt.Generator{Secret: jwtSecret}, users}
+	ue := userEndpoint{&jwt.Generator{Secret: jwtSecret}, users, oAuth}
 
 	// Public routes
 	r.Mount("/auth", ue.Routes())
@@ -85,10 +86,10 @@ func router() *chi.Mux {
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Recoverer)
 	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{"*"},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"Accept", "Content-Type", "Authorization"},
-		MaxAge:           300, // Maximum value not ignored by any of major browsers
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders: []string{"Accept", "Content-Type", "Authorization"},
+		MaxAge:         300, // Maximum value not ignored by any of major browsers
 	}))
 	return r
 }

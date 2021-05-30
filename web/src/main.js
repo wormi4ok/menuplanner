@@ -19,11 +19,13 @@ Vue.use(Buefy, {
   defaultIconPack: 'fas',
 });
 
-Vue.use(GAuth, {
-  clientId: window.config.MP_CLIENT_ID,
-  scope: 'profile email',
-  prompt: 'select_account',
-});
+if (window.config.MP_CLIENT_ID) {
+  Vue.use(GAuth, {
+    clientId: window.config.MP_CLIENT_ID,
+    scope: 'profile email',
+    prompt: 'select_account',
+  });
+}
 
 Vue.config.productionTip = false;
 

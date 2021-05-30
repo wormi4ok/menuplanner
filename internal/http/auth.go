@@ -1,6 +1,9 @@
 package http
 
 import (
+	"encoding/json"
+	"io"
+	"log"
 	"math/rand"
 	"net/http"
 	"time"
@@ -8,19 +11,28 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/wormi4ok/menuplanner/internal"
 	"github.com/wormi4ok/menuplanner/internal/http/jwt"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
 )
 
 const authTokenDuration = time.Hour
 const refreshTokenDuration = 7 * 24 * time.Hour
+const userInfoURL = "https://openidconnect.googleapis.com/v1/userinfo"
 
 type TokenGenerator interface {
 	CreateAccessToken(user *internal.User, expiresIn time.Duration) (string, error)
 	CreateRefreshToken(user *internal.User, expiresIn time.Duration) (string, error)
 }
 
+type OAuth struct {
+	ClientID     string
+	ClientSecret string
+}
+
 type userEndpoint struct {
 	token   TokenGenerator
 	storage internal.UserRepository
+	oAuth   *OAuth
 }
 
 // Routes creates a REST router for the user authentication
@@ -30,7 +42,9 @@ func (e userEndpoint) Routes() chi.Router {
 
 	r.Post("/signup", e.Signup())
 	r.Post("/login", e.Login())
-	r.Post("/login/google", e.GoogleAuth())
+	if e.oAuth != nil {
+		r.Post("/login/google", e.GoogleAuth(e.oAuth))
+	}
 
 	return r
 }
@@ -184,9 +198,108 @@ func (e *userEndpoint) Refresh() http.HandlerFunc {
 	}
 }
 
-func (e *userEndpoint) GoogleAuth() http.HandlerFunc {
-	// TODO
-	return nil
+func (e *userEndpoint) GoogleAuth(config *OAuth) http.HandlerFunc {
+	type request struct {
+		AuthCode string `json:"code"`
+	}
+
+	type googleResponse struct {
+		Name          string `json:"name"`
+		Picture       string `json:"picture"`
+		Email         string `json:"email"`
+		EmailVerified bool   `json:"email_verified"`
+		Locale        string `json:"locale"`
+	}
+
+	conf := &oauth2.Config{
+		ClientID:     config.ClientID,
+		ClientSecret: config.ClientSecret,
+		RedirectURL:  "postmessage",
+		Endpoint:     google.Endpoint,
+	}
+
+	return func(w http.ResponseWriter, r *http.Request) {
+		var (
+			req      request
+			userInfo googleResponse
+		)
+
+		if err := readJSON(r, &req); err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		token, err := conf.Exchange(r.Context(), req.AuthCode)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusFailedDependency)
+			return
+		}
+
+		log.Printf("%+v", token.AccessToken)
+
+		authClient := conf.Client(r.Context(), token)
+
+		res, err := authClient.Get(userInfoURL)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusFailedDependency)
+			return
+		}
+
+		if body, err := io.ReadAll(res.Body); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		} else {
+			_ = r.Body.Close()
+			if err = json.Unmarshal(body, &userInfo); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+		}
+
+		if existingUser, err := e.storage.ReadUserByEmail(r.Context(), userInfo.Email); existingUser != nil {
+			at, rt, err := e.tokenPair(existingUser)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			res := authTokenResponse{
+				AccessToken:  at,
+				TokenType:    "bearer",
+				ExpiresIn:    int(authTokenDuration.Seconds()),
+				RefreshToken: rt,
+			}
+
+			responseJSON(w, res)
+		} else if internal.ErrorIs(err, internal.ErrorNotFound) {
+			user := &internal.User{
+				Name:  userInfo.Name,
+				Email: userInfo.Email,
+			}
+
+			if err := e.storage.CreateUser(r.Context(), user); err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			at, rt, err := e.tokenPair(user)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			res := authTokenResponse{
+				AccessToken:  at,
+				TokenType:    "bearer",
+				ExpiresIn:    int(authTokenDuration.Seconds()),
+				RefreshToken: rt,
+			}
+
+			responseJSON(w, res)
+		} else {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	}
 }
 
 func (e *userEndpoint) tokenPair(user *internal.User) (string, string, error) {
