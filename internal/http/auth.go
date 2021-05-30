@@ -9,6 +9,7 @@ import (
 	"github.com/wormi4ok/menuplanner/internal"
 	"github.com/wormi4ok/menuplanner/internal/http/jwt"
 	"github.com/wormi4ok/menuplanner/internal/http/oauth"
+	"golang.org/x/text/language"
 )
 
 const authTokenDuration = time.Hour
@@ -82,6 +83,10 @@ func (e *userEndpoint) Signup() http.HandlerFunc {
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
+		}
+
+		if locale := getRequestLocale(r); locale != "" {
+			user.Locale = locale
 		}
 
 		if err := e.storage.CreateUser(r.Context(), user); err != nil {
@@ -205,8 +210,10 @@ func (e *userEndpoint) GoogleAuth(googleOAuth *oauth.Google) http.HandlerFunc {
 			responseJSON(w, newAuthTokenResponse(at, rt))
 		} else if internal.ErrorIs(err, internal.ErrorNotFound) {
 			user := &internal.User{
-				Name:  userInfo.Name,
-				Email: userInfo.Email,
+				Name:    userInfo.Name,
+				Email:   userInfo.Email,
+				Picture: userInfo.Picture,
+				Locale:  userInfo.Locale,
 			}
 
 			if err := e.storage.CreateUser(r.Context(), user); err != nil {
@@ -237,4 +244,13 @@ func (e *userEndpoint) tokenPair(user *internal.User) (accessToken string, refre
 	}
 
 	return
+}
+
+func getRequestLocale(r *http.Request) string {
+	t, _, err := language.ParseAcceptLanguage(r.Header.Get("Accept-Language"))
+	if err == nil && t != nil && len(t) > 0 {
+		return t[0].String()
+	}
+
+	return ""
 }
