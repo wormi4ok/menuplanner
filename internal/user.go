@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"log"
+	"time"
 
 	"github.com/go-playground/validator/v10"
 	"golang.org/x/crypto/bcrypt"
@@ -27,15 +28,19 @@ type UserReader interface {
 }
 
 type User struct {
+	ID       int    `gorm:"primarykey"`
 	Name     string `json:"name"`
-	Email    string `json:"email" validate:"required,email" gorm:"not null;size:255"`
+	Email    string `json:"email" validate:"required,email" gorm:"unique;not null;size:255"`
 	Password string `json:"password" validate:"required" gorm:"not null;size:255"`
 
 	Picture string `json:"picture" gorm:"size:255"`
 	Locale  string `json:"locale" gorm:"size:31"`
 
 	Key string `json:"-" gorm:"size:31"`
-	gorm.Model
+
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	DeletedAt gorm.DeletedAt `gorm:"index"`
 }
 
 func NewUser(email, password string) (*User, error) {
