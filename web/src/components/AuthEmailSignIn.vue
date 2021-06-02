@@ -26,7 +26,25 @@
         password-reveal
       />
     </b-field>
-    <b-button class="is-primary" label="Continue" native-type="submit"/>
+    <b-field>
+      <div class="level">
+        <div class="level-left">
+          <div class="level-item">
+            <b-button class="is-primary" label="Continue" native-type="submit"/>
+          </div>
+        </div>
+        <div class="level-right">
+          <div class="level-item">
+            <b-tooltip
+              type="is-light" multilined position="is-right" :delay="300"
+              label="Please, contact the administrator of this website to reset your password."
+            >
+              <b-button tag="a" label="Forgot password?" size="is-small" type="is-ghost"/>
+            </b-tooltip>
+          </div>
+        </div>
+      </div>
+    </b-field>
   </form>
 </template>
 
