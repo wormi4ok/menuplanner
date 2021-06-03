@@ -99,7 +99,8 @@ client.interceptors.response.use(
     if (error.response.status === 401 && !originalRequest.retry) {
       originalRequest.retry = true;
 
-      if (!token.getRefresh()) {
+      if (!token.getRefresh() || originalRequest.url === '/token/refresh') {
+        token.reset();
         return Promise.reject(error);
       }
       try {

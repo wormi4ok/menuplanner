@@ -21,4 +21,9 @@ export default {
     refreshToken = token;
   },
   getRefresh: () => refreshToken,
+  reset: () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('token_valid_until');
+  },
 };
