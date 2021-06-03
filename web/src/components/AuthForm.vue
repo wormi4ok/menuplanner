@@ -18,7 +18,7 @@
       </template>
       <b-tabs position="is-centered" size="is-large">
         <b-tab-item label="Sign In">
-          <AuthEmailSignIn/>
+          <AuthEmailSignIn :init-email="email" :init-password="password"/>
         </b-tab-item>
         <b-tab-item label="Sign Up">
           <AuthEmailSignUp/>
@@ -41,15 +41,32 @@ export default {
     AuthEmailSignUp,
   },
   props: {
+    email: {
+      type: String,
+      default: '',
+    },
+    password: {
+      type: String,
+      default: '',
+    },
     hasGoogleAuth: {
       type: Boolean,
       default: false,
     },
+    isExpanded: {
+      type: Boolean,
+      default: false,
+    },
   },
-  data() {
-    return {
-      showForm: !this.hasGoogleAuth,
-    };
+  computed: {
+    showForm: {
+      get() {
+        return !this.hasGoogleAuth || this.isExpanded;
+      },
+      set(newValue) {
+        this.isExpanded = newValue;
+      },
+    },
   },
 };
 </script>

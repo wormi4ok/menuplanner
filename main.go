@@ -12,6 +12,7 @@ import (
 
 	"github.com/sethvargo/go-envconfig"
 	"github.com/wormi4ok/menuplanner/internal"
+	"github.com/wormi4ok/menuplanner/internal/demo"
 	"github.com/wormi4ok/menuplanner/internal/http"
 	"github.com/wormi4ok/menuplanner/internal/http/oauth"
 	"github.com/wormi4ok/menuplanner/internal/storage"
@@ -57,6 +58,10 @@ func main() {
 		weekStorage, recipeStorage, courseStorage, userStorage = db, db, db, db
 	} else {
 		recipeStorage, weekStorage = loadMocks(&c)
+	}
+
+	if err := demo.PreloadData(context.Background(), userStorage, recipeStorage, weekStorage); err != nil {
+		log.Printf("Failed to preload database content: %s", err)
 	}
 
 	srv := http.NewServer(c.Host, c.Port, c.JWTSecret, oAuth, recipeStorage, courseStorage, weekStorage, userStorage, docs)

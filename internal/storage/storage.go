@@ -1,9 +1,14 @@
 package storage
 
 import (
+	"log"
+	"os"
+	"time"
+
 	"github.com/wormi4ok/menuplanner/internal"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 type DB struct {
@@ -11,7 +16,9 @@ type DB struct {
 }
 
 func InitDB(dsn string) (*DB, error) {
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+		Logger: customLogger(),
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -25,4 +32,16 @@ func InitDB(dsn string) (*DB, error) {
 	instance.preloadCourses()
 
 	return instance, nil
+}
+
+func customLogger() logger.Interface {
+	return logger.New(
+		log.New(os.Stdout, "\r\n", log.LstdFlags),
+		logger.Config{
+			SlowThreshold:             200 * time.Millisecond,
+			LogLevel:                  logger.Warn,
+			IgnoreRecordNotFoundError: true,
+			Colorful:                  true,
+		},
+	)
 }

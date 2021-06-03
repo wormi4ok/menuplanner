@@ -1,0 +1,112 @@
+[
+  {
+    "id": 1,
+    "name": "Spicy Poblano Bolognese",
+    "courses": [
+      {
+        "id": 2,
+        "name": "main"
+      }
+    ],
+    "calories": 239,
+    "protein": 13,
+    "fat": 10,
+    "carbs": 30,
+    "quantity": 100,
+    "portion": 350
+  },
+  {
+    "id": 2,
+    "name": "Moroccan-Style Chickpea & Tomato Stew",
+    "courses": [
+      {
+        "id": 2,
+        "name": "main"
+      }
+    ],
+    "calories": 143,
+    "protein": 6,
+    "fat": 3,
+    "carbs": 27,
+    "quantity": 100,
+    "portion": 400
+  },
+  {
+    "id": 3,
+    "name": "Lemon Ricotta Pancakes",
+    "courses": [
+      {
+        "id": 1,
+        "name": "breakfast"
+      },
+      {
+        "id": 3,
+        "name": "pudding"
+      }
+    ],
+    "calories": 180,
+    "protein": 8,
+    "fat": 9,
+    "carbs": 20,
+    "quantity": 100,
+    "portion": 300
+  },
+  {
+    "id": 4,
+    "name": "Chocolate Fudgy Brownies",
+    "courses": [
+      {
+        "id": 3,
+        "name": "pudding"
+      }
+    ],
+    "calories": 320,
+    "protein": 4,
+    "fat": 12,
+    "carbs": 46,
+    "quantity": 100,
+    "portion": 50
+  },
+  {
+    "id": 5,
+    "name": "Chicken Gyro Couscous Bowls",
+    "courses": [
+      {
+        "id": 2,
+        "name": "main"
+      }
+    ],
+    "calories": 630,
+    "protein": 41,
+    "fat": 28,
+    "carbs": 51
+  },
+  {
+    "id": 6,
+    "name": "Apple Pecan Breakfast Oatmeal Bake",
+    "courses": [
+      {
+        "id": 1,
+        "name": "breakfast"
+      }
+    ],
+    "calories": 490,
+    "protein": 11,
+    "fat": 24,
+    "carbs": 61
+  },
+  {
+    "id": 7,
+    "name": "Italian Noodle Soup",
+    "courses": [
+      {
+        "id": 2,
+        "name": "main"
+      }
+    ],
+    "calories": 830,
+    "protein": 40,
+    "fat": 37,
+    "carbs": 81
+  }
+]

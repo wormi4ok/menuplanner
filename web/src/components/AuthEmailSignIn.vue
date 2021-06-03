@@ -51,12 +51,40 @@
 <script>
 export default {
   name: 'AuthEmailSignIn',
+  props: {
+    initEmail: {
+      type: String,
+      default: '',
+    },
+    initPassword: {
+      type: String,
+      default: '',
+    },
+  },
   data() {
     return {
-      email: '',
-      password: '',
+      userEmail: '',
+      userPassword: '',
       error: '',
     };
+  },
+  computed: {
+    email: {
+      get() {
+        return this.userEmail || this.initEmail;
+      },
+      set(newValue) {
+        this.userEmail = newValue;
+      },
+    },
+    password: {
+      get() {
+        return this.userPassword || this.initPassword;
+      },
+      set(newValue) {
+        this.userPassword = newValue;
+      },
+    },
   },
   methods: {
     async signIn() {

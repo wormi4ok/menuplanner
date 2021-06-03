@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	jwt2 "github.com/wormi4ok/menuplanner/internal/http/jwt"
+	"github.com/wormi4ok/menuplanner/internal/http/jwt"
 )
 
 func TestGapFiller_FillWeek(t *testing.T) {
@@ -33,7 +33,7 @@ func TestGapFiller_FillWeek(t *testing.T) {
 				r: m,
 				c: m,
 			}
-			got := gf.FillWeek(context.TODO(), jwt2.UserID(r.Context()), tt.input)
+			got := gf.FillWeek(context.TODO(), jwt.UserID(context.TODO()), tt.input)
 			for i, day := range tt.want.Menu {
 				if _, exists := got.Menu[i]; !exists {
 					t.Errorf("Missing menu for day %d", i)
