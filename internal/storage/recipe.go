@@ -46,6 +46,7 @@ func (s *DB) ReadRandom(ctx context.Context, course internal.Course, userID int)
 		Table("recipe_courses").
 		Select("recipe_id").
 		Where("course_id = ?", course.ID).
+		Joins("JOIN recipes ON recipes.id = recipe_courses.recipe_id AND recipes.user_id = ?", userID).
 		Order("RAND()").
 		Scan(&id)
 	s.db.WithContext(ctx).Preload("Courses").First(&r, id)
