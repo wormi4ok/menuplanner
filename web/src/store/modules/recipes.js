@@ -8,7 +8,7 @@ const state = () => ({
 const getters = {
   listRecipes: (state) => state.recipes,
   recipesByCourse: (state) => (course) => state.recipes.filter(
-    (recipe) => recipe.courses.some(
+    (recipe) => recipe.courses && recipe.courses.some(
       (c) => c.id === course.id,
     ),
   ),
