@@ -10,9 +10,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/go-chi/jwtauth"
-	"github.com/lestrrat-go/jwx/jwa"
-	"github.com/lestrrat-go/jwx/jwt"
+	"github.com/go-chi/jwtauth/v5"
+	"github.com/lestrrat-go/jwx/v3/jwa"
+	"github.com/lestrrat-go/jwx/v3/jwt"
 
 	"github.com/wormi4ok/menuplanner/internal"
 )
@@ -22,31 +22,43 @@ type Generator struct {
 }
 
 func (g *Generator) CreateAccessToken(user *internal.User, expiresIn time.Duration) (string, error) {
-	t := jwt.New()
-	_ = t.Set(jwt.NotBeforeKey, time.Now().Add(-time.Second))
-	_ = t.Set(jwt.ExpirationKey, time.Now().Add(expiresIn))
-	_ = t.Set(jwt.SubjectKey, fmt.Sprintf("%d", user.ID))
+	t, err := jwt.NewBuilder().
+		NotBefore(time.Now().Add(-time.Second)).
+		Expiration(time.Now().Add(expiresIn)).
+		Subject(fmt.Sprintf("%d", user.ID)).
+		Build()
+	if err != nil {
+		return "", err
+	}
 
-	signedToken, err := jwt.Sign(t, jwa.HS512, []byte(g.Secret))
+	signedToken, err := jwt.Sign(t, jwt.WithKey(jwa.HS512(), []byte(g.Secret)))
 
 	return string(signedToken), err
 }
 
 func (g *Generator) CreateRefreshToken(user *internal.User, expiresIn time.Duration) (string, error) {
-	t := jwt.New()
-	_ = t.Set(jwt.NotBeforeKey, time.Now().Add(-time.Second))
-	_ = t.Set(jwt.ExpirationKey, time.Now().Add(expiresIn))
-	_ = t.Set(jwt.SubjectKey, fmt.Sprintf("%d", user.ID))
-	_ = t.Set("key", user.Key)
+	t, err := jwt.NewBuilder().
+		NotBefore(time.Now().Add(-time.Second)).
+		Expiration(time.Now().Add(expiresIn)).
+		Subject(fmt.Sprintf("%d", user.ID)).
+		Claim("key", user.Key).
+		Build()
+	if err != nil {
+		return "", err
+	}
 
-	signedToken, err := jwt.Sign(t, jwa.HS512, []byte(g.Secret))
+	signedToken, err := jwt.Sign(t, jwt.WithKey(jwa.HS512(), []byte(g.Secret)))
 
 	return string(signedToken), err
 }
 
 func UserID(ctx context.Context) int {
-	token, _ := ctx.Value(jwtauth.TokenCtxKey).(jwt.Token)
-	id, _ := strconv.Atoi(token.Subject())
+	token, ok := ctx.Value(jwtauth.TokenCtxKey).(jwt.Token)
+	if !ok {
+		return 0
+	}
+	sub, _ := token.Subject()
+	id, _ := strconv.Atoi(sub)
 
 	return id
 }
@@ -56,8 +68,8 @@ func AccessTokenVerifier(jwtSecret string) func(http.Handler) http.Handler {
 	return jwtauth.Verifier(tokenAuth)
 }
 
-func AccessTokenAuthenticator(next http.Handler) http.Handler {
-	return jwtauth.Authenticator(next)
+func AccessTokenAuthenticator(jwtSecret string) func(http.Handler) http.Handler {
+	return jwtauth.Authenticator(jwtauth.New("HS512", []byte(jwtSecret), nil))
 }
 
 func RefreshTokenVerifier(jwtSecret string) func(http.Handler) http.Handler {
@@ -76,7 +88,8 @@ func RefreshTokenAuthenticator(reader internal.UserReader) func(next http.Handle
 				return
 			}
 
-			id, err := strconv.Atoi(token.Subject())
+			sub, _ := token.Subject()
+			id, err := strconv.Atoi(sub)
 			if err != nil {
 				http.Error(w, "malformed token", http.StatusNotAcceptable)
 				return

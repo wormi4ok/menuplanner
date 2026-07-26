@@ -48,7 +48,7 @@ func NewServer(
 	// Protected routes
 	r.Group(func(r chi.Router) {
 		r.Use(jwt.AccessTokenVerifier(jwtSecret))
-		r.Use(jwt.AccessTokenAuthenticator)
+		r.Use(jwt.AccessTokenAuthenticator(jwtSecret))
 
 		r.Get("/", we.Get())
 		r.Get("/user/me", ue.Get())

@@ -1,16 +1,16 @@
-FROM golang:1.16-alpine3.13 AS build
+FROM golang:1.26-alpine AS build
 
-ENV CGO_ENABLED 0
+ENV CGO_ENABLED=0
 
 WORKDIR /go/src/github.com/wormi4ok/menuplanner
 
-RUN set -xe && apk add --no-cache git
+RUN set -xe && apk add --no-cache git curl
 
 COPY . .
 
 RUN go mod download
 
-RUN go get github.com/githubnemo/CompileDaemon
+RUN go install github.com/githubnemo/CompileDaemon@latest
 
 EXPOSE 8081
 

@@ -39,8 +39,10 @@ var docs []byte
 
 func main() {
 	var c Config
-	l := envconfig.PrefixLookuper("MP_", envconfig.OsLookuper())
-	if err := envconfig.ProcessWith(context.Background(), &c, l); err != nil {
+	if err := envconfig.ProcessWith(context.Background(), &envconfig.Config{
+		Target:   &c,
+		Lookuper: envconfig.PrefixLookuper("MP_", envconfig.OsLookuper()),
+	}); err != nil {
 		panic(err)
 	}
 
