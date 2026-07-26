@@ -1,19 +1,12 @@
-FROM golang:1.16-alpine3.13 AS build
+FROM gcr.io/distroless/static:nonroot
 
-ENV CGO_ENABLED 0
+ARG TARGETPLATFORM
 
-WORKDIR /go/src/github.com/wormi4ok/menuplanner
-
-RUN set -xe && apk add --no-cache git
-
-COPY . .
-
-RUN go mod download
-
-RUN go get github.com/githubnemo/CompileDaemon
+ENV MP_HOST=0.0.0.0
+ENV MP_PORT=8081
 
 EXPOSE 8081
 
-HEALTHCHECK --timeout=3s CMD curl -f http://localhost:8081/health || exit 1
+COPY $TARGETPLATFORM/menuplanner /menuplanner
 
-ENTRYPOINT CompileDaemon -build="go install" -command="/go/bin/menuplanner"
+ENTRYPOINT ["/menuplanner"]

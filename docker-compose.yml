@@ -30,7 +30,9 @@ services:
     ports:
       - 127.0.0.1:8080:8080
   api:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     volumes:
       - .:/go/src/github.com/wormi4ok/menuplanner
     ports:

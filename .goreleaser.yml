@@ -1,5 +1,6 @@
+version: 2
 archives:
-  - format: binary
+  - formats: [binary]
 builds:
   - goos:
       - linux
@@ -9,6 +10,19 @@ builds:
       - CGO_ENABLED=0
 checksum:
   name_template: "{{ .ProjectName }}.sha256"
+dockers_v2:
+  - images:
+      - "ghcr.io/wormi4ok/menuplanner"
+    tags:
+      - "{{ .Version }}"
+      - "{{ .Tag }}"
+    platforms:
+      - linux/amd64
+    labels:
+      org.opencontainers.image.source: "https://github.com/wormi4ok/menuplanner"
+      org.opencontainers.image.version: "{{ .Version }}"
+      org.opencontainers.image.revision: "{{ .FullCommit }}"
+      org.opencontainers.image.created: "{{ .Date }}"
 release:
   draft: true
   extra_files:
