@@ -64,9 +64,7 @@ jobs:
           name: web-ui
           path: release
       - name: Build API docs
-        uses: kpurdon/openapi-generator-action@v0.0.3
-        with:
-          args: generate -i api.yml -g html2 -o docs
+        run: make api-docs
       - name: Set up Buildx
         uses: docker/setup-buildx-action@v3
       - name: Login to GHCR
