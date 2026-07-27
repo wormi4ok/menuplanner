@@ -1,6 +1,6 @@
 <template>
-  <RecipeCard v-if="!isEmpty" v-bind="recipe" @delete-recipe="deleteRecipe"/>
-  <EmptySlot v-else-if="course" :course="course" @pick-recipe="pickRecipe($event)"/>
+  <RecipeCard v-if="!isEmpty" v-bind="recipe" @delete-recipe="deleteRecipe" />
+  <EmptySlot v-else-if="course" :course="course" @pick-recipe="pickRecipe($event)" />
 </template>
 
 <script>

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <WeekSlider v-if="this.$root.isMobile" :menu="data"/>
-    <WeekGrid v-else :menu="data"/>
-    <b-loading :is-full-page="true" v-model="isLoading"></b-loading>
+    <WeekSlider v-if="this.$root.isMobile" :menu="data" />
+    <WeekGrid v-else :menu="data" />
+    <b-loading :is-full-page="true" v-model="isLoading" />
   </div>
 </template>
 

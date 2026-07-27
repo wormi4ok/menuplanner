@@ -4,7 +4,8 @@
       cell-class="is-align-middle"
       field="name"
       label="Recipe"
-      width="80" v-slot="props">
+      width="80"
+      v-slot="props">
       <a @click="props.toggleDetails(props.row)">
         {{ props.row.name }}
       </a>

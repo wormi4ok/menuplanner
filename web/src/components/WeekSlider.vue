@@ -4,21 +4,22 @@
     v-model="selectedDay"
     v-touch:swipe.left="onSwipeLeft"
     v-touch:swipe.right="onSwipeRight"
-    expanded type="is-toggle-rounded"
+    expanded
+    type="is-toggle-rounded"
   >
     <b-tab-item v-for="(day, i) in menu" :key="i" :label="weekDays[i]">
       <MenuSlot
         v-for="(recipe, slot) in day.recipes"
-        :key="''.concat('slider',slot,day)"
+        :key="''.concat('slider', slot, day)"
         :recipe="recipe"
         :course="course(slot)"
         class="block"
-        @delete-recipe="removeSlot(i,slot)"
-        @pick-recipe="fillSlot({day:i, slot}, $event)"
+        @delete-recipe="removeSlot(i, slot)"
+        @pick-recipe="fillSlot({ day: i, slot }, $event)"
       />
       <div class="section">
         <h5 class="title is-5">Summary</h5>
-        <DailySummary :recipes="day.recipes"/>
+        <DailySummary :recipes="day.recipes" />
       </div>
     </b-tab-item>
   </b-tabs>

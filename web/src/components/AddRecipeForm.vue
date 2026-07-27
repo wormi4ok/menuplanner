@@ -3,7 +3,7 @@
     <form @submit.prevent="submitRecipeForm">
       <header class="modal-card-head">
         <p class="modal-card-title">{{ isUpdate ? 'Update recipe' : 'Add new' }}</p>
-        <button type="button" class="delete" @click="$emit('close')"/>
+        <button type="button" class="delete" @click="$emit('close')" />
       </header>
       <section class="modal-card-body">
         <b-notification
@@ -20,22 +20,23 @@
               validation-message="Recipe name is very important!"
               type="text"
               required
-              expanded/>
-            <b-checkbox-button v-model="courses"
-                               v-for="course in listCourses"
-                               :value="course.name"
-                               :key="course.id"
-                               :native-value="course"
-                               :type="courseColorCode(course)">
+              expanded />
+            <b-checkbox-button
+              v-model="courses"
+              v-for="course in listCourses"
+              :value="course.name"
+              :key="course.id"
+              :native-value="course"
+              :type="courseColorCode(course)">
               <span class="is-capitalized">{{ course.name }}</span>
             </b-checkbox-button>
           </b-field>
         </b-field>
         <b-field label="Description">
-          <b-input type="textarea" v-model="description"></b-input>
+          <b-input type="textarea" v-model="description" />
         </b-field>
         <b-field label="Calories">
-          <b-numberinput v-model="calories" step="50" min-step="1" min="1" message="Calories"/>
+          <b-numberinput v-model="calories" step="50" min-step="1" min="1" message="Calories" />
         </b-field>
         <b-field grouped>
           <b-field label="Protein">
@@ -45,23 +46,25 @@
               min-step="1"
               controls-position="compact"
               min="1"
-              size="is-small"/>
+              size="is-small" />
           </b-field>
           <b-field label="Fat">
-            <b-numberinput v-model="fat"
-                           step="5"
-                           min-step="1"
-                           min="1"
-                           controls-position="compact"
-                           size="is-small"/>
+            <b-numberinput
+              v-model="fat"
+              step="5"
+              min-step="1"
+              min="1"
+              controls-position="compact"
+              size="is-small" />
           </b-field>
           <b-field label="Carbs">
-            <b-numberinput v-model="carbs"
-                           step="5"
-                           min-step="1"
-                           min="1"
-                           controls-position="compact"
-                           size="is-small"/>
+            <b-numberinput
+              v-model="carbs"
+              step="5"
+              min-step="1"
+              min="1"
+              controls-position="compact"
+              size="is-small" />
           </b-field>
         </b-field>
         <b-field aria-controls="quantityPerServing" position="is-centered">
@@ -81,23 +84,25 @@
         <b-collapse aria-id="quantityPerServing" class="panel" v-model="showQuantityInput">
           <b-field grouped position="is-centered">
             <b-field label="Quantity (g)">
-              <b-numberinput v-model="quantity"
-                             step="50"
-                             min-step="1"
-                             controls-position="compact"/>
+              <b-numberinput
+                v-model="quantity"
+                step="50"
+                min-step="1"
+                controls-position="compact" />
             </b-field>
             <b-field label="Portion (g)">
-              <b-numberinput v-model="portion"
-                             step="50"
-                             min-step="1"
-                             controls-position="compact"/>
+              <b-numberinput
+                v-model="portion"
+                step="50"
+                min-step="1"
+                controls-position="compact" />
             </b-field>
           </b-field>
         </b-collapse>
       </section>
       <footer class="modal-card-foot">
-        <b-button label="Close" @click="$emit('close')"/>
-        <b-button :label="isUpdate ? 'Update' : 'Create'" class="is-primary" native-type="submit"/>
+        <b-button label="Close" @click="$emit('close')" />
+        <b-button :label="isUpdate ? 'Update' : 'Create'" class="is-primary" native-type="submit" />
       </footer>
     </form>
   </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="card grid-item">
     <header
-      :class="{'card-header':true, 'is-clickable': description}"
+      :class="{ 'card-header': true, 'is-clickable': description }"
       @click="toggleDescription"
       aria-controls="descriptionBlock">
       <p class="card-header-title">{{ name }}</p>
@@ -25,7 +25,7 @@
     </div>
     <footer class="card-footer">
       <a class="card-footer-item" @click="deleteRecipe">
-        <b-icon icon="times"></b-icon>
+        <b-icon icon="times" />
       </a>
       <div class="card-footer-item">
         <b-tag>{{ recipeSize }}</b-tag>

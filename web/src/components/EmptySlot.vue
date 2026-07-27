@@ -4,7 +4,8 @@
       v-if="!showInput"
       type="is-success"
       icon-right="plus-circle"
-      size="is-large" inverted
+      size="is-large"
+      inverted
       @click="onShowRecipeInput"
     />
     <div v-show="showInput" class="has-text-centered">
@@ -17,7 +18,9 @@
           icon="search-plus"
           field="name"
           placeholder="Recipe name"
-          open-on-focus rounded clearable
+          open-on-focus
+          rounded
+          clearable
           @select="pickRecipe">
           <template #empty>No recipes found</template>
         </b-autocomplete>

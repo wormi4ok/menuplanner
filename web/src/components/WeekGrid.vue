@@ -6,16 +6,16 @@
     <template v-for="slot in courses">
       <MenuSlot
         v-for="(today, day) in menu"
-        :key="''.concat(slot,day)"
+        :key="''.concat(slot, day)"
         :recipe="today.recipes[slot]"
         :course="course(slot)"
-        @delete-recipe="removeSlot(day,slot)"
-        @pick-recipe="fillSlot({day, slot}, $event)"
+        @delete-recipe="removeSlot(day, slot)"
+        @pick-recipe="fillSlot({ day, slot }, $event)"
       />
     </template>
     <DailySummary
-      v-for="(today,day) in menu"
-      :key="''.concat('summary',day)"
+      v-for="(today, day) in menu"
+      :key="''.concat('summary', day)"
       :recipes="today.recipes"
     />
   </div>

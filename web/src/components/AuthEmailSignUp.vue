@@ -37,7 +37,7 @@
         password-reveal
       />
     </b-field>
-    <b-button class="is-primary" label="Register" native-type="submit"/>
+    <b-button class="is-primary" label="Register" native-type="submit" />
   </form>
 </template>
 

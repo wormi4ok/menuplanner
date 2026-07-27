@@ -1,14 +1,15 @@
 <template>
   <div id="app">
-    <PseudoWindow @resize.passive="onResize"/>
-    <Navbar v-if="isLoggedIn"/>
+    <PseudoWindow @resize.passive="onResize" />
+    <Navbar v-if="isLoggedIn" />
     <div class="container" :class="{ 'is-fluid': !this.$root.isMobile }">
-      <router-view/>
+      <router-view />
     </div>
     <footer class="footer">
       <div class="content has-text-centered">
         <p>
-          Made with ♥️ by <a href="https://petrashov.ru" target="_blank">wormi4ok</a>
+          Made with ♥️ by
+          <a href="https://petrashov.com" target="_blank" rel="noopener noreferrer">wormi4ok</a>
           © {{ (new Date).getFullYear() }}, Menuplanner {{ appVersion }}
         </p>
       </div>
