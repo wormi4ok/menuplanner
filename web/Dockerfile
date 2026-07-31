@@ -1,4 +1,4 @@
-FROM node:22-alpine as dev
+FROM node:22-alpine AS dev
 
 WORKDIR /app
 
@@ -12,4 +12,4 @@ COPY . .
 
 EXPOSE 8080
 
-ENTRYPOINT ["npm", "run", "serve"]
+ENTRYPOINT ["npm", "run", "dev"]

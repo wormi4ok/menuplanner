@@ -1,5 +1,8 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const config = {
   MP_VERSION: process.env.MP_VERSION
@@ -9,6 +12,6 @@ const config = {
 };
 
 fs.writeFileSync(
-  path.join(__dirname, '..', 'dist', 'config.js'),
+  path.join(dirname, '..', 'dist', 'config.js'),
   `window.config = ${JSON.stringify(config, null, 2)};\n`,
 );
