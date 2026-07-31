@@ -32,6 +32,9 @@
       <NavbarUserMenu />
     </template>
   </b-navbar>
+  <b-modal v-model="showAddRecipeForm" has-modal-card>
+    <AddRecipeForm @close="showAddRecipeForm = false" />
+  </b-modal>
 </template>
 
 <script>
@@ -42,6 +45,7 @@ import { mapActions, mapGetters } from 'vuex';
 export default {
   name: 'Navbar',
   components: {
+    AddRecipeForm,
     NavbarUserMenu,
   },
   data: () => ({
@@ -64,11 +68,7 @@ export default {
       });
     },
     onAddRecipe() {
-      this.$buefy.modal.open({
-        parent: this,
-        component: AddRecipeForm,
-        hasModalCard: true,
-      });
+      this.showAddRecipeForm = true;
     },
   },
 };

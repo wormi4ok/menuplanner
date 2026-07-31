@@ -10,26 +10,23 @@
     "lint": "eslint src --ext .js,.vue"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.35",
-    "@fortawesome/free-solid-svg-icons": "^5.15.3",
-    "@fortawesome/vue-fontawesome": "^2.0.2",
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/vue-fontawesome": "^3.3.3",
     "axios": "^0.21.1",
-    "buefy": "^0.9.7",
-    "vue": "^2.7.16",
-    "vue-google-oauth2": "^1.5.8",
-    "vue-object-merge": "^0.1",
-    "vue-pseudo-window": "^1.0.0",
-    "vue-router": "^3.2.0",
-    "vue2-touch-events": "^3.2.2",
-    "vuex": "^3.6.2"
+    "buefy": "^3.0.10",
+    "vue": "^3.5.40",
+    "vue-router": "^4.6.4",
+    "vue3-touch-events": "^5.0.15",
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.28.4",
-    "@vitejs/plugin-vue2": "^2.3.4",
+    "@vitejs/plugin-vue": "^6.0.8",
     "@vue/eslint-config-airbnb": "^7.0.1",
     "eslint": "^8.57.1",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-vue": "^9.33.0",
-    "vite": "^7.3.6"
+    "vite": "^8.2.0"
   }
 }

@@ -7,7 +7,7 @@
     <b-field v-if="hasGoogleAuth">
       <AuthGoogle />
     </b-field>
-    <b-collapse :open.sync="showForm" aria-id="loginForm">
+    <b-collapse v-model:open="showForm" aria-id="loginForm">
       <template #trigger="props">
         <div class="has-text-centered">
           <a v-if="!props.open" aria-controls="loginForm" class="icon-text">

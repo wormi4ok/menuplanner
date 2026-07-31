@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import { getAuthCode } from '@/auth/google';
+
 export default {
   name: 'AuthGoogle',
   data() {
@@ -16,7 +18,7 @@ export default {
     async onSignIn() {
       try {
         this.loading = true;
-        const authCode = await this.$gAuth.getAuthCode();
+        const authCode = await getAuthCode();
         await this.$store.dispatch('googleLogIn', authCode);
         await this.$router.push('/');
       } catch (e) {

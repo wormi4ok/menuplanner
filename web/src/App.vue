@@ -1,8 +1,7 @@
 <template>
   <div id="app">
-    <PseudoWindow @resize.passive="onResize" />
     <Navbar v-if="isLoggedIn" />
-    <div class="container" :class="{ 'is-fluid': !this.$root.isMobile }">
+    <div class="container" :class="{ 'is-fluid': !isMobile }">
       <router-view />
     </div>
     <footer class="footer">
@@ -20,13 +19,12 @@
 <script>
 import Navbar from '@/components/Navbar.vue';
 import ErrorHandler from '@/mixins/ErrorHandler';
-import PseudoWindow from 'vue-pseudo-window';
+import isMobile from '@/isMobile';
 import { mapGetters } from 'vuex';
 
 export default {
   name: 'App',
   components: {
-    PseudoWindow,
     Navbar,
   },
   data: () => ({
@@ -36,11 +34,7 @@ export default {
     ...mapGetters([
       'isLoggedIn',
     ]),
-  },
-  methods: {
-    onResize() {
-      this.$root.isMobile = window.innerWidth <= 768;
-    },
+    isMobile: () => isMobile.value,
   },
   mixins: [
     ErrorHandler,

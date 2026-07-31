@@ -1,5 +1,5 @@
 <template>
-  <div class="grid">
+  <div class="week-grid">
     <div :key="day" v-for="(day, i) in weekDays" class="has-text-centered">
       <div class="subtitle" :class="{ 'has-text-weight-bold': today === i }">{{ day }}</div>
     </div>
@@ -68,7 +68,7 @@ export default {
 </script>
 
 <style scoped>
-.grid {
+.week-grid {
   display: grid;
   grid-auto-rows: min-content;
   grid-template-columns: repeat(7, 1fr );

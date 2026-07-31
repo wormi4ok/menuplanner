@@ -1,6 +1,17 @@
 /* eslint no-shadow: ["error", { "allow": ["state"] }] */
-import { stateMerge } from 'vue-object-merge';
 import api from '../../api';
+
+function stateMerge(state, value, propName) {
+  if (Object.prototype.toString.call(value) === '[object Object]'
+    && (propName == null || Object.prototype.hasOwnProperty.call(state, propName))) {
+    const o = propName == null ? state : state[propName];
+    if (o != null) {
+      Object.keys(value).forEach((prop) => stateMerge(o, value[prop], prop));
+      return;
+    }
+  }
+  state[propName] = value;
+}
 
 const state = () => ({
   week: {

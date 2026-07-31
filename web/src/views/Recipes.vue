@@ -108,6 +108,9 @@
       <div class="has-text-centered">No recipes</div>
     </template>
   </b-table>
+  <b-modal v-model="isFormActive" has-modal-card>
+    <AddRecipeForm :recipe="editedRecipe" @close="isFormActive = false" />
+  </b-modal>
 </template>
 
 <script>
@@ -117,6 +120,13 @@ import AddRecipeForm from '@/components/AddRecipeForm.vue';
 
 export default {
   name: 'Recipes',
+  components: {
+    AddRecipeForm,
+  },
+  data: () => ({
+    isFormActive: false,
+    editedRecipe: null,
+  }),
   computed: mapGetters({
     data: 'listRecipes',
     recipeInUse: 'recipePosition',
@@ -150,14 +160,8 @@ export default {
       }
     },
     onEdit(recipe) {
-      this.$buefy.modal.open({
-        parent: this,
-        component: AddRecipeForm,
-        props: {
-          recipe,
-        },
-        hasModalCard: true,
-      });
+      this.editedRecipe = recipe;
+      this.isFormActive = true;
     },
   },
   mixins: [

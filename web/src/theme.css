@@ -1,0 +1,53 @@
+:root {
+  --bulma-primary-h: 256deg;
+  --bulma-primary-s: 60%;
+  --bulma-primary-l: 59%;
+  --bulma-primary-invert-l: 100%;
+
+  --bulma-link-h: 256deg;
+  --bulma-link-s: 60%;
+  --bulma-link-l: 59%;
+  --bulma-link-invert-l: 100%;
+
+  --bulma-info-h: 212deg;
+  --bulma-info-s: 88%;
+  --bulma-info-l: 51%;
+  --bulma-info-invert-l: 100%;
+
+  --bulma-warning-h: 44deg;
+  --bulma-warning-s: 100%;
+  --bulma-warning-l: 77%;
+
+  --bulma-danger-h: 348deg;
+  --bulma-danger-s: 86%;
+  --bulma-danger-l: 61%;
+  --bulma-danger-invert-l: 100%;
+
+  --bulma-success-invert-l: 100%;
+
+  --bulma-card-radius: 0.25rem;
+}
+
+.card:not(:last-child) {
+  margin-bottom: 0;
+}
+
+.tabs {
+  --bulma-tabs-link-active-color: var(--bulma-primary);
+  --bulma-tabs-link-active-border-bottom-color: var(--bulma-primary);
+}
+
+.notification.is-info.is-light {
+  --bulma-notification-background-l: 96%;
+  --bulma-notification-color-l: 43%;
+}
+
+.delete,
+.modal-close {
+  --bulma-delete-background-alpha: 0.2;
+}
+
+.delete:hover,
+.modal-close:hover {
+  --bulma-delete-background-alpha: 0.3;
+}

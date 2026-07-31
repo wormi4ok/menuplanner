@@ -1,41 +1,32 @@
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import Vue2TouchEvents from 'vue2-touch-events';
-import GAuth from 'vue-google-oauth2';
-import 'buefy/dist/buefy.css';
+import Vue3TouchEvents from 'vue3-touch-events';
+import 'buefy/dist/css/buefy.css';
+import './theme.css';
 import Buefy from 'buefy';
 import App from './App.vue';
 import store from './store';
+import { init as initGoogleAuth } from './auth/google';
 
 import router from './router';
 
-Vue.component('fa', FontAwesomeIcon);
 library.add(fas);
-Vue.use(Vue2TouchEvents);
-Vue.use(Buefy, {
+
+if (window.config.MP_CLIENT_ID) {
+  initGoogleAuth(window.config.MP_CLIENT_ID);
+}
+
+const app = createApp(App);
+
+app.component('fa', FontAwesomeIcon);
+app.use(Vue3TouchEvents, {});
+app.use(Buefy, {
   defaultIconComponent: 'fa',
   defaultIconPack: 'fas',
 });
+app.use(store);
+app.use(router);
 
-if (window.config.MP_CLIENT_ID) {
-  Vue.use(GAuth, {
-    clientId: window.config.MP_CLIENT_ID,
-    scope: 'profile email',
-    prompt: 'select_account',
-  });
-}
-
-Vue.config.productionTip = false;
-
-new Vue({
-  store,
-  router,
-  data() {
-    return {
-      isMobile: window.innerWidth <= 768,
-    };
-  },
-  render: (h) => h(App),
-}).$mount('#app');
+app.mount('#app');

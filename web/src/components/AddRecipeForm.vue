@@ -137,7 +137,7 @@ export default {
       this.id = this.recipe.id;
       this.name = this.recipe.name;
       this.recipe.courses.forEach((course, index) => {
-        this.$set(this.courses, index, course);
+        this.courses[index] = course;
       });
 
       this.description = this.recipe.description;

@@ -1,14 +1,11 @@
-import Vuex from 'vuex';
-import Vue from 'vue';
+import { createStore } from 'vuex';
 import user from './modules/user';
 import recipes from './modules/recipes';
 import courses from './modules/courses';
 import week from './modules/week';
 import error from './modules/error';
 
-Vue.use(Vuex);
-
-export default new Vuex.Store({
+export default createStore({
   modules: {
     user,
     recipes,
