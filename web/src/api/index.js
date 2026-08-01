@@ -85,7 +85,6 @@ const week = {
 
 client.interceptors.request.use((request) => {
   if (token.get()) {
-    // eslint-disable-next-line no-param-reassign
     request.headers.Authorization = token.header();
   }
   return request;
@@ -108,7 +107,7 @@ client.interceptors.response.use(
         token.set(response.data.access_token, response.data.expires_in);
         originalRequest.headers.Authorization = token.header();
         return client(originalRequest);
-      } catch (e) {
+      } catch {
         return Promise.reject(error);
       }
     }

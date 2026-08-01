@@ -13,7 +13,7 @@ export default {
         }
         await user.fetchCurrentUser();
         next();
-      } catch (e) {
+      } catch {
         useErrorStore().reportError('Authentication failed');
         next();
       }
