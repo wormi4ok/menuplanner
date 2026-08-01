@@ -32,18 +32,27 @@ func TestGapFiller_FillWeek(t *testing.T) {
 			t.Errorf("Missing menu for day %d", i)
 			continue
 		}
+		calories, servedBy := 0, map[int]int{}
 		for j := 0; j < 3; j++ {
 			recipe, exists := day.Recipes[j]
 			if !exists || recipe.IsEmpty() {
 				t.Errorf("Day %d, slot %d was left empty", i, j)
 				continue
 			}
+			calories += recipe.EnergyAmount()
+			if slot, served := servedBy[recipe.ID]; served {
+				t.Errorf("Day %d serves recipe %d in slot %d and again in slot %d", i, recipe.ID, slot, j)
+			}
+			servedBy[recipe.ID] = j
 			if id, ok := preset[[2]int{i, j}]; ok && id != recipe.ID {
 				t.Errorf("Day %d, slot %d was already filled with recipe %d, got %d", i, j, id, recipe.ID)
 			}
 			if !servesCourse(recipe, slotCourse[j]) {
 				t.Errorf("Day %d, slot %d wants a %s, got recipe %d which is not one", i, j, slotCourse[j], recipe.ID)
 			}
+		}
+		if calories > MaxCalories {
+			t.Errorf("Day %d serves %d calories, over the %d limit", i, calories, MaxCalories)
 		}
 	}
 }

@@ -33,16 +33,27 @@ func NewGapFiller(recipes RecipeReader, courses CourseReader) *GapFiller {
 
 func (gf *GapFiller) FillWeek(ctx context.Context, userID int, week *Week) *Week {
 	gf.prepareSkeleton(ctx, userID, week)
-	for i, menu := range week.Menu {
+	for _, menu := range week.Menu {
 		for j, recipe := range menu.Recipes {
-			if recipe.IsEmpty() {
-				for attempts := 3; attempts > 0; attempts-- {
-					r := *gf.r.ReadRandom(ctx, *gf.courseName(j), userID)
-					week.Menu[i].AddRecipe(j, r)
-					if menu.CheckRecipe(r) == nil {
-						break
-					}
+			if !recipe.IsEmpty() {
+				continue
+			}
+
+			course := gf.courseName(j)
+			if course == nil {
+				continue
+			}
+
+			var pick *Recipe
+			for attempts := 3; attempts > 0; attempts-- {
+				pick = gf.r.ReadRandom(ctx, *course, userID)
+				if pick == nil || menu.CheckRecipe(*pick) == nil {
+					break
 				}
+			}
+
+			if pick != nil {
+				menu.AddRecipe(j, *pick)
 			}
 		}
 	}
