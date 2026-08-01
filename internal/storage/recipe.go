@@ -31,7 +31,9 @@ func (s *DB) Delete(ctx context.Context, id int) bool {
 
 func (s *DB) Read(ctx context.Context, userID int, id int) *internal.Recipe {
 	r := &internal.Recipe{}
-	s.db.WithContext(ctx).Preload("Courses").First(&r, "user_id = ? AND id = ?", userID, id)
+	if err := s.db.WithContext(ctx).Preload("Courses").First(&r, "user_id = ? AND id = ?", userID, id).Error; err != nil {
+		return nil
+	}
 	return r
 }
 
@@ -40,7 +42,7 @@ func (s *DB) ReadAll(ctx context.Context, userID int) (rr []*internal.Recipe) {
 	return
 }
 
-func (s *DB) ReadRandom(ctx context.Context, course internal.Course, userID int) (r *internal.Recipe) {
+func (s *DB) ReadRandom(ctx context.Context, course internal.Course, userID int) *internal.Recipe {
 	var id int
 	s.db.
 		Table("recipe_courses").
@@ -49,6 +51,9 @@ func (s *DB) ReadRandom(ctx context.Context, course internal.Course, userID int)
 		Joins("JOIN recipes ON recipes.id = recipe_courses.recipe_id AND recipes.user_id = ?", userID).
 		Order("RAND()").
 		Scan(&id)
-	s.db.WithContext(ctx).Preload("Courses").First(&r, id)
-	return r
+	if id == 0 {
+		return nil
+	}
+
+	return s.Read(ctx, userID, id)
 }
