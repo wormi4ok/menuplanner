@@ -16,6 +16,7 @@ dockers_v2:
     tags:
       - "{{ .Version }}"
       - "{{ .Tag }}"
+      - "latest"
     platforms:
       - linux/amd64
     labels:

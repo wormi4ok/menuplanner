@@ -1,50 +1,43 @@
 services:
+  web:
+    image: ghcr.io/wormi4ok/menuplanner-web:latest
+    depends_on:
+      - api
+    environment:
+      API_ADDRESS: http://localhost:8081
+#      MP_CLIENT_ID: ""
+    ports:
+      - 8080:80
+    restart: unless-stopped
+  api:
+    image: ghcr.io/wormi4ok/menuplanner:latest
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      MP_MYSQL_DSN: menuplanner:menuplanner@tcp(db:3306)/menuplanner?charset=utf8mb4&parseTime=True&loc=Local
+      MP_JWT_SECRET: change-me-before-exposing-this-to-anyone
+#      MP_CLIENT_ID: ""
+#      MP_CLIENT_SECRET: ""
+    ports:
+      - 8081:8081
+    restart: unless-stopped
   db:
     image: mysql:8.4
-    ports:
-      - 3306
+    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
     environment:
       MYSQL_ROOT_PASSWORD: unsecurepassword
       MYSQL_DATABASE: menuplanner
       MYSQL_USER: menuplanner
       MYSQL_PASSWORD: menuplanner
-    command: [ 'mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci' ]
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    depends_on:
-      - db
-    environment:
-      PMA_HOST: db
-      PMA_PORT: 3306
-      PMA_ARBITRARY: 1
-    ports:
-      - 8183:80
-  web:
-    build:
-      context: web
-      target: dev
-    environment:
-      VITE_API_ADDRESS: http://localhost:8081
+    healthcheck:
+      test: [ 'CMD', 'mysqladmin', 'ping', '-h', '127.0.0.1' ]
+      interval: 5s
+      timeout: 3s
+      retries: 20
     volumes:
-      - ./web/src:/app/src
-    ports:
-      - 127.0.0.1:8080:8080
-  api:
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
-    volumes:
-      - .:/go/src/github.com/wormi4ok/menuplanner
-    ports:
-      - 127.0.0.1:8081:8081
-    depends_on:
-      - db
-    restart: always
-    environment:
-      MP_HOST: 0.0.0.0
-      MP_MYSQL_DSN: menuplanner:menuplanner@tcp(db:3306)/menuplanner?charset=utf8mb4&parseTime=True&loc=Local
-      MP_JWT_SECRET: menuplanner-supersecret
-#      MP_CLIENT_ID: ""
-#      MP_CLIENT_SECRET: ""
-#      MP_RECIPES_JSON: recipes.json
-#      MP_WEEK_JSON: internal/testdata/week_with_gaps.json
+      - db:/var/lib/mysql
+    restart: unless-stopped
+
+volumes:
+  db:
