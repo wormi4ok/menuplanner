@@ -173,7 +173,8 @@ func (e recipeEndpoint) Update() http.HandlerFunc {
 			userID = jwt.UserID(r.Context())
 		)
 
-		if _, ok := ctx.Value("recipe").(*internal.Recipe); !ok {
+		current, ok := ctx.Value("recipe").(*internal.Recipe)
+		if !ok {
 			http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
 			return
 		}
@@ -184,6 +185,7 @@ func (e recipeEndpoint) Update() http.HandlerFunc {
 		}
 
 		recipe := internal.Recipe(req)
+		recipe.ID, recipe.UserID = current.ID, current.UserID
 
 		_, err := internal.UpdateRecipe(r.Context(), userID, &recipe, e.storage)
 		if err != nil {
