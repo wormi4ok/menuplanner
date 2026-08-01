@@ -25,7 +25,7 @@ type Config struct {
 	RecipesJSON string `env:"RECIPES_JSON"`
 	WeekJSON    string `env:"WEEK_JSON"`
 
-	MysqlDSN string `env:"MYSQL_DSN,required"`
+	MysqlDSN string `env:"MYSQL_DSN"`
 
 	JWTSecret string `env:"JWT_SECRET,required"`
 
@@ -59,7 +59,7 @@ func main() {
 		db := loadDB(&c)
 		weekStorage, recipeStorage, courseStorage, userStorage = db, db, db, db
 	} else {
-		recipeStorage, weekStorage = loadMocks(&c)
+		recipeStorage, weekStorage, courseStorage, userStorage = loadMocks(&c)
 	}
 
 	if err := demo.PreloadData(context.Background(), userStorage, recipeStorage, weekStorage); err != nil {
@@ -93,7 +93,7 @@ func loadDB(c *Config) *storage.DB {
 	return db
 }
 
-func loadMocks(c *Config) (*mock.Recipes, *mock.Weeks) {
+func loadMocks(c *Config) (*mock.Recipes, *mock.Weeks, *mock.Courses, *mock.Users) {
 	log.Println("Using mock storage...")
 	mr := &mock.Recipes{}
 	if c.RecipesJSON != "" {
@@ -109,7 +109,7 @@ func loadMocks(c *Config) (*mock.Recipes, *mock.Weeks) {
 			os.Exit(1)
 		}
 	}
-	return mr, wr
+	return mr, wr, mock.NewCourses(), &mock.Users{}
 }
 
 func handleServerShutdown(srv *http.Server) {

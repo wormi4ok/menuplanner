@@ -106,16 +106,26 @@ func (ws *Weeks) LoadFromFile(path string) error {
 	return nil
 }
 
-func (ws *Weeks) UpdateCurrent(_ context.Context, _ int, week *internal.Week) *internal.Week {
+func (ws *Weeks) UpdateCurrent(ctx context.Context, userID int, week *internal.Week) *internal.Week {
 	ws.current = week
-	return ws.current
+	return ws.ReadCurrent(ctx, userID)
 }
 
-func (ws *Weeks) ReadCurrent(_ context.Context, _ int) *internal.Week {
+func (ws *Weeks) ReadCurrent(ctx context.Context, userID int) *internal.Week {
+	if ws.current == nil {
+		ws.current = &internal.Week{Menu: map[int]*internal.DailyMenu{}}
+	}
 	c := ws.current
 	for i, day := range c.Menu {
 		for k, recipe := range day.Recipes {
-			c.Menu[i].Recipes[k] = *ws.Recipes.Read(context.TODO(), 1, recipe.ID)
+			if recipe.IsEmpty() {
+				continue
+			}
+			if full := ws.Recipes.Read(ctx, userID, recipe.ID); full != nil {
+				c.Menu[i].Recipes[k] = *full
+			} else {
+				delete(c.Menu[i].Recipes, k)
+			}
 		}
 	}
 
@@ -123,14 +133,74 @@ func (ws *Weeks) ReadCurrent(_ context.Context, _ int) *internal.Week {
 }
 
 func (ws *Weeks) DeleteSlot(_ context.Context, _ int, _ int, day int, slot int) error {
-	menu := ws.current.Menu
-	if menu != nil {
-		if _, exists := menu[day]; exists {
-			if _, exists = menu[day].Recipes[slot]; exists {
-				ws.current.Menu[day].Recipes[slot] = internal.Recipe{}
-				return nil
-			}
+	if ws.current == nil {
+		return nil
+	}
+	if menu, exists := ws.current.Menu[day]; exists {
+		delete(menu.Recipes, slot)
+	}
+	return nil
+}
+
+type Users struct {
+	all []*internal.User
+}
+
+func (us *Users) CreateUser(_ context.Context, user *internal.User) error {
+	user.ID = len(us.all) + 1
+	us.all = append(us.all, user)
+	return nil
+}
+
+func (us *Users) UpdateUser(_ context.Context, user *internal.User) error {
+	for i, u := range us.all {
+		if u.ID == user.ID {
+			us.all[i] = user
+			return nil
 		}
 	}
-	return errors.New("not found")
+	return internal.NewError(errors.New("user not found"), internal.ErrorNotFound)
+}
+
+func (us *Users) ReadUser(_ context.Context, id int) (*internal.User, error) {
+	for _, u := range us.all {
+		if u.ID == id {
+			return u, nil
+		}
+	}
+	return nil, internal.NewError(errors.New("user not found"), internal.ErrorNotFound)
+}
+
+func (us *Users) ReadUserByEmail(_ context.Context, email string) (*internal.User, error) {
+	for _, u := range us.all {
+		if u.Email == email {
+			return u, nil
+		}
+	}
+	return nil, internal.NewError(errors.New("user not found"), internal.ErrorNotFound)
+}
+
+type Courses struct {
+	all []*internal.Course
+}
+
+func NewCourses() *Courses {
+	return &Courses{all: []*internal.Course{
+		{ID: 1, Name: internal.CourseBreakfast},
+		{ID: 2, Name: internal.CourseMain},
+		{ID: 3, Name: internal.CoursePudding},
+	}}
+}
+
+func (cs *Courses) ReadCourse(_ context.Context, id int) *internal.Course {
+	for _, c := range cs.all {
+		if c.ID == id {
+			return c
+		}
+	}
+	return nil
+}
+
+func (cs *Courses) ReadAllCourses(_ context.Context) []*internal.Course {
+	return cs.all
 }
