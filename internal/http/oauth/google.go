@@ -24,13 +24,13 @@ type googleResponse struct {
 	Locale        string `json:"locale"`
 }
 
-func (config *Google) UserInfo(ctx context.Context, authCode string) (*googleResponse, error) {
+func (config *Google) UserInfo(ctx context.Context, authCode, redirectURI string) (*googleResponse, error) {
 	var userInfo googleResponse
 
 	conf := &oauth2.Config{
 		ClientID:     config.ClientID,
 		ClientSecret: config.ClientSecret,
-		RedirectURL:  "postmessage",
+		RedirectURL:  redirectURI,
 		Endpoint:     google.Endpoint,
 	}
 

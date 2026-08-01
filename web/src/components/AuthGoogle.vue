@@ -24,7 +24,7 @@ export default {
         await useUserStore().googleLogIn(authCode);
         await this.$router.push('/');
       } catch (e) {
-        useErrorStore().reportError(e.response.data);
+        useErrorStore().reportError(e.response?.data ?? e.message);
       } finally {
         this.loading = false;
       }

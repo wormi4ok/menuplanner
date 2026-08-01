@@ -183,7 +183,8 @@ func (e *userEndpoint) Refresh() http.HandlerFunc {
 
 func (e *userEndpoint) GoogleAuth(googleOAuth *oauth.Google) http.HandlerFunc {
 	type request struct {
-		AuthCode string `json:"code"`
+		AuthCode    string `json:"code"`
+		RedirectURI string `json:"redirect_uri"`
 	}
 
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -194,7 +195,12 @@ func (e *userEndpoint) GoogleAuth(googleOAuth *oauth.Google) http.HandlerFunc {
 			return
 		}
 
-		userInfo, err := googleOAuth.UserInfo(r.Context(), req.AuthCode)
+		if req.RedirectURI == "" {
+			http.Error(w, "redirect_uri is required", http.StatusBadRequest)
+			return
+		}
+
+		userInfo, err := googleOAuth.UserInfo(r.Context(), req.AuthCode, req.RedirectURI)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusFailedDependency)
 			return

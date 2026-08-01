@@ -21,7 +21,10 @@ const auth = {
     return client.post('/token/refresh', { refresh_token: token.getRefresh() });
   },
   loginViaGoogle(authCode) {
-    return client.post('/auth/login/google', { code: authCode, redirect_uri: 'postmessage' });
+    return client.post('/auth/login/google', {
+      code: authCode,
+      redirect_uri: window.location.origin,
+    });
   },
 };
 
