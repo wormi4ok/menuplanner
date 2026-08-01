@@ -3,7 +3,7 @@
     <div :key="day" v-for="(day, i) in weekDays" class="has-text-centered">
       <div class="subtitle" :class="{ 'has-text-weight-bold': today === i }">{{ day }}</div>
     </div>
-    <template v-for="slot in courses">
+    <template v-for="slot in slots">
       <MenuSlot
         v-for="(today, day) in menu"
         :key="''.concat(slot, day)"
@@ -23,10 +23,8 @@
 
 <script>
 import MenuSlot from '@/components/MenuSlot.vue';
-import { mapState } from 'pinia';
-import { useCoursesStore } from '@/stores/courses';
-import { useWeekStore } from '@/stores/week';
 import DailySummary from '@/components/DailySummary.vue';
+import WeekSlots, { currentWeekDay } from '@/mixins/WeekSlots';
 
 export default {
   name: 'WeekGrid',
@@ -37,35 +35,12 @@ export default {
   props: {
     menu: Object,
   },
-  data() {
-    return {
-      weekDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-      today: (new Date().getDay() || 7) - 1,
-      courses: [0, 1, 2],
-    };
-  },
-  computed: {
-    ...mapState(useCoursesStore, [
-      'listCourses',
-    ]),
-  },
-  methods: {
-    removeSlot(day, slot) {
-      useWeekStore().emptySlot({ day, slot });
-    },
-    fillSlot({ day, slot }, recipe) {
-      useWeekStore().fillSlot({ day, slot, recipe });
-    },
-    course(slot) {
-      const map = {
-        0: 'breakfast',
-        1: 'main',
-        2: 'main',
-        3: 'pudding',
-      };
-      return this.listCourses.find((course) => course.name === map[slot]);
-    },
-  },
+  data: () => ({
+    today: currentWeekDay(),
+  }),
+  mixins: [
+    WeekSlots,
+  ],
 };
 </script>
 
