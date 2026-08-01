@@ -15,13 +15,16 @@
     "@fortawesome/vue-fontawesome": "^3.3.3",
     "axios": "^0.21.1",
     "buefy": "^3.0.10",
+    "pinia": "^4.0.2",
     "vue": "^3.5.40",
     "vue-router": "^4.6.4",
-    "vue3-touch-events": "^5.0.15",
-    "vuex": "^4.1.0"
+    "vue3-touch-events": "^5.0.15"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.28.4",
+    "@emnapi/core": "2.0.0-alpha.3",
+    "@emnapi/runtime": "2.0.0-alpha.3",
+    "@emnapi/wasi-threads": "2.0.1",
     "@vitejs/plugin-vue": "^6.0.8",
     "@vue/eslint-config-airbnb": "^7.0.1",
     "eslint": "^8.57.1",

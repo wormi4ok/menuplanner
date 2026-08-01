@@ -17,6 +17,7 @@ module.exports = {
   settings: {
     ...createAliasSetting({ '@': path.resolve(__dirname, 'src') }),
     'import/extensions': ['.js', '.jsx', '.mjs', '.vue'],
+    'import/core-modules': ['pinia'],
   },
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',

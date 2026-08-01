@@ -6,6 +6,8 @@
 
 <script>
 import { getAuthCode } from '@/auth/google';
+import { useUserStore } from '@/stores/user';
+import { useErrorStore } from '@/stores/error';
 
 export default {
   name: 'AuthGoogle',
@@ -19,10 +21,10 @@ export default {
       try {
         this.loading = true;
         const authCode = await getAuthCode();
-        await this.$store.dispatch('googleLogIn', authCode);
+        await useUserStore().googleLogIn(authCode);
         await this.$router.push('/');
       } catch (e) {
-        await this.$store.dispatch('reportError', e.response.data);
+        useErrorStore().reportError(e.response.data);
       } finally {
         this.loading = false;
       }

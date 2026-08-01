@@ -42,6 +42,8 @@
 </template>
 
 <script>
+import { useUserStore } from '@/stores/user';
+
 export default {
   name: 'AuthEmailSignUp',
   data() {
@@ -60,7 +62,7 @@ export default {
       }
       const { email, password, passwordConfirm } = this;
       try {
-        await this.$store.dispatch('signUp', { email, password, passwordConfirm });
+        await useUserStore().signUp({ email, password, passwordConfirm });
         await this.$router.push('/');
       } catch (e) {
         this.error = e.response.data;

@@ -40,7 +40,8 @@
 <script>
 import AddRecipeForm from '@/components/AddRecipeForm.vue';
 import NavbarUserMenu from '@/components/NavbarUserMenu.vue';
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapState } from 'pinia';
+import { useWeekStore } from '@/stores/week';
 
 export default {
   name: 'Navbar',
@@ -52,12 +53,12 @@ export default {
     showAddRecipeForm: false,
   }),
   computed: {
-    ...mapGetters([
+    ...mapState(useWeekStore, [
       'hasGaps',
     ]),
   },
   methods: {
-    ...mapActions(['fillGaps', 'emptyWeek']),
+    ...mapActions(useWeekStore, ['fillGaps', 'emptyWeek']),
     onFillGaps() {
       this.fillGaps();
     },

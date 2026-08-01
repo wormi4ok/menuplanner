@@ -109,7 +109,9 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapState } from 'pinia';
+import { useCoursesStore } from '@/stores/courses';
+import { useRecipesStore } from '@/stores/recipes';
 import CourseColor from '@/mixins/CourseColor';
 
 export default {
@@ -155,7 +157,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
+    ...mapState(useCoursesStore, [
       'listCourses',
     ]),
     isUpdate() {
@@ -174,7 +176,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions([
+    ...mapActions(useRecipesStore, [
       'createRecipe',
       'updateRecipe',
     ]),

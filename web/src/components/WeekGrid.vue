@@ -23,7 +23,9 @@
 
 <script>
 import MenuSlot from '@/components/MenuSlot.vue';
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useCoursesStore } from '@/stores/courses';
+import { useWeekStore } from '@/stores/week';
 import DailySummary from '@/components/DailySummary.vue';
 
 export default {
@@ -43,16 +45,16 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
+    ...mapState(useCoursesStore, [
       'listCourses',
     ]),
   },
   methods: {
     removeSlot(day, slot) {
-      this.$store.dispatch('emptySlot', { day, slot });
+      useWeekStore().emptySlot({ day, slot });
     },
     fillSlot({ day, slot }, recipe) {
-      this.$store.dispatch('fillSlot', { day, slot, recipe });
+      useWeekStore().fillSlot({ day, slot, recipe });
     },
     course(slot) {
       const map = {

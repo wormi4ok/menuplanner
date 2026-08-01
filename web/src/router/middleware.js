@@ -1,17 +1,20 @@
-import $store from '@/store';
 import token from '@/auth/token';
+import { useUserStore } from '@/stores/user';
+import { useErrorStore } from '@/stores/error';
 
 export default {
   async initUser(to, from, next) {
-    if (token.getRefresh() && !$store.getters.isLoggedIn) {
+    const user = useUserStore();
+
+    if (token.getRefresh() && !user.isLoggedIn) {
       try {
         if (token.isExpired()) {
-          await $store.dispatch('refreshToken');
+          await user.refreshToken();
         }
-        await $store.dispatch('fetchCurrentUser');
+        await user.fetchCurrentUser();
         next();
       } catch (e) {
-        await $store.dispatch('reportError', 'Authentication failed');
+        useErrorStore().reportError('Authentication failed');
       }
     } else {
       next();
@@ -20,7 +23,7 @@ export default {
   checkAccess(to, from, next) {
     const isAuthRoute = to.matched.some((item) => item.meta.isAuth);
 
-    if (isAuthRoute && !$store.getters.isLoggedIn) return next({ name: 'Login' });
+    if (isAuthRoute && !useUserStore().isLoggedIn) return next({ name: 'Login' });
     return next();
   },
 };

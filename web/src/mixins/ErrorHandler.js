@@ -1,8 +1,9 @@
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useErrorStore } from '@/stores/error';
 
 export default {
   computed: {
-    ...mapGetters({
+    ...mapState(useErrorStore, {
       errorMessage: 'getError',
     }),
   },

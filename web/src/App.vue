@@ -20,7 +20,8 @@
 import Navbar from '@/components/Navbar.vue';
 import ErrorHandler from '@/mixins/ErrorHandler';
 import isMobile from '@/isMobile';
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useUserStore } from '@/stores/user';
 
 export default {
   name: 'App',
@@ -31,7 +32,7 @@ export default {
     appVersion: window.config.MP_VERSION || '',
   }),
   computed: {
-    ...mapGetters([
+    ...mapState(useUserStore, [
       'isLoggedIn',
     ]),
     isMobile: () => isMobile.value,

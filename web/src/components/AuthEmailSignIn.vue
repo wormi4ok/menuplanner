@@ -52,6 +52,8 @@
 </template>
 
 <script>
+import { useUserStore } from '@/stores/user';
+
 export default {
   name: 'AuthEmailSignIn',
   props: {
@@ -94,7 +96,7 @@ export default {
       this.error = '';
       const { email, password } = this;
       try {
-        await this.$store.dispatch('logIn', { email, password });
+        await useUserStore().logIn({ email, password });
         await this.$router.push('/');
       } catch (e) {
         this.error = e.response.data;

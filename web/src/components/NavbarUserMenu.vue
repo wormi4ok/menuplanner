@@ -10,18 +10,19 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapState } from 'pinia';
+import { useUserStore } from '@/stores/user';
 
 export default {
   name: 'NavbarUserMenu',
   computed: {
-    ...mapGetters(['currentUser']),
+    ...mapState(useUserStore, ['currentUser']),
     displayName() {
       return this.currentUser.name || this.currentUser.email;
     },
   },
   methods: {
-    ...mapActions(['logOut']),
+    ...mapActions(useUserStore, ['logOut']),
     onLogout() {
       this.logOut();
       this.$router.push({ name: 'Login' });

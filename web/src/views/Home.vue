@@ -10,7 +10,10 @@
 import WeekGrid from '@/components/WeekGrid.vue';
 import WeekSlider from '@/components/WeekSlider.vue';
 import isMobile from '@/isMobile';
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapState } from 'pinia';
+import { useWeekStore } from '@/stores/week';
+import { useRecipesStore } from '@/stores/recipes';
+import { useCoursesStore } from '@/stores/courses';
 
 export default {
   name: 'Home',
@@ -22,7 +25,7 @@ export default {
     isLoading: false,
   }),
   computed: {
-    ...mapGetters({
+    ...mapState(useWeekStore, {
       data: 'weekMenu',
     }),
     isMobile: () => isMobile.value,
@@ -35,11 +38,9 @@ export default {
     this.isLoading = false;
   },
   methods: {
-    ...mapActions([
-      'fetchCurrentWeek',
-      'fetchRecipes',
-      'fetchCourses',
-    ]),
+    ...mapActions(useWeekStore, ['fetchCurrentWeek']),
+    ...mapActions(useRecipesStore, ['fetchRecipes']),
+    ...mapActions(useCoursesStore, ['fetchCourses']),
   },
 };
 </script>

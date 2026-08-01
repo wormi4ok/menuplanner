@@ -30,7 +30,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapState } from 'pinia';
+import { useRecipesStore } from '@/stores/recipes';
 
 export default {
   name: 'EmptySlot',
@@ -56,7 +57,7 @@ export default {
     recipes() {
       return this.recipesByCourse(this.course);
     },
-    ...mapGetters([
+    ...mapState(useRecipesStore, [
       'recipesByCourse',
     ]),
   },

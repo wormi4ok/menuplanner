@@ -6,8 +6,8 @@ import Vue3TouchEvents from 'vue3-touch-events';
 import 'buefy/dist/css/buefy.css';
 import './theme.css';
 import Buefy from 'buefy';
+import { createPinia } from 'pinia';
 import App from './App.vue';
-import store from './store';
 import { init as initGoogleAuth } from './auth/google';
 
 import router from './router';
@@ -26,7 +26,7 @@ app.use(Buefy, {
   defaultIconComponent: 'fa',
   defaultIconPack: 'fas',
 });
-app.use(store);
+app.use(createPinia());
 app.use(router);
 
 app.mount('#app');

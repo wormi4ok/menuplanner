@@ -114,7 +114,9 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapActions, mapState } from 'pinia';
+import { useRecipesStore } from '@/stores/recipes';
+import { useWeekStore } from '@/stores/week';
 import CourseColor from '@/mixins/CourseColor';
 import AddRecipeForm from '@/components/AddRecipeForm.vue';
 
@@ -127,21 +129,22 @@ export default {
     isFormActive: false,
     editedRecipe: null,
   }),
-  computed: mapGetters({
-    data: 'listRecipes',
-    recipeInUse: 'recipePosition',
-  }),
+  computed: {
+    ...mapState(useRecipesStore, {
+      data: 'listRecipes',
+    }),
+    ...mapState(useWeekStore, {
+      recipeInUse: 'recipePosition',
+    }),
+  },
   created() {
     if (this.data.length === 0) {
       this.fetchRecipes();
     }
   },
   methods: {
-    ...mapActions([
-      'fetchRecipes',
-      'deleteRecipe',
-      'emptySlot',
-    ]),
+    ...mapActions(useRecipesStore, ['fetchRecipes', 'deleteRecipe']),
+    ...mapActions(useWeekStore, ['emptySlot']),
     onDelete(recipe) {
       const positions = this.recipeInUse(recipe.id);
       if (positions) {
