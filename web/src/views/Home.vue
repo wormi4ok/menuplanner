@@ -30,12 +30,17 @@ export default {
     }),
     isMobile: () => isMobile.value,
   },
-  mounted() {
+  async mounted() {
     this.isLoading = true;
-    this.fetchCurrentWeek();
-    this.fetchRecipes();
-    this.fetchCourses();
-    this.isLoading = false;
+    try {
+      await Promise.all([
+        this.fetchCurrentWeek(),
+        this.fetchRecipes(),
+        this.fetchCourses(),
+      ]);
+    } finally {
+      this.isLoading = false;
+    }
   },
   methods: {
     ...mapActions(useWeekStore, ['fetchCurrentWeek']),
