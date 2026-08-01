@@ -5,7 +5,7 @@ web="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
 repo="$(dirname "$web")"
 image="mcr.microsoft.com/playwright:v$(node -p "require('$web/package.json').devDependencies['@playwright/test'].replace('^','')")-noble"
 
-(cd "$repo" && GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o web/tests/.bin/api .)
+(cd "$repo" && GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -buildvcs=false -o web/tests/.bin/api .)
 
 exec docker run --rm --platform linux/amd64 \
   -v "$repo":/src -w /src/web \

@@ -12,7 +12,7 @@ export default function globalSetup() {
   if (process.env.TEST_API_BINARY) return;
 
   mkdirSync(dirname(apiBinary), { recursive: true });
-  execFileSync('go', ['build', '-o', apiBinary, '.'], {
+  execFileSync('go', ['build', '-buildvcs=false', '-o', apiBinary, '.'], {
     cwd: repoRoot,
     stdio: 'inherit',
   });
