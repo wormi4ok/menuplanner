@@ -1,1 +1,5 @@
 node_modules
+dist
+tests/.bin
+playwright-report
+test-results
