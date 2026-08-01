@@ -2,7 +2,7 @@ import axios from 'axios';
 import token from '@/auth/token';
 
 const client = axios.create({
-  baseURL: window.config.API_ADDRESS || import.meta.env.VITE_API_ADDRESS,
+  baseURL: window.config.API_ADDRESS,
   timeout: 1000,
   headers: {
     Accept: 'application/json',
