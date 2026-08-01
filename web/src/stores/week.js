@@ -2,18 +2,6 @@ import { defineStore } from 'pinia';
 import api from '@/api';
 import { useErrorStore } from './error';
 
-function stateMerge(state, value, propName) {
-  if (Object.prototype.toString.call(value) === '[object Object]'
-    && (propName == null || Object.prototype.hasOwnProperty.call(state, propName))) {
-    const o = propName == null ? state : state[propName];
-    if (o != null) {
-      Object.keys(value).forEach((prop) => stateMerge(o, value[prop], prop));
-      return;
-    }
-  }
-  state[propName] = value;
-}
-
 function emptyMenu() {
   return Object.fromEntries(
     Array.from({ length: 7 }, (_, day) => [day, { recipes: { 0: null, 1: null, 2: null } }]),
@@ -51,7 +39,13 @@ export const useWeekStore = defineStore('week', {
   },
   actions: {
     setCurrentWeek(week) {
-      stateMerge(this.$state, week, 'week');
+      const menu = emptyMenu();
+      Object.entries(week.menu || {}).forEach(([day, { recipes }]) => {
+        if (menu[day]) {
+          Object.assign(menu[day].recipes, recipes);
+        }
+      });
+      this.week = { ...week, menu };
     },
     resetCurrentWeek() {
       Object.entries(this.week.menu).forEach((weekday) => {
