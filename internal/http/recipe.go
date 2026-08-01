@@ -3,8 +3,10 @@ package http
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -16,6 +18,37 @@ import (
 
 type recipeEndpoint struct {
 	storage internal.RecipeRepository
+}
+
+type validationError struct {
+	Field   string `json:"field"`
+	Message string `json:"message"`
+}
+
+type validationErrorResponse struct {
+	Errors []validationError `json:"errors"`
+}
+
+func writeValidationError(w http.ResponseWriter, err error) {
+	var failures validator.ValidationErrors
+	if !errors.As(err, &failures) {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	res := validationErrorResponse{}
+	for _, failure := range failures {
+		res.Errors = append(res.Errors, validationError{
+			Field:   failure.Field(),
+			Message: fmt.Sprintf("Validation error (%s)", failure.Tag()),
+		})
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusBadRequest)
+	if err := json.NewEncoder(w).Encode(res); err != nil {
+		log.Printf("Failed to write validation errors: %s", err)
+	}
 }
 
 // Routes creates a REST router for the recipe resource
@@ -55,15 +88,6 @@ func (e recipeEndpoint) RecipeCtx(next http.Handler) http.Handler {
 func (e recipeEndpoint) Create() http.HandlerFunc {
 	type request internal.Recipe
 
-	type validationError struct {
-		Field   string `json:"field"`
-		Message string `json:"message"`
-	}
-
-	type validationErrorResponse struct {
-		Errors []validationError `json:"errors"`
-	}
-
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req request
 
@@ -79,25 +103,7 @@ func (e recipeEndpoint) Create() http.HandlerFunc {
 				return
 			}
 
-			if _, ok := err.(*validator.InvalidValidationError); ok {
-				_, _ = io.WriteString(w, err.Error())
-				w.WriteHeader(http.StatusInternalServerError)
-				return
-			}
-			res := validationErrorResponse{}
-			for _, err := range err.(validator.ValidationErrors) {
-
-				res.Errors = append(res.Errors, validationError{
-					Field:   err.Field(),
-					Message: fmt.Sprintf("Validation error (%s)", err.Tag()),
-				})
-			}
-
-			w.WriteHeader(http.StatusBadRequest)
-			if err := json.NewEncoder(w).Encode(res); err != nil {
-				_, _ = io.WriteString(w, err.Error())
-				w.WriteHeader(http.StatusInternalServerError)
-			}
+			writeValidationError(w, err)
 			return
 		}
 		req.ID = id
@@ -157,15 +163,6 @@ func (e recipeEndpoint) Get() http.HandlerFunc {
 func (e recipeEndpoint) Update() http.HandlerFunc {
 	type request internal.Recipe
 
-	type validationError struct {
-		Field   string `json:"field"`
-		Message string `json:"message"`
-	}
-
-	type validationErrorResponse struct {
-		Errors []validationError `json:"errors"`
-	}
-
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
 			req    request
@@ -193,25 +190,8 @@ func (e recipeEndpoint) Update() http.HandlerFunc {
 				http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
 				return
 			}
-			if _, ok := err.(*validator.InvalidValidationError); ok {
-				_, _ = io.WriteString(w, err.Error())
-				w.WriteHeader(http.StatusInternalServerError)
-				return
-			}
-			res := validationErrorResponse{}
-			for _, err := range err.(validator.ValidationErrors) {
 
-				res.Errors = append(res.Errors, validationError{
-					Field:   err.Field(),
-					Message: fmt.Sprintf("Validation error (%s)", err.Tag()),
-				})
-			}
-
-			w.WriteHeader(http.StatusBadRequest)
-			if err := json.NewEncoder(w).Encode(res); err != nil {
-				_, _ = io.WriteString(w, err.Error())
-				w.WriteHeader(http.StatusInternalServerError)
-			}
+			writeValidationError(w, err)
 			return
 		}
 
