@@ -24,13 +24,13 @@ RUN npm ci
 
 COPY . .
 
-ARG MP_VERSION=dev
+ARG MP_VERSION=
 
 RUN MP_VERSION=$MP_VERSION npm run build
 
 FROM nginx:1.29-alpine AS prod
 
-ARG MP_VERSION=dev
+ARG MP_VERSION=
 
 ENV MP_VERSION=$MP_VERSION
 
