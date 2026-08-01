@@ -66,6 +66,18 @@ test('a hard reload keeps the session', async ({ page }) => {
   await expect(page.getByText('Spicy Poblano Bolognese').first()).toBeVisible();
 });
 
+test('a refresh token the API rejects lands on login instead of stalling', async ({ page }) => {
+  await loginAsDemo(page);
+  await page.evaluate(() => {
+    localStorage.setItem('token_valid_until', '0');
+    localStorage.setItem('refresh_token', 'not-a-token');
+  });
+
+  await page.reload();
+  await expect(page).toHaveURL(/\/login$/);
+  await expect(page.getByRole('button', { name: 'Continue' })).toBeVisible();
+});
+
 test('an expired access token is refreshed on reload', async ({ page }) => {
   await loginAsDemo(page);
   await page.evaluate(() => localStorage.setItem('token_valid_until', '0'));

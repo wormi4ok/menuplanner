@@ -15,6 +15,7 @@ export default {
         next();
       } catch (e) {
         useErrorStore().reportError('Authentication failed');
+        next();
       }
     } else {
       next();
