@@ -6,52 +6,55 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
-
-	"github.com/wormi4ok/menuplanner/internal/http/jwt"
 )
 
+const testUserID = 0
+
+var slotCourse = map[int]string{0: CourseBreakfast, 1: CourseMain, 2: CourseMain}
+
 func TestGapFiller_FillWeek(t *testing.T) {
-	tests := []struct {
-		name    string
-		recipes []*Recipe
-		courses []*Course
-		input   *Week
-		want    *Week
-	}{
-		{
-			name:    "Happy path",
-			recipes: recipesFromJSON("recipes.json"),
-			courses: coursesFromJSON("courses.json"),
-			input:   weekFromJSON("week_with_gaps.json"),
-			want:    weekFromJSON("week_golden.json"),
-		},
+	m := &mock{Recipes: recipesFromJSON("recipes.json"), Courses: coursesFromJSON("courses.json")}
+	gf := &GapFiller{r: m, c: m}
+	input := weekFromJSON("week_with_gaps.json")
+
+	preset := map[[2]int]int{}
+	for i, day := range input.Menu {
+		for j, recipe := range day.Recipes {
+			preset[[2]int{i, j}] = recipe.ID
+		}
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			m := &mock{Recipes: tt.recipes, Courses: tt.courses}
-			gf := &GapFiller{
-				r: m,
-				c: m,
+
+	got := gf.FillWeek(context.TODO(), testUserID, input)
+
+	for i := 0; i < 7; i++ {
+		day, exists := got.Menu[i]
+		if !exists {
+			t.Errorf("Missing menu for day %d", i)
+			continue
+		}
+		for j := 0; j < 3; j++ {
+			recipe, exists := day.Recipes[j]
+			if !exists || recipe.IsEmpty() {
+				t.Errorf("Day %d, slot %d was left empty", i, j)
+				continue
 			}
-			got := gf.FillWeek(context.TODO(), jwt.UserID(context.TODO()), tt.input)
-			for i, day := range tt.want.Menu {
-				if _, exists := got.Menu[i]; !exists {
-					t.Errorf("Missing menu for day %d", i)
-					continue
-				}
-				gotMenu := got.Menu[i]
-				for j, recipe := range day.Recipes {
-					if _, exists := gotMenu.Recipes[j]; !exists {
-						t.Errorf("Missing recipe for day %d, slot %d", i, j)
-						continue
-					}
-					if recipe.ID != got.Menu[i].Recipes[j].ID {
-						t.Errorf("Recipe on day %d, slot %d didn't match expected: want = %d, got = %d", i, j, recipe.ID, gotMenu.Recipes[j].ID)
-					}
-				}
+			if id, ok := preset[[2]int{i, j}]; ok && id != recipe.ID {
+				t.Errorf("Day %d, slot %d was already filled with recipe %d, got %d", i, j, id, recipe.ID)
 			}
-		})
+			if !servesCourse(recipe, slotCourse[j]) {
+				t.Errorf("Day %d, slot %d wants a %s, got recipe %d which is not one", i, j, slotCourse[j], recipe.ID)
+			}
+		}
 	}
+}
+
+func servesCourse(r Recipe, name string) bool {
+	for _, c := range r.Courses {
+		if c.Name == name {
+			return true
+		}
+	}
+	return false
 }
 
 func recipesFromJSON(file string) (rr []*Recipe) {

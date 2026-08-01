@@ -108,7 +108,7 @@ func writeWeek(ctx context.Context, ws internal.WeekRepository, userID int) erro
 	ws.UpdateCurrent(ctx, userID, w)
 
 	// remove everything else
-	_ = ws.DeleteSlot(ctx,userID,1,2,0)
+	_ = ws.DeleteSlot(ctx, userID, 1, 2, 0)
 	for i := 3; i < 7; i++ {
 		for j := 0; j < 3; j++ {
 			if err := ws.DeleteSlot(ctx, userID, 1, i, j); err != nil {

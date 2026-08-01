@@ -20,10 +20,8 @@ import (
 )
 
 type Config struct {
-	Host        string `env:"HOST,default=localhost"`
-	Port        int    `env:"PORT,default=8081"`
-	RecipesJSON string `env:"RECIPES_JSON"`
-	WeekJSON    string `env:"WEEK_JSON"`
+	Host string `env:"HOST,default=localhost"`
+	Port int    `env:"PORT,default=8081"`
 
 	MysqlDSN string `env:"MYSQL_DSN"`
 
@@ -59,7 +57,7 @@ func main() {
 		db := loadDB(&c)
 		weekStorage, recipeStorage, courseStorage, userStorage = db, db, db, db
 	} else {
-		recipeStorage, weekStorage, courseStorage, userStorage = loadMocks(&c)
+		recipeStorage, weekStorage, courseStorage, userStorage = loadMocks()
 	}
 
 	if err := demo.PreloadData(context.Background(), userStorage, recipeStorage, weekStorage); err != nil {
@@ -93,23 +91,10 @@ func loadDB(c *Config) *storage.DB {
 	return db
 }
 
-func loadMocks(c *Config) (*mock.Recipes, *mock.Weeks, *mock.Courses, *mock.Users) {
+func loadMocks() (*mock.Recipes, *mock.Weeks, *mock.Courses, *mock.Users) {
 	log.Println("Using mock storage...")
 	mr := &mock.Recipes{}
-	if c.RecipesJSON != "" {
-		if err := mr.LoadFromFile(c.RecipesJSON); err != nil {
-			log.Println("Failed to load recipes from file")
-			os.Exit(1)
-		}
-	}
-	wr := &mock.Weeks{Recipes: mr}
-	if c.WeekJSON != "" {
-		if err := wr.LoadFromFile(c.WeekJSON); err != nil {
-			log.Println("Failed to load recipes from file")
-			os.Exit(1)
-		}
-	}
-	return mr, wr, mock.NewCourses(), &mock.Users{}
+	return mr, &mock.Weeks{Recipes: mr}, mock.NewCourses(), &mock.Users{}
 }
 
 func handleServerShutdown(srv *http.Server) {
